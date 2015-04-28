@@ -4,14 +4,17 @@ import spike.DataAccess;
 import spike.Example;
 
 public class ExampleTestData {
+
     private DataAccess dataAccess;
 
     private String excel;
 
+    private Example example;
+
     public ExampleTestData() {
         excel = "Example.xls";
     }
-    
+
     public void reset() {
         dataAccess.reset();
     }
@@ -23,9 +26,33 @@ public class ExampleTestData {
     public boolean hasNext() {
         return dataAccess.hasNext();
     }
-    
+
+    public boolean hasNext(int constructMode) {
+        switch (constructMode){
+        case 1:
+        boolean captured = false;
+        do {
+            try {
+                int value1  = dataAccess.getInt("getExampleIntValue1");
+                captured = true;
+            } catch (EmptyDataAccessError e) {
+                this.next();
+            } catch (TypeDataAccessError e) {
+                // mensaje de error
+                System.exit(0);
+            }
+        } while (!captured);
+        return true;
+        case 2:
+            return false;
+    }
+
     public Example getExample() {
-        return null;
+        return example;
+    }
+
+    public int getConstructMode() {
+        return dataAccess.getConstructMode();
     }
 
     public int getM1Result() {
@@ -34,7 +61,7 @@ public class ExampleTestData {
 
     public int getM1IntX() {
         return dataAccess.getInt("getM1IntX");
-    }       
+    }
 
     public int getM1IntResult() {
         return dataAccess.getInt("getM1IntResult");

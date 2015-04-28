@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import spike.Example;
+
 public class ExampleTest {
 
     private ExampleTestData data;
@@ -21,7 +23,16 @@ public class ExampleTest {
     }
 
     @Test
-    public void testExample() {
+    public void testExampleInt() {
+        while (data.hasNext(1)) {
+            Example example = data.getExample();
+            fail("Not yet implemented");
+            data.next();
+        }
+    }
+    
+    @Test
+    public void testExampleIntInt() {
         while (data.hasNext()) {
             data.getExample();
             fail("Not yet implemented");
