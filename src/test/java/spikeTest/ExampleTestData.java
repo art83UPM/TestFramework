@@ -3,13 +3,13 @@ package spikeTest;
 import spike.DataAccess;
 import spike.Example;
 
-public class EjemploTestData {
+public class ExampleTestData {
     private DataAccess dataAccess;
 
     private String excel;
 
-    public EjemploTestData() {
-        excel = "EjemploTestData.xls";
+    public ExampleTestData() {
+        excel = "Example.xls";
     }
     
     public void reset() {
@@ -24,7 +24,7 @@ public class EjemploTestData {
         return dataAccess.hasNext();
     }
     
-    public Example getEjemplo() {
+    public Example getExample() {
         return null;
     }
 
