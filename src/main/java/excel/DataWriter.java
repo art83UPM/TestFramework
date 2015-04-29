@@ -1,15 +1,11 @@
 package excel;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
-import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -19,45 +15,29 @@ public class DataWriter {
 
     private String fileName;
     private XSSFWorkbook workbook;
-    private int currentRow;
-    private int currentCell;
+    private XSSFSheet currentSheet;
+    private XSSFRow currentRow;
+    private XSSFCell currentCell;
+        
+    private static final String SHEET_NAME = "DATA";
+    private static final int STARTING_ROW = 0;
+    private static final int STARTING_CELL= 0;
     
     public DataWriter(String fileName) {
         this.fileName = fileName;
         this.workbook = new XSSFWorkbook();
-        this.currentRow = 0;
-        this.currentCell = 0;
-        XSSFSheet sheet = workbook.createSheet("DATA");
-        
-        //This data needs to be written (Object[])
-        Map < String, Object[] > empinfo = new TreeMap < String, Object[] >();
-        empinfo.put( "1", new Object[] { "EMP ID", "EMP NAME", "DESIGNATION" });
-        empinfo.put( "2", new Object[] { "tp01", "Gopal", "Technical Manager" });
-        empinfo.put( "3", new Object[] { "tp02", "Manisha", "Proof Reader" });
-        empinfo.put( "4", new Object[] { "tp03", "Masthan", "Technical Writer" });
-        empinfo.put( "5", new Object[] { "tp04", "Satish", "Technical Writer" });
-        empinfo.put( "6", new Object[] { "tp05", "Krishna", "Technical Writer" });
-        //Iterate over data and write to sheet
-        Set < String > keyid = empinfo.keySet();
-        int rowid = 0;
-        
-//        for (String key : keyid) {
-//           row = sheet.createRow(rowid++);
-//           Object [] objectArr = empinfo.get(key);
-//           int cellid = 0;
-//           for (Object obj : objectArr) {
-//              Cell cell = row.createCell(cellid++);
-//              cell.setCellValue((String)obj);
-//           }
-//        }
-        
-        this.save();
+        this.currentSheet = this.workbook.createSheet(SHEET_NAME);
+        this.currentRow = this.currentSheet.createRow(STARTING_ROW);
+        this.currentCell = this.currentRow.createCell(STARTING_CELL);
     }
     
-    private void save() {
+    public void save() {
         try {
-            FileOutputStream out;
-            out = new FileOutputStream(new File(fileName));
+            File file = new File(fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+            FileOutputStream out = new FileOutputStream(file);
             workbook.write(out);
             out.close();
         } catch (FileNotFoundException e) {
@@ -67,12 +47,20 @@ public class DataWriter {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        System.out.println(fileName + " written successfully");
     }
     
     public void write(String text) {
-//        workbook.getS
-//        Cell cell = sheet.createRow(currentRow).createCell(currentCell++);
+        this.currentCell.setCellValue(text);
+        this.nextCell();
+    }
+    
+    private void nextCell() {
+        this.currentCell = this.currentRow.createCell(this.currentCell.getColumnIndex() + 1);
+    }
+    
+    public void nextRow() {
+        this.currentRow = this.currentSheet.createRow(this.currentRow.getRowNum() + 1);
+        this.currentCell = this.currentRow.createCell(STARTING_CELL);
     }
     
 }
