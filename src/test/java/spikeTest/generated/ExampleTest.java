@@ -31,7 +31,7 @@ public class ExampleTest {
             data.next();
         }
     }
-    
+
     @Test
     public void testExampleInt() {
         while (data.hasNext(1)) {
@@ -40,7 +40,7 @@ public class ExampleTest {
             data.next();
         }
     }
-    
+
     @Test
     public void testExampleIntInt() {
         while (data.hasNext(2)) {
@@ -101,8 +101,7 @@ public class ExampleTest {
     @Test
     public void testM1IntInt() {
         while (data.hasNext()) {
-            assertEquals(data.getM1IntIntResult(),
-                    data.getExample().m1(data.getM1IntIntX(), data.getM1IntIntY()));
+            assertEquals(data.getM1IntIntResult(), data.getExample().m1(data.getM1IntIntX(), data.getM1IntIntY()));
             data.next();
         }
     }

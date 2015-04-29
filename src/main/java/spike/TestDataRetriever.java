@@ -7,9 +7,9 @@ import spike.error.TypeDataAccessError;
 public abstract class TestDataRetriever {
 
     private DataReader dataAccess;
-    
+
     public TestDataRetriever(String excelFile) {
-       this.dataAccess = new DataReader(excelFile);
+        this.dataAccess = new DataReader(excelFile);
     }
 
     protected DataReader getDataAccess() {
@@ -22,67 +22,71 @@ public abstract class TestDataRetriever {
 
     public boolean next() {
         return dataAccess.next();
-    }    
-    
+    }
+
     protected int getInt(String columnName) {
-        int result = 0; 
+        int result = 0;
         try {
             result = dataAccess.getInt(columnName);
         } catch (EmptyDataAccessError e) {
             this.next();
         } catch (TypeDataAccessError e) {
-            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna " + dataAccess.getColumn() + ". Se esperaba un número entero.");
+            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
+                    + dataAccess.getColumn() + ". Se esperaba un número entero.");
         }
         return result;
     }
-    
+
     protected float getFloat(String columnName) {
-        float result = (float) 0.0; 
+        float result = (float) 0.0;
         try {
             result = dataAccess.getFloat(columnName);
         } catch (EmptyDataAccessError e) {
             this.next();
         } catch (TypeDataAccessError e) {
-            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna " + dataAccess.getColumn() + ". Se esperaba un número decimal.");
+            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
+                    + dataAccess.getColumn() + ". Se esperaba un número decimal.");
         }
         return result;
     }
-    
+
     protected double getDouble(String columnName) {
-        double result = 0.0; 
+        double result = 0.0;
         try {
             result = dataAccess.getDouble(columnName);
         } catch (EmptyDataAccessError e) {
             this.next();
         } catch (TypeDataAccessError e) {
-            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna " + dataAccess.getColumn() + ". Se esperaba un número decimal.");
+            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
+                    + dataAccess.getColumn() + ". Se esperaba un número decimal.");
         }
         return result;
     }
-    
+
     protected boolean getBoolean(String columnName) {
-        boolean result = false; 
+        boolean result = false;
         try {
             result = dataAccess.getBoolean(columnName);
         } catch (EmptyDataAccessError e) {
             this.next();
         } catch (TypeDataAccessError e) {
-            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna " + dataAccess.getColumn() + ". Se esperaba un valor booleano.");
+            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
+                    + dataAccess.getColumn() + ". Se esperaba un valor booleano.");
         }
         return result;
     }
-    
+
     protected String getString(String columnName) {
-        String result = null; 
+        String result = null;
         try {
             result = dataAccess.getString(columnName);
         } catch (EmptyDataAccessError e) {
             this.next();
         } catch (TypeDataAccessError e) {
-            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna " + dataAccess.getColumn() + ". Se esperaba un palabra, frase o texto.");
+            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
+                    + dataAccess.getColumn() + ". Se esperaba un palabra, frase o texto.");
         }
         return result;
     }
-    
 
 }
