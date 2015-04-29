@@ -1,7 +1,7 @@
 package spike;
 
-import spikeTest.EmptyDataAccessError;
-import spikeTest.TypeDataAccessError;
+import spike.error.EmptyDataAccessError;
+import spike.error.TypeDataAccessError;
 
 public class DataAccess {
 
