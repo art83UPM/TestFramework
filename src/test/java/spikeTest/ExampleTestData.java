@@ -1,6 +1,6 @@
 package spikeTest;
 
-import spike.DataAccess;
+import excel.DataAccess;
 import spike.Example;
 
 public class ExampleTestData {
