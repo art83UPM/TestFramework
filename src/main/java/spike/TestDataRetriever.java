@@ -9,7 +9,7 @@ public abstract class TestDataRetriever {
     private DataReader dataAccess;
     
     public TestDataRetriever(String excelFile) {
-       // this.dataAccess = new DataAccess(excelFile);
+       this.dataAccess = new DataReader(excelFile);
     }
 
     protected DataReader getDataAccess() {
