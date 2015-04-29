@@ -1,18 +1,18 @@
 package spike;
 
-import excel.DataAccess;
+import excel.DataReader;
 import spike.error.EmptyDataAccessError;
 import spike.error.TypeDataAccessError;
 
 public abstract class TestDataRetriever {
 
-    private DataAccess dataAccess;
+    private DataReader dataAccess;
     
     public TestDataRetriever(String excelFile) {
        // this.dataAccess = new DataAccess(excelFile);
     }
 
-    protected DataAccess getDataAccess() {
+    protected DataReader getDataAccess() {
         return dataAccess;
     }
 
