@@ -12,8 +12,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import spikeTest.EmptyDataAccessError;
-import spikeTest.TypeDataAccessError;
+import spike.error.EmptyDataAccessError;
+import spike.error.TypeDataAccessError;
 
 public class DataAccess {
 

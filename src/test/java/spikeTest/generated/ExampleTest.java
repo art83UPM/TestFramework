@@ -1,4 +1,4 @@
-package spikeTest;
+package spikeTest.generated;
 
 import static org.junit.Assert.*;
 
@@ -7,14 +7,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import spike.Example;
+import spike.generated.ExampleTestDataRetriever;
 
 public class ExampleTest {
 
-    private ExampleTestData data;
+    private ExampleTestDataRetriever data;
 
     @BeforeClass
     public void init() {
-        data = new ExampleTestData();
+        data = new ExampleTestDataRetriever();
     }
 
     @After
@@ -22,6 +23,15 @@ public class ExampleTest {
         data.reset();
     }
 
+    @Test
+    public void testExample() {
+        while (data.hasNext(0)) {
+            Example example = data.getExample();
+            fail("Not yet implemented");
+            data.next();
+        }
+    }
+    
     @Test
     public void testExampleInt() {
         while (data.hasNext(1)) {
@@ -33,7 +43,7 @@ public class ExampleTest {
     
     @Test
     public void testExampleIntInt() {
-        while (data.hasNext()) {
+        while (data.hasNext(2)) {
             data.getExample();
             fail("Not yet implemented");
             data.next();
