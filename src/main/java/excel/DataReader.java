@@ -23,7 +23,6 @@ public class DataReader {
     private XSSFRow currentRow;
     private XSSFCell currentCell;
     
-    private static final String SHEET_NAME = "DATA";
     private static final int STARTING_ROW = 0;
     private static final int STARTING_CELL= 0;
     
