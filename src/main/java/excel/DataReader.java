@@ -18,14 +18,19 @@ import spike.error.TypeDataAccessError;
 public class DataReader {
 
     private String fileName;
+
     private XSSFWorkbook workbook;
+
     private XSSFSheet currentSheet;
+
     private XSSFRow currentRow;
+
     private XSSFCell currentCell;
-    
+
     private static final int STARTING_ROW = 0;
-    private static final int STARTING_CELL= 0;
-    
+
+    private static final int STARTING_CELL = 0;
+
     public DataReader(String fileName) {
         this.fileName = fileName;
         try {
