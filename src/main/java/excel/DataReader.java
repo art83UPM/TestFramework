@@ -15,7 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import spike.error.EmptyDataAccessError;
 import spike.error.TypeDataAccessError;
 
-public class DataAccess {
+public class DataReader {
 
     private String fileName;
     private XSSFWorkbook workbook;
@@ -27,7 +27,7 @@ public class DataAccess {
     private static final int STARTING_ROW = 0;
     private static final int STARTING_CELL= 0;
     
-    public DataAccess(String fileName) {
+    public DataReader(String fileName) {
         this.fileName = fileName;
         try {
             this.workbook = new XSSFWorkbook(fileName);
