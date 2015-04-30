@@ -1,8 +1,8 @@
 package spike;
 
 import excel.DataReader;
-import spike.error.EmptyDataAccessError;
-import spike.error.TypeDataAccessError;
+import spike.error.EmptyDataReaderErrorException;
+import spike.error.TypeDataReaderErrorException;
 
 public abstract class TestDataRetriever {
 
@@ -12,7 +12,7 @@ public abstract class TestDataRetriever {
         this.dataAccess = new DataReader(excelFile);
     }
 
-    protected DataReader getDataAccess() {
+    protected DataReader getDataReader() {
         return dataAccess;
     }
 
@@ -23,14 +23,28 @@ public abstract class TestDataRetriever {
     public boolean next() {
         return dataAccess.next();
     }
+    
+    protected void emptyDataReaderErrorCatch() {
+        this.next();        
+    }
 
+    protected void typeDataReaderErrorCatch(String message) {
+        System.out.println(message);
+        System.exit(0);
+    }
+    
+    protected void invalidDataReaderErrorCatch(String message) {
+        System.out.println(message);
+        System.exit(0);        
+    }
+    
     protected int getInt(String columnName) {
         int result = 0;
         try {
             result = dataAccess.getInt(columnName);
-        } catch (EmptyDataAccessError e) {
+        } catch (EmptyDataReaderErrorException e) {
             this.next();
-        } catch (TypeDataAccessError e) {
+        } catch (TypeDataReaderErrorException e) {
             System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
                     + dataAccess.getColumn() + ". Se esperaba un número entero.");
         }
@@ -41,9 +55,9 @@ public abstract class TestDataRetriever {
         float result = (float) 0.0;
         try {
             result = dataAccess.getFloat(columnName);
-        } catch (EmptyDataAccessError e) {
+        } catch (EmptyDataReaderErrorException e) {
             this.next();
-        } catch (TypeDataAccessError e) {
+        } catch (TypeDataReaderErrorException e) {
             System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
                     + dataAccess.getColumn() + ". Se esperaba un número decimal.");
         }
@@ -54,9 +68,9 @@ public abstract class TestDataRetriever {
         double result = 0.0;
         try {
             result = dataAccess.getDouble(columnName);
-        } catch (EmptyDataAccessError e) {
+        } catch (EmptyDataReaderErrorException e) {
             this.next();
-        } catch (TypeDataAccessError e) {
+        } catch (TypeDataReaderErrorException e) {
             System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
                     + dataAccess.getColumn() + ". Se esperaba un número decimal.");
         }
@@ -67,9 +81,9 @@ public abstract class TestDataRetriever {
         boolean result = false;
         try {
             result = dataAccess.getBoolean(columnName);
-        } catch (EmptyDataAccessError e) {
+        } catch (EmptyDataReaderErrorException e) {
             this.next();
-        } catch (TypeDataAccessError e) {
+        } catch (TypeDataReaderErrorException e) {
             System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
                     + dataAccess.getColumn() + ". Se esperaba un valor booleano.");
         }
@@ -80,13 +94,15 @@ public abstract class TestDataRetriever {
         String result = null;
         try {
             result = dataAccess.getString(columnName);
-        } catch (EmptyDataAccessError e) {
+        } catch (EmptyDataReaderErrorException e) {
             this.next();
-        } catch (TypeDataAccessError e) {
+        } catch (TypeDataReaderErrorException e) {
             System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
                     + dataAccess.getColumn() + ". Se esperaba un palabra, frase o texto.");
         }
         return result;
     }
+
+    
 
 }
