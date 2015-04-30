@@ -29,22 +29,27 @@ public class DataReader {
     private HashMap<String, Integer> headers;
 
     public DataReader(String filePath) {
-        FileInputStream fis;
-        try {
-            fis = new FileInputStream(new File(filePath));
-            this.workbook = new XSSFWorkbook(fis);
-        } catch (FileNotFoundException e) {
-            System.out.println("Fichero " + filePath + " no encontrado");
-            System.exit(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.workbook = this.readWorkbookFromFile(filePath);
         this.currentSheet = this.workbook.getSheetAt(0);
         this.rowIterator = this.currentSheet.iterator();
         this.next();
         this.fillHeaders();
     }
 
+    private XSSFWorkbook readWorkbookFromFile(String filePath) {
+        XSSFWorkbook workbook = null;
+        try {
+            FileInputStream fis = new FileInputStream(new File(filePath));
+            workbook = new XSSFWorkbook(fis);
+        } catch (FileNotFoundException e) {
+            System.out.println("Fichero " + filePath + " no encontrado");
+            System.exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return workbook;
+    }
+    
     private void fillHeaders() {
         this.headers = new HashMap<String, Integer>();
         for (Cell cell : this.currentRow) {
@@ -57,11 +62,11 @@ public class DataReader {
     }
 
     public boolean next() {
-        boolean result;
-        if (result = this.hasNext()) {
+        boolean hasNext =  this.hasNext();
+        if (hasNext) {
             this.currentRow = (XSSFRow) this.rowIterator.next();
         } 
-        return result;
+        return hasNext;    
     }
 
     public boolean hasNext() {
@@ -72,44 +77,35 @@ public class DataReader {
         return headers;
     }
 
-    public String getRow() {
-        // TODO Auto-generated method stub
-        return null;
+    public int getRow() {
+        return this.currentRow.getRowNum();
     }
 
-    public String getColumn() {
-        // TODO Auto-generated method stub
-        return null;
+    public String getString(String name) throws EmptyDataAccessError, TypeDataAccessError {
+        return this.getCell(name).getStringCellValue();
     }
 
-    public int getConstructMode() {
-        // TODO Auto-generated method stub
-        return 0;
+    public int getInt(String name) throws EmptyDataAccessError, TypeDataAccessError {
+        return (int)this.getCell(name).getNumericCellValue();
     }
 
-    public String getString(String string) throws EmptyDataAccessError, TypeDataAccessError {
-        // TODO Auto-generated method stub
-        return null;
+    public float getFloat(String name) throws EmptyDataAccessError, TypeDataAccessError {
+        return (float)this.getCell(name).getNumericCellValue();
     }
 
-    public int getInt(String string) throws EmptyDataAccessError, TypeDataAccessError {
-        // TODO Auto-generated method stub
-        return 0;
+    public double getDouble(String name) throws EmptyDataAccessError, TypeDataAccessError {
+        return this.getCell(name).getNumericCellValue();
     }
 
-    public float getFloat(String string) throws EmptyDataAccessError, TypeDataAccessError {
-        // TODO Auto-generated method stub
-        return 0;
+    public boolean getBoolean(String name) throws EmptyDataAccessError, TypeDataAccessError {
+        return this.getCell(name).getBooleanCellValue();
     }
-
-    public double getDouble(String string) throws EmptyDataAccessError, TypeDataAccessError {
-        // TODO Auto-generated method stub
-        return 0;
+    
+    private int getHeader(String name) {
+        return this.headers.get(name);
     }
-
-    public boolean getBoolean(String string) throws EmptyDataAccessError, TypeDataAccessError {
-        // TODO Auto-generated method stub
-        return false;
+    
+    private Cell getCell(String header) {
+        return this.currentRow.getCell(this.getHeader(header));
     }
-
 }
