@@ -6,11 +6,11 @@ import spike.error.EmptyDataReaderErrorException;
 import spike.error.InvalidDataReaderErrorException;
 import spike.error.TypeDataReaderErrorException;
 
-public class ExampleTestDataRetriever extends TestDataRetriever {
+public class ExampleTestDataReader extends TestDataRetriever {
 
     private Example example;
 
-    public ExampleTestDataRetriever() {
+    public ExampleTestDataReader() {
         super("Example.xls");
     }
 
