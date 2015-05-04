@@ -138,7 +138,12 @@ public class DataReader {
 
     public boolean getBoolean(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
-        this.checkCellErrors(cell, Cell.CELL_TYPE_STRING);
+        if (this.isEmptyCell(cell)) {
+            throw new EmptyDataReaderErrorException();
+        }
+        if (!this.isStringCell(cell)) {
+            throw new TypeDataReaderErrorException();
+        }
         if (cell.getStringCellValue().equalsIgnoreCase("true")) {
             return true;
         } else if (cell.getStringCellValue().equalsIgnoreCase("false")) {
@@ -154,14 +159,6 @@ public class DataReader {
 
     private Cell getCell(String header) {
         return this.currentRow.getCell(this.getHeader(header));
-    }
-
-    private void checkCellErrors(Cell cell, int cellType) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
-        if (cell == null || cell.getCellType() == Cell.CELL_TYPE_BLANK) {
-            throw new EmptyDataReaderErrorException();
-        } else if (cell.getCellType() != cellType) {
-            throw new TypeDataReaderErrorException();
-        }
     }
 
     private boolean isNumericCell(Cell cell) {
