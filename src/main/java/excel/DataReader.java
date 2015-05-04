@@ -126,16 +126,18 @@ public class DataReader {
 
     public boolean getBoolean(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
-        if (!this.isStringCell(cell)) {
-            throw new TypeDataReaderErrorException();
+        if (this.isStringCell(cell)) {
+            if (cell.getStringCellValue().equalsIgnoreCase("true")) {
+                return true;
+            } else if (cell.getStringCellValue().equalsIgnoreCase("false")) {
+                return false;
+            } else {
+                throw new TypeDataReaderErrorException();
+            }
+        } else if (this.isBooleanCell(cell)) {
+            return cell.getBooleanCellValue();
         }
-        if (cell.getStringCellValue().equalsIgnoreCase("true")) {
-            return true;
-        } else if (cell.getStringCellValue().equalsIgnoreCase("false")) {
-            return false;
-        } else {
-            throw new TypeDataReaderErrorException();
-        }
+        throw new TypeDataReaderErrorException();
     }
 
     private int getHeader(String name) {
@@ -158,6 +160,11 @@ public class DataReader {
     private boolean isStringCell(Cell cell) {
         return cell.getCellType() == Cell.CELL_TYPE_STRING
                 || (cell.getCellType() == Cell.CELL_TYPE_FORMULA && cell.getCachedFormulaResultType() == Cell.CELL_TYPE_STRING);
+    }
+    
+    private boolean isBooleanCell(Cell cell) {
+        return cell.getCellType() == Cell.CELL_TYPE_BOOLEAN
+                || (cell.getCellType() == Cell.CELL_TYPE_FORMULA && cell.getCachedFormulaResultType() == Cell.CELL_TYPE_BOOLEAN);
     }
 
     private boolean isEmptyCell(Cell cell) throws EmptyDataReaderErrorException {
