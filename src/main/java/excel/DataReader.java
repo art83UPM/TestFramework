@@ -14,6 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import spike.error.EmptyDataAccessError;
+import spike.error.EmptyDataSheetException;
 import spike.error.TypeDataAccessError;
 
 public class DataReader {
@@ -28,12 +29,16 @@ public class DataReader {
 
     private HashMap<String, Integer> headers;
 
-    public DataReader(String filePath) {
+    public DataReader(String filePath) throws EmptyDataSheetException {
         this.workbook = this.readWorkbookFromFile(filePath);
         this.currentSheet = this.workbook.getSheetAt(0);
         this.rowIterator = this.currentSheet.iterator();
         this.next();
         this.fillHeaders();
+        if (!this.hasNext()) {
+            throw new EmptyDataSheetException();
+        }
+        this.next();
     }
 
     private XSSFWorkbook readWorkbookFromFile(String filePath) {
@@ -61,12 +66,10 @@ public class DataReader {
         this.rowIterator = this.currentSheet.iterator();
     }
 
-    public boolean next() {
-        boolean hasNext =  this.hasNext();
-        if (hasNext) {
+    public void next() {
+        if (this.hasNext()) {
             this.currentRow = (XSSFRow) this.rowIterator.next();
         } 
-        return hasNext;    
     }
 
     public boolean hasNext() {
@@ -82,23 +85,47 @@ public class DataReader {
     }
 
     public String getString(String name) throws EmptyDataAccessError, TypeDataAccessError {
-        return this.getCell(name).getStringCellValue();
+        Cell cell = this.getCell(name);
+        this.checkCellErrors(cell, Cell.CELL_TYPE_STRING);
+        String value = cell.getStringCellValue();
+        if (!(value.startsWith("\"") && value.endsWith("\""))) {
+            throw new TypeDataAccessError();
+        }
+        return value.substring(1, value.length()-1);
     }
 
     public int getInt(String name) throws EmptyDataAccessError, TypeDataAccessError {
-        return (int)this.getCell(name).getNumericCellValue();
+        Cell cell = this.getCell(name);
+        this.checkCellErrors(cell, Cell.CELL_TYPE_NUMERIC);
+        double value = cell.getNumericCellValue();
+        if (value % (int)value != 0) {
+            throw new TypeDataAccessError();
+        }
+        return (int)value;
     }
 
     public float getFloat(String name) throws EmptyDataAccessError, TypeDataAccessError {
-        return (float)this.getCell(name).getNumericCellValue();
+        Cell cell = this.getCell(name);
+        this.checkCellErrors(cell, Cell.CELL_TYPE_NUMERIC);
+        return (float)cell.getNumericCellValue();
     }
 
     public double getDouble(String name) throws EmptyDataAccessError, TypeDataAccessError {
-        return this.getCell(name).getNumericCellValue();
+        Cell cell = this.getCell(name);
+        this.checkCellErrors(cell, Cell.CELL_TYPE_NUMERIC);
+        return cell.getNumericCellValue();
     }
 
     public boolean getBoolean(String name) throws EmptyDataAccessError, TypeDataAccessError {
-        return this.getCell(name).getBooleanCellValue();
+        Cell cell = this.getCell(name);
+        this.checkCellErrors(cell, Cell.CELL_TYPE_STRING);
+        if (cell.getStringCellValue().equalsIgnoreCase("true")) {
+            return true;
+        } else if (cell.getStringCellValue().equalsIgnoreCase("false")) {
+            return false;
+        } else {
+            throw new TypeDataAccessError();
+        }
     }
     
     private int getHeader(String name) {
@@ -107,5 +134,13 @@ public class DataReader {
     
     private Cell getCell(String header) {
         return this.currentRow.getCell(this.getHeader(header));
+    }
+    
+    private void checkCellErrors(Cell cell, int cellType) throws EmptyDataAccessError, TypeDataAccessError {
+        if (cell.getCellType() == Cell.CELL_TYPE_BLANK) {
+            throw new EmptyDataAccessError();
+        } else if (cell.getCellType() != cellType) {
+            throw new TypeDataAccessError();
+        }
     }
 }
