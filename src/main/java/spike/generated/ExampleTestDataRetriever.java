@@ -97,10 +97,6 @@ public class ExampleTestDataRetriever extends TestDataRetriever {
         return example;
     }
 
-    private int getConstructMode() {
-        return this.getDataReader().getConstructMode();
-    }
-
     public int getM1Result() {
         return this.getInt("getM1Result");
     }
