@@ -86,9 +86,6 @@ public class DataReader {
 
     public String getString(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
-        if (this.isEmptyCell(cell)) {
-            throw new EmptyDataReaderErrorException();
-        }
         if (!this.isStringCell(cell)) {
             throw new TypeDataReaderErrorException();
         }
@@ -101,9 +98,6 @@ public class DataReader {
 
     public int getInt(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
-        if (this.isEmptyCell(cell)) {
-            throw new EmptyDataReaderErrorException();
-        }
         if (!this.isNumericCell(cell)) {
             throw new TypeDataReaderErrorException();
         }
@@ -116,9 +110,6 @@ public class DataReader {
 
     public float getFloat(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
-        if (this.isEmptyCell(cell)) {
-            throw new EmptyDataReaderErrorException();
-        }
         if (!this.isNumericCell(cell)) {
             throw new TypeDataReaderErrorException();
         }
@@ -127,9 +118,6 @@ public class DataReader {
 
     public double getDouble(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
-        if (this.isEmptyCell(cell)) {
-            throw new EmptyDataReaderErrorException();
-        }
         if (!this.isNumericCell(cell)) {
             throw new TypeDataReaderErrorException();
         }
@@ -138,9 +126,6 @@ public class DataReader {
 
     public boolean getBoolean(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
-        if (this.isEmptyCell(cell)) {
-            throw new EmptyDataReaderErrorException();
-        }
         if (!this.isStringCell(cell)) {
             throw new TypeDataReaderErrorException();
         }
@@ -157,8 +142,12 @@ public class DataReader {
         return this.headers.get(name);
     }
 
-    private Cell getCell(String header) {
-        return this.currentRow.getCell(this.getHeader(header));
+    private Cell getCell(String header) throws EmptyDataReaderErrorException {
+        Cell cell = this.currentRow.getCell(this.getHeader(header));;
+        if (this.isEmptyCell(cell)) {
+            throw new EmptyDataReaderErrorException();
+        }
+        return cell;
     }
 
     private boolean isNumericCell(Cell cell) {
