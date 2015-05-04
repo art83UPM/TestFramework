@@ -134,10 +134,10 @@ public class DataReader {
             } else {
                 throw new TypeDataReaderErrorException();
             }
-        } else if (this.isBooleanCell(cell)) {
-            return cell.getBooleanCellValue();
+        } else if (!this.isBooleanCell(cell)) {
+            throw new TypeDataReaderErrorException();      
         }
-        throw new TypeDataReaderErrorException();
+        return cell.getBooleanCellValue();
     }
 
     private int getHeader(String name) {
