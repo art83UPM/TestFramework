@@ -27,6 +27,7 @@ public class ExampleTest {
     public void testExample() {
         while (data.hasNext(0)) {
             Example example = data.getExample();
+            //Example example = (Example) data.getObject("Example");
             fail("Not yet implemented");
             data.next();
         }
@@ -53,7 +54,7 @@ public class ExampleTest {
     @Test
     public void testM1() {
         while (data.hasNext()) {
-            assertEquals(data.getM1Result(), data.getExample().m1());
+           assertEquals(data.getM1Result(), data.getExample().m1());
             data.next();
         }
     }
