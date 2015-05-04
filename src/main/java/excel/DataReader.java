@@ -13,9 +13,9 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import spike.error.EmptyDataAccessError;
 import spike.error.EmptyDataSheetException;
-import spike.error.TypeDataAccessError;
+import spike.error.EmptyDataReaderErrorException;
+import spike.error.TypeDataReaderErrorException;
 
 public class DataReader {
 
@@ -54,7 +54,7 @@ public class DataReader {
         }
         return workbook;
     }
-    
+
     private void fillHeaders() {
         this.headers = new HashMap<String, Integer>();
         for (Cell cell : this.currentRow) {
@@ -69,7 +69,7 @@ public class DataReader {
     public void next() {
         if (this.hasNext()) {
             this.currentRow = (XSSFRow) this.rowIterator.next();
-        } 
+        }
     }
 
     public boolean hasNext() {
@@ -84,39 +84,44 @@ public class DataReader {
         return this.currentRow.getRowNum();
     }
 
-    public String getString(String name) throws EmptyDataAccessError, TypeDataAccessError {
+    public String getString(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
         this.checkCellErrors(cell, Cell.CELL_TYPE_STRING);
         String value = cell.getStringCellValue();
         if (!(value.startsWith("\"") && value.endsWith("\""))) {
-            throw new TypeDataAccessError();
+            throw new TypeDataReaderErrorException();
         }
-        return value.substring(1, value.length()-1);
+        return value.substring(1, value.length() - 1);
     }
 
-    public int getInt(String name) throws EmptyDataAccessError, TypeDataAccessError {
+    public int getInt(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
         this.checkCellErrors(cell, Cell.CELL_TYPE_NUMERIC);
         double value = cell.getNumericCellValue();
-        if (value % (int)value != 0) {
-            throw new TypeDataAccessError();
+        if (value % (int) value != 0) {
+            throw new TypeDataReaderErrorException();
         }
-        return (int)value;
+        return (int) value;
     }
 
-    public float getFloat(String name) throws EmptyDataAccessError, TypeDataAccessError {
+    public float getFloat(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
         this.checkCellErrors(cell, Cell.CELL_TYPE_NUMERIC);
-        return (float)cell.getNumericCellValue();
+        return (float) cell.getNumericCellValue();
     }
 
-    public double getDouble(String name) throws EmptyDataAccessError, TypeDataAccessError {
+    public double getDouble(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
-        this.checkCellErrors(cell, Cell.CELL_TYPE_NUMERIC);
+        if (this.isEmptyCell(cell)) {
+            throw new EmptyDataReaderErrorException();
+        }
+        if (!this.isNumericCell(cell)) {
+            throw new TypeDataReaderErrorException();
+        }
         return cell.getNumericCellValue();
     }
 
-    public boolean getBoolean(String name) throws EmptyDataAccessError, TypeDataAccessError {
+    public boolean getBoolean(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
         this.checkCellErrors(cell, Cell.CELL_TYPE_STRING);
         if (cell.getStringCellValue().equalsIgnoreCase("true")) {
@@ -124,23 +129,32 @@ public class DataReader {
         } else if (cell.getStringCellValue().equalsIgnoreCase("false")) {
             return false;
         } else {
-            throw new TypeDataAccessError();
+            throw new TypeDataReaderErrorException();
         }
     }
-    
+
     private int getHeader(String name) {
         return this.headers.get(name);
     }
-    
+
     private Cell getCell(String header) {
         return this.currentRow.getCell(this.getHeader(header));
     }
-    
-    private void checkCellErrors(Cell cell, int cellType) throws EmptyDataAccessError, TypeDataAccessError {
-        if (cell.getCellType() == Cell.CELL_TYPE_BLANK) {
-            throw new EmptyDataAccessError();
+
+    private void checkCellErrors(Cell cell, int cellType) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
+        if (cell == null || cell.getCellType() == Cell.CELL_TYPE_BLANK) {
+            throw new EmptyDataReaderErrorException();
         } else if (cell.getCellType() != cellType) {
-            throw new TypeDataAccessError();
+            throw new TypeDataReaderErrorException();
         }
+    }
+    
+    private boolean isNumericCell(Cell cell) {
+        return cell.getCellType() == Cell.CELL_TYPE_NUMERIC
+                || (cell.getCellType() == Cell.CELL_TYPE_FORMULA && cell.getCachedFormulaResultType() == Cell.CELL_TYPE_NUMERIC);
+    }
+
+    private boolean isEmptyCell(Cell cell) throws EmptyDataReaderErrorException {
+        return (cell == null || cell.getCellType() == Cell.CELL_TYPE_BLANK);
     }
 }
