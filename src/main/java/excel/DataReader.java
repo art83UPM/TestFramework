@@ -86,7 +86,12 @@ public class DataReader {
 
     public String getString(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
-        this.checkCellErrors(cell, Cell.CELL_TYPE_STRING);
+        if (this.isEmptyCell(cell)) {
+            throw new EmptyDataReaderErrorException();
+        }
+        if (!this.isStringCell(cell)) {
+            throw new TypeDataReaderErrorException();
+        }
         String value = cell.getStringCellValue();
         if (!(value.startsWith("\"") && value.endsWith("\""))) {
             throw new TypeDataReaderErrorException();
@@ -96,7 +101,12 @@ public class DataReader {
 
     public int getInt(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
-        this.checkCellErrors(cell, Cell.CELL_TYPE_NUMERIC);
+        if (this.isEmptyCell(cell)) {
+            throw new EmptyDataReaderErrorException();
+        }
+        if (!this.isNumericCell(cell)) {
+            throw new TypeDataReaderErrorException();
+        }
         double value = cell.getNumericCellValue();
         if (value % (int) value != 0) {
             throw new TypeDataReaderErrorException();
@@ -106,7 +116,12 @@ public class DataReader {
 
     public float getFloat(String name) throws EmptyDataReaderErrorException, TypeDataReaderErrorException {
         Cell cell = this.getCell(name);
-        this.checkCellErrors(cell, Cell.CELL_TYPE_NUMERIC);
+        if (this.isEmptyCell(cell)) {
+            throw new EmptyDataReaderErrorException();
+        }
+        if (!this.isNumericCell(cell)) {
+            throw new TypeDataReaderErrorException();
+        }
         return (float) cell.getNumericCellValue();
     }
 
@@ -148,10 +163,15 @@ public class DataReader {
             throw new TypeDataReaderErrorException();
         }
     }
-    
+
     private boolean isNumericCell(Cell cell) {
         return cell.getCellType() == Cell.CELL_TYPE_NUMERIC
                 || (cell.getCellType() == Cell.CELL_TYPE_FORMULA && cell.getCachedFormulaResultType() == Cell.CELL_TYPE_NUMERIC);
+    }
+    
+    private boolean isStringCell(Cell cell) {
+        return cell.getCellType() == Cell.CELL_TYPE_STRING
+                || (cell.getCellType() == Cell.CELL_TYPE_FORMULA && cell.getCachedFormulaResultType() == Cell.CELL_TYPE_STRING);
     }
 
     private boolean isEmptyCell(Cell cell) throws EmptyDataReaderErrorException {
