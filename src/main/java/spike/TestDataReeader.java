@@ -4,11 +4,11 @@ import excel.DataReader;
 import spike.error.EmptyDataReaderErrorException;
 import spike.error.TypeDataReaderErrorException;
 
-public abstract class TestDataRetriever {
+public abstract class TestDataReeader {
 
     private DataReader dataAccess;
 
-    public TestDataRetriever(String excelFile) {
+    public TestDataReeader(String excelFile) {
         this.dataAccess = new DataReader(excelFile);
     }
 

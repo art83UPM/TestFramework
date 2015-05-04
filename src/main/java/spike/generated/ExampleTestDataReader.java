@@ -1,12 +1,12 @@
 package spike.generated;
 
 import spike.Example;
-import spike.TestDataRetriever;
+import spike.TestDataReeader;
 import spike.error.EmptyDataReaderErrorException;
 import spike.error.InvalidDataReaderErrorException;
 import spike.error.TypeDataReaderErrorException;
 
-public class ExampleTestDataReader extends TestDataRetriever {
+public class ExampleTestDataReader extends TestDataReeader {
 
     private Example example;
 
