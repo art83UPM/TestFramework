@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class TestClassGenerator {
-    //DataWriter dataWriter;
+    // DataWriter dataWriter;
 
     public void generate(String clazzName) {
         try {
@@ -21,26 +21,25 @@ public class TestClassGenerator {
     private void printConstructors(Constructor<?>[] constructors) {
         System.out.println("Constructors:");
         for (Constructor<?> constructor : constructors) {
-            System.out.print(Modifier.toString(constructor.getModifiers()) + " "
-                    + constructor.getName() + "(");
+            System.out.print(Modifier.toString(constructor.getModifiers()) + " " + constructor.getName() + "(");
             this.printParameters(this.getParametersType(constructor));
             System.out.println(")");
-        }        
+        }
     }
 
-    private  Class<?>[] getParametersType(Constructor<?> constructor) {
-       return constructor.getParameterTypes();
+    private Class<?>[] getParametersType(Constructor<?> constructor) {
+        return constructor.getParameterTypes();
     }
 
-    private Constructor<?>[] getConstructors(Class<?>  clazz) {        
+    private Constructor<?>[] getConstructors(Class<?> clazz) {
         return clazz.getConstructors();
     }
 
     private void printMethods(Method[] methods) {
         System.out.println("Methods:");
         for (Method method : methods) {
-            System.out.print(Modifier.toString(method.getModifiers()) + " "
-                    + method.getReturnType().toString() + " " + method.getName() + "(");
+            System.out.print(Modifier.toString(method.getModifiers()) + " " + method.getReturnType().toString() + " " + method.getName()
+                    + "(");
             this.printParameters(this.getParametersType(method));
             System.out.println(")");
         }

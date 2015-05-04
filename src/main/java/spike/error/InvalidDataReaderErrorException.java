@@ -1,6 +1,6 @@
 package spike.error;
 
-public class TypeDataAccessError extends Exception {
+public class InvalidDataReaderErrorException extends Exception {
 
     private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,6 @@
 package spike.error;
 
-public class EmptyDataAccessError extends Exception {
+public class EmptyDataReaderErrorException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
