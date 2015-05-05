@@ -29,20 +29,6 @@ public abstract class TestDataReader {
         dataReader.next();
     }
     
-    protected void emptyDataReaderErrorCatch() {
-        this.next();        
-    }
-
-    protected void typeDataReaderErrorCatch(String message) {
-        System.out.println(message);
-        System.exit(0);
-    }
-    
-    protected void invalidDataReaderErrorCatch(String message) {
-        System.out.println(message);
-        System.exit(0);        
-    }
-    
     protected int getInt(String columnName) {
         int result = 0;
         try {
