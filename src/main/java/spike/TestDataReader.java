@@ -1,27 +1,32 @@
 package spike;
 
+import spike.error.DataReaderException;
+import spike.error.InvalidDataSheetException;
 import excel.DataReader;
-import spike.error.EmptyDataReaderErrorException;
-import spike.error.TypeDataReaderErrorException;
 
 public abstract class TestDataReader {
 
-    private DataReader dataAccess;
+    private DataReader dataReader;
 
     public TestDataReader(String excelFile) {
-        this.dataAccess = new DataReader(excelFile);
+        try {
+            this.dataReader = new DataReader(excelFile);
+        } catch (InvalidDataSheetException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     protected DataReader getDataReader() {
-        return dataAccess;
+        return dataReader;
     }
 
     public void reset() {
-        dataAccess.reset();
+        dataReader.reset();
     }
 
-    public boolean next() {
-        return dataAccess.next();
+    public void next() {
+        dataReader.next();
     }
     
     protected void emptyDataReaderErrorCatch() {
@@ -41,12 +46,9 @@ public abstract class TestDataReader {
     protected int getInt(String columnName) {
         int result = 0;
         try {
-            result = dataAccess.getInt(columnName);
-        } catch (EmptyDataReaderErrorException e) {
-            this.next();
-        } catch (TypeDataReaderErrorException e) {
-            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
-                    + dataAccess.getColumn() + ". Se esperaba un número entero.");
+            result = dataReader.getInt(columnName);
+        } catch (DataReaderException e) {
+            System.out.println(e.getMessage());
         }
         return result;
     }
@@ -54,12 +56,9 @@ public abstract class TestDataReader {
     protected float getFloat(String columnName) {
         float result = (float) 0.0;
         try {
-            result = dataAccess.getFloat(columnName);
-        } catch (EmptyDataReaderErrorException e) {
-            this.next();
-        } catch (TypeDataReaderErrorException e) {
-            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
-                    + dataAccess.getColumn() + ". Se esperaba un número decimal.");
+            result = dataReader.getFloat(columnName);
+        } catch (DataReaderException e){
+            System.out.println(e.getMessage());
         }
         return result;
     }
@@ -67,12 +66,9 @@ public abstract class TestDataReader {
     protected double getDouble(String columnName) {
         double result = 0.0;
         try {
-            result = dataAccess.getDouble(columnName);
-        } catch (EmptyDataReaderErrorException e) {
-            this.next();
-        } catch (TypeDataReaderErrorException e) {
-            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
-                    + dataAccess.getColumn() + ". Se esperaba un número decimal.");
+            result = dataReader.getDouble(columnName);
+        } catch (DataReaderException e) {
+            System.out.println(e.getMessage());
         }
         return result;
     }
@@ -80,12 +76,9 @@ public abstract class TestDataReader {
     protected boolean getBoolean(String columnName) {
         boolean result = false;
         try {
-            result = dataAccess.getBoolean(columnName);
-        } catch (EmptyDataReaderErrorException e) {
-            this.next();
-        } catch (TypeDataReaderErrorException e) {
-            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
-                    + dataAccess.getColumn() + ". Se esperaba un valor booleano.");
+            result = dataReader.getBoolean(columnName);
+        } catch (DataReaderException e) {
+            System.out.println(e.getMessage());
         }
         return result;
     }
@@ -93,12 +86,9 @@ public abstract class TestDataReader {
     protected String getString(String columnName) {
         String result = null;
         try {
-            result = dataAccess.getString(columnName);
-        } catch (EmptyDataReaderErrorException e) {
-            this.next();
-        } catch (TypeDataReaderErrorException e) {
-            System.out.println("Ha introducido un valor de un tipo diferente al esperado en la fila " + dataAccess.getRow() + " - columna "
-                    + dataAccess.getColumn() + ". Se esperaba un palabra, frase o texto.");
+            result = dataReader.getString(columnName);
+        } catch (DataReaderException e) {
+            System.out.println(e.getMessage());
         }
         return result;
     }
