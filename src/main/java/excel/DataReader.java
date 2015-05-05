@@ -33,6 +33,9 @@ public class DataReader {
         this.workbook = this.readWorkbookFromFile(filePath);
         this.currentSheet = this.workbook.getSheetAt(0);
         this.rowIterator = this.currentSheet.iterator();
+        if (!this.hasNext()) {
+            throw new EmptyDataSheetException();
+        }
         this.next();
         this.fillHeaders();
         if (!this.hasNext()) {
