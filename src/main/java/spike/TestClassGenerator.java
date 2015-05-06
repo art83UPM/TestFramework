@@ -10,6 +10,9 @@ public class TestClassGenerator {
     public void generate(String clazzName) {
         try {
             Class<?> clazz = Class.forName(clazzName);
+
+            System.out.println("~~~~~~ "+ clazz.getPackage() + " ~~~~~~");  
+            System.out.println("~~~~~~ Class "+ clazz.getSimpleName() + " ~~~~~~");            
             this.printConstructors(this.getConstructors(clazz));
             this.printMethods(this.getMethods(clazz));
 
