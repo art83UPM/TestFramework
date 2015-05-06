@@ -5,7 +5,6 @@ import spike.TestDataReader;
 import spike.error.DataReaderException;
 import spike.error.EmptyDataReaderException;
 import spike.error.InvalidDataReaderException;
-import spike.error.TypeDataReaderException;
 
 public class ExampleTestDataReader extends TestDataReader {
 
@@ -23,27 +22,25 @@ public class ExampleTestDataReader extends TestDataReader {
     public boolean hasNext(int constructMode) {
         boolean captured = false;
         switch (constructMode) {
-        case 0:            
+        case 0:
             do {
                 try {
-                    captured = this.tryCase0();                    
+                    captured = this.tryCase0();
                 } catch (EmptyDataReaderException e) {
-                    this.next();                    
-                } catch (TypeDataReaderException e) {
+                    this.next();
+                } catch (DataReaderException e) {
                     System.out.println(e.getMessage());
                     System.exit(0);
-                } catch (InvalidDataReaderException e) {
-                    e.printStackTrace();
                 }
             } while (!captured);
             return true;
         case 1:
             do {
-                try {                    
+                try {
                     captured = this.tryCase1();
                 } catch (EmptyDataReaderException e) {
                     this.next();
-                } catch (TypeDataReaderException e) {
+                } catch (DataReaderException e) {
                     System.out.println(e.getMessage());
                     System.exit(0);
                 }
@@ -51,11 +48,11 @@ public class ExampleTestDataReader extends TestDataReader {
             return true;
         case 2:
             do {
-                try {                    
-                    captured = this.tryCase2();                    
+                try {
+                    captured = this.tryCase2();
                 } catch (EmptyDataReaderException e) {
                     this.next();
-                } catch (TypeDataReaderException e) {
+                } catch (DataReaderException e) {
                     System.out.println(e.getMessage());
                     System.exit(0);
                 }
@@ -69,20 +66,20 @@ public class ExampleTestDataReader extends TestDataReader {
 
     private boolean tryCase0() throws DataReaderException {
         String x = this.getDataReader().getString("getExample");
-        if (x.equalsIgnoreCase("x")) {
-            this.example = new Example();
-        } else {
-            throw new InvalidDataReaderException();
+        if (!x.equalsIgnoreCase("x")) {
+            throw new InvalidDataReaderException("Data under column \"getExample\" at row: " + this.getDataReader().getRow()
+                    + " should be x or X");
         }
-        return true;        
+        this.example = new Example();
+        return true;
     }
-    
+
     private boolean tryCase1() throws DataReaderException {
         int value1 = this.getDataReader().getInt("getExampleIntValue1");
         this.example = new Example(value1);
         return true;
     }
-    
+
     private boolean tryCase2() throws DataReaderException {
         int value1 = this.getDataReader().getInt("getExampleIntIntValue1");
         int value2 = this.getDataReader().getInt("getExampleIntIntValue2");
