@@ -1,26 +1,21 @@
 package spike;
 
-import java.io.File;
-import java.io.IOException;
-
 public class TestGenerator {
 
-    private File file;
-
-    public TestGenerator(String fileName) {
-        this.file = new File(fileName);
+	public TestGenerator(String clazzName) {
         try {
-            file.createNewFile();
-        } catch (IOException e) {
+            ClazzReader clazzReader = new ClazzReader(Class.forName(clazzName));
+            Clazz clazz = clazzReader.read();
+            TestWriter testWriter = new TestWriter("C:\\Users\\nyuron\\Desktop");
+            clazz.accept(testWriter);
+            testWriter.close();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void writeHeader() {
-        
-    }
-
-    public static void main(String[] args) {
-        TestGenerator testGenerator = new TestGenerator("C:\\Users\\nyuron\\Desktop\\newfile.java");
-    }
+            System.exit(0);
+        }		
+	}
+	
+	public static void main(String[] args) {
+	        new TestGenerator(args[0]);
+	}
 }
