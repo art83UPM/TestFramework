@@ -20,12 +20,12 @@ public class Clazz implements Visitable {
         myPackage = clazz.getPackage().getName();
         constructorMemberList = new ArrayList<ConstructorMember>();
         int order = 0;
-        for (Constructor<?> constructor : clazz.getConstructors()) {
+        for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
             ConstructorMember constructorMember = new ConstructorMember(constructor, order++);
             constructorMemberList.add(constructorMember);
         }
         methodMemberList = new ArrayList<MethodMember>();
-        for (Method method : clazz.getMethods()) {
+        for (Method method : clazz.getDeclaredMethods()) {
             MethodMember methodMember = new MethodMember(method);
             methodMemberList.add(methodMember);
         }
