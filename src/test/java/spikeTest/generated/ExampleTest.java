@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import spike.Example;
+import spike.error.DataReaderException;
 import spike.generated.ExampleTestDataReader;
 
 public class ExampleTest {
@@ -25,11 +26,15 @@ public class ExampleTest {
 
     @Test
     public void testExample() {
-        while (data.hasNext(0)) {
-            Example example = data.getExample();
-            //Example example = (Example) data.getObject("Example");
-            fail("Not yet implemented");
-            data.next();
+        try {
+            while (data.hasNext(0)) {
+                Example example = data.getExample();
+                // Example example = (Example) data.getObject("Example");
+                fail("Not yet implemented");
+                data.next();
+            }
+        } catch (DataReaderException e) {
+            fail(e.getMessage());
         }
     }
 
@@ -54,7 +59,7 @@ public class ExampleTest {
     @Test
     public void testM1() {
         while (data.hasNext()) {
-           assertEquals(data.getM1Result(), data.getExample().m1());
+            assertEquals(data.getM1Result(), data.getExample().m1());
             data.next();
         }
     }
