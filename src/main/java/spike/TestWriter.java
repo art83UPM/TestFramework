@@ -42,7 +42,7 @@ public class TestWriter implements Visitor {
         }
     }
 
-    public void visit(ConstructorMember constructorMember) {
+    public void visit(ConstructorMember constructorMember) {//TODO que los constructores esten ordenados
         try {
             writer.write(this.printTabs(1) + "@Test\n");
             writer.write(this.printTabs(1) + "public void test" + constructorMember.getName());
@@ -62,7 +62,7 @@ public class TestWriter implements Visitor {
         }
     }
 
-    public void visit(MethodMember methodMember) {
+    public void visit(MethodMember methodMember) {//TODO que los metodos esten ordenados
         String nameAndParametersType = methodMember.getName();
         for (ParameterMember parameterMember : methodMember.getParametersType()) {
             nameAndParametersType += parameterMember.getType();
