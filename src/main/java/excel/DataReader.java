@@ -180,4 +180,12 @@ public class DataReader {
     private boolean isEmptyCell(Cell cell) throws EmptyDataReaderException {
         return (cell == null || cell.getCellType() == Cell.CELL_TYPE_BLANK);
     }
+
+    public int getRow() {
+        return this.currentRow.getRowNum();
+    }
+    
+    public int getDataRowCount() {
+        return this.currentSheet.getPhysicalNumberOfRows() -1;
+    }
 }
