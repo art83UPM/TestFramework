@@ -10,12 +10,15 @@ public class MethodMember implements Visitable  {
     private String name;
     
     private String returnType;
+    
+    private String clazzName;
 
     private List<ParameterMember> parameterTypes;
     
     public MethodMember(Method method) {
         this.name = method.getName();
         this.returnType = method.getReturnType().toString();
+        this.clazzName = method.getDeclaringClass().getSimpleName();
         this.parameterTypes = new ArrayList<ParameterMember>();
         for (Class<?> parameterType : method.getParameterTypes()) {
             this.parameterTypes.add(new ParameterMember(parameterType));
@@ -23,11 +26,15 @@ public class MethodMember implements Visitable  {
     }
     
     public String getName() {
-        return this.name;
+        return name.toString().substring(0, 1).toUpperCase() + name.toString().substring(1);
     }
 
     public String getReturnType() {
         return returnType;
+    }
+
+    public String getClazzName() {
+        return clazzName;
     }
 
     public List<ParameterMember> getParametersType() {
