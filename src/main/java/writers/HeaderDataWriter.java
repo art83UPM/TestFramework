@@ -3,6 +3,7 @@ package writers;
 import code.Clazz;
 import code.ConstructorMember;
 import code.MethodMember;
+import code.Package;
 import code.ParameterMember;
 import code.Visitor;
 
@@ -45,9 +46,16 @@ public class HeaderDataWriter implements Visitor {
         }
         dataWriter.write(header + "Result");
     }
+    
+    @Override
+    public void visit(Package package1) {
+        // TODO Auto-generated method stub
+        
+    }
 
     public void close() {
         dataWriter.save();
     }
+
 
 }

@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Clazz implements Visitable {
+public class Clazz extends CodeComponent {
 
     private String name;
 

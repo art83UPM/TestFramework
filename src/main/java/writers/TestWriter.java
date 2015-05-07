@@ -8,6 +8,7 @@ import java.io.IOException;
 import code.Clazz;
 import code.ConstructorMember;
 import code.MethodMember;
+import code.Package;
 import code.ParameterMember;
 import code.Visitor;
 
@@ -91,7 +92,13 @@ public class TestWriter implements Visitor {
             e.printStackTrace();
         }
     }
-
+    
+    @Override
+    public void visit(Package package1) {
+        // TODO Auto-generated method stub
+        
+    }
+ 
     public void close() {
         try {
             writer.write("}\n\n");
@@ -108,4 +115,6 @@ public class TestWriter implements Visitor {
         }
         return result;
     }
+
+   
 }
