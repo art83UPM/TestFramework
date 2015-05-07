@@ -16,7 +16,7 @@ public abstract class TestDataReader {
             e.printStackTrace();
         }
     }
-
+    
     protected DataReader getDataReader() {
         return dataReader;
     }
@@ -25,10 +25,6 @@ public abstract class TestDataReader {
         dataReader.reset();
     }
 
-    public void next() {
-        dataReader.next();
-    }
-    
     protected int getInt(String columnName) {
         int result = 0;
         try {
