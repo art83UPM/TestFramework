@@ -4,18 +4,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Package extends CodeComponent {
+public class Package extends CodeFile {
     
     private File file;
     
     private String name;
     
-    private List<CodeComponent> components;
+    private List<CodeFile> components;
     
     public Package(File file) {
         this.file = file;
         this.name = this.file.getName();
-        this.components = new ArrayList<CodeComponent>();
+        this.components = new ArrayList<CodeFile>();
         this.inspect();
     }
 
@@ -30,15 +30,15 @@ public class Package extends CodeComponent {
         }
     }
 
-    public void add(CodeComponent component) {
+    public void add(CodeFile component) {
         this.components.add(component);
     }
     
-    public void remove(CodeComponent component) {
+    public void remove(CodeFile component) {
         this.components.remove(component);
     }
 
-    public List<CodeComponent> getComponents() {
+    public List<CodeFile> getComponents() {
         return this.components;
     }
     
@@ -48,7 +48,7 @@ public class Package extends CodeComponent {
     
     @Override
     public void accept(Visitor visitor) {
-        for (CodeComponent codeComponent : components) {
+        for (CodeFile codeComponent : components) {
             codeComponent.accept(visitor);
         }
     }   

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Code {
 
-    private List<CodeComponent> components;
+    private List<CodeFile> components;
     
     private File file;
     
@@ -22,7 +22,7 @@ public class Code {
         }
     }
 
-    private void add(CodeComponent component) {
+    private void add(CodeFile component) {
         this.components.add(component);
     }
 }
