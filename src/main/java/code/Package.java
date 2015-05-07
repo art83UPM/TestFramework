@@ -24,8 +24,12 @@ public class Package extends CodeFile {
             if (file.isDirectory()) {
                 this.add(new Package(file));
             } else if (file.isFile()) {
-                String className = this.name+"."+file.getName().split(".")[0];
-                //this.add(new Clazz(file.getPath()));
+                String className = this.name+"."+file.getName().split("\\.")[0];
+                try {
+                    this.add(new Clazz(Class.forName(className)));
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
