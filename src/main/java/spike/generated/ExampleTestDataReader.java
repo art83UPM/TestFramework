@@ -15,8 +15,34 @@ public class ExampleTestDataReader extends TestDataReader {
     }
 
     public boolean hasNext() {
-        // TODO: Select the first valid constructor in the same row
-        return false;
+        this.example = null;
+        return this.getDataReader().hasNext();
+    }
+    
+    public Example next() {
+        this.getDataReader().next();
+      //TODO: Improve this code
+        try {
+            tryCase0();
+        } catch (EmptyDataReaderException e) {
+            try { 
+                tryCase1();
+            } catch (EmptyDataReaderException e1) {
+                try {
+                    tryCase2();
+                } catch (EmptyDataReaderException e2) {
+                    System.out.println("No constructor defined at row "+this.getDataReader().getRow());
+                    System.exit(0);
+                } catch (DataReaderException e2) {
+                    System.out.println(e2.getMessage());
+                }
+            } catch (DataReaderException e1) {
+                System.out.println(e1.getMessage());
+            }
+        } catch (DataReaderException e) {
+            e.printStackTrace();
+        }
+        return this.example;
     }
 
     public boolean hasNext(int constructMode) {
