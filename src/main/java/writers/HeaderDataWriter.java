@@ -1,6 +1,10 @@
-package spike;
+package writers;
 
-import excel.DataWriter;
+import code.Clazz;
+import code.ConstructorMember;
+import code.MethodMember;
+import code.ParameterMember;
+import code.Visitor;
 
 public class HeaderDataWriter implements Visitor {
 

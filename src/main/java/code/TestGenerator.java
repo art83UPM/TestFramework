@@ -1,4 +1,8 @@
-package spike;
+package code;
+
+import readers.ClazzReader;
+import writers.HeaderDataWriter;
+import writers.TestWriter;
 
 public class TestGenerator {
 

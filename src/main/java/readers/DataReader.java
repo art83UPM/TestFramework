@@ -1,4 +1,4 @@
-package excel;
+package readers;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,10 +13,10 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import spike.error.DataReaderException;
-import spike.error.InvalidDataSheetException;
-import spike.error.EmptyDataReaderException;
-import spike.error.TypeDataReaderException;
+import exceptions.DataReaderException;
+import exceptions.EmptyDataReaderException;
+import exceptions.InvalidDataSheetException;
+import exceptions.TypeDataReaderException;
 
 public class DataReader {
 

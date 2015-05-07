@@ -1,4 +1,5 @@
-package spike;
+package code;
+
 
 public interface Visitor {
 	void visit(Clazz clazz);

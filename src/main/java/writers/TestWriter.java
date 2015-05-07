@@ -1,9 +1,15 @@
-package spike;
+package writers;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import code.Clazz;
+import code.ConstructorMember;
+import code.MethodMember;
+import code.ParameterMember;
+import code.Visitor;
 
 public class TestWriter implements Visitor {
 

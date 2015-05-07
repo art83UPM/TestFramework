@@ -1,4 +1,6 @@
-package spike;
+package readers;
+
+import code.Clazz;
 
 public class ClazzReader {
 	
@@ -8,7 +10,7 @@ public class ClazzReader {
         this.clazz = clazz;
     }
 
-    Clazz read(){		
+    public Clazz read(){		
 		Clazz result = new Clazz(this.clazz);
 		return result;
 	}

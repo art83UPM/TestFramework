@@ -1,8 +1,7 @@
-package spike;
+package readers;
 
-import spike.error.DataReaderException;
-import spike.error.InvalidDataSheetException;
-import excel.DataReader;
+import exceptions.DataReaderException;
+import exceptions.InvalidDataSheetException;
 
 public abstract class TestDataReader {
 

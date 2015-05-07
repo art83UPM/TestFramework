@@ -1,4 +1,4 @@
-package spike;
+package code;
 
 public class ParameterMember {
     private String type;

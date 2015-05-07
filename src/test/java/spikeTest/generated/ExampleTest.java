@@ -6,8 +6,8 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import exceptions.DataReaderException;
 import spike.Example;
-import spike.error.DataReaderException;
 import spike.generated.ExampleTestDataReader;
 
 public class ExampleTest {

@@ -1,4 +1,4 @@
-package spike.error;
+package exceptions;
 
 public class EmptyDataReaderException extends DataReaderException {
 

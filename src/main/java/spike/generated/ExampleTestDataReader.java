@@ -1,10 +1,10 @@
 package spike.generated;
 
+import exceptions.DataReaderException;
+import exceptions.EmptyDataReaderException;
+import exceptions.InvalidDataReaderException;
+import readers.TestDataReader;
 import spike.Example;
-import spike.TestDataReader;
-import spike.error.DataReaderException;
-import spike.error.EmptyDataReaderException;
-import spike.error.InvalidDataReaderException;
 
 public class ExampleTestDataReader extends TestDataReader {
 
