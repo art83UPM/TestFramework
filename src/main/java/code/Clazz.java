@@ -7,6 +7,8 @@ import java.util.List;
 
 public class Clazz extends CodeComponent {
 
+    private Class<?> clazz;
+    
     private String name;
 
     private String myPackage;
@@ -16,9 +18,14 @@ public class Clazz extends CodeComponent {
     private List<MethodMember> methodMemberList;
 
     public Clazz(Class<?> clazz) {
+        this.clazz = clazz;
         name = clazz.getSimpleName();
         myPackage = clazz.getPackage().getName();
         constructorMemberList = new ArrayList<ConstructorMember>();
+        this.inspect();
+    }
+
+    private void inspect() {
         int order = 0;
         for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
             ConstructorMember constructorMember = new ConstructorMember(constructor, order++);
