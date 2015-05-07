@@ -16,10 +16,10 @@ public class Package extends CodeFile {
         this.file = file;
         this.name = this.file.getName();
         this.components = new ArrayList<CodeFile>();
-        this.inspect();
+        this.build();
     }
 
-    private void inspect() {
+    public void build() {
         for (File file : this.file.listFiles()) {
             if (file.isDirectory()) {
                 this.add(new Package(file));

@@ -22,10 +22,10 @@ public class Clazz extends CodeFile {
         name = clazz.getSimpleName();
         myPackage = clazz.getPackage().getName();
         constructorMemberList = new ArrayList<ConstructorMember>();
-        this.inspect();
+        this.build();
     }
 
-    private void inspect() {
+    public void build() {
         int order = 0;
         for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
             ConstructorMember constructorMember = new ConstructorMember(constructor, order++);
