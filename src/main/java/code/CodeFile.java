@@ -1,5 +1,5 @@
 package code;
 
-public abstract class CodeFile implements Visitable {
+public abstract class CodeFile implements CodeComponent {
 
 }

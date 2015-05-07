@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MethodMember implements Visitable  {
+public class MethodMember implements CodeComponent  {
 
     private String name;
     

@@ -1,5 +1,5 @@
 package code;
 
-interface Visitable {
+interface CodeComponent {
 	void accept(Visitor visitor);
 }

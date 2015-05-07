@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConstructorMember implements Visitable {
+public class ConstructorMember implements CodeComponent {
 
     private String name;
     
