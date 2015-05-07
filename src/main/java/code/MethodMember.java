@@ -7,6 +7,8 @@ import java.util.List;
 
 public class MethodMember implements CodeComponent  {
 
+    private Method method;
+    
     private String name;
     
     private String returnType;
@@ -20,6 +22,10 @@ public class MethodMember implements CodeComponent  {
         this.returnType = method.getReturnType().toString();
         this.clazzName = method.getDeclaringClass().getSimpleName();
         this.parameterTypes = new ArrayList<ParameterMember>();
+        this.build();
+    }
+    
+    public void build() {
         for (Class<?> parameterType : method.getParameterTypes()) {
             this.parameterTypes.add(new ParameterMember(parameterType));
         }

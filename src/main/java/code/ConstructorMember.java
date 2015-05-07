@@ -6,6 +6,8 @@ import java.util.List;
 
 public class ConstructorMember implements CodeComponent {
 
+    private Constructor<?> constructor;
+    
     private String name;
     
     private int order;
@@ -16,6 +18,10 @@ public class ConstructorMember implements CodeComponent {
         this.name = constructor.getName().substring(constructor.getName().lastIndexOf('.') + 1);
         this.order = order;
         this.parameterTypes = new ArrayList<ParameterMember>();
+        this.build();
+    }
+    
+    public void build() {
         for (Class<?> parameterType : constructor.getParameterTypes()) {
             this.parameterTypes.add(new ParameterMember(parameterType));
         }
