@@ -26,15 +26,10 @@ public class ExampleTest {
 
     @Test
     public void testExample() {
-        try {
-            while (data.hasNext(0)) {
-                Example example = data.getExample();
-                // Example example = (Example) data.getObject("Example");
-                fail("Not yet implemented");
-                data.next();
-            }
-        } catch (DataReaderException e) {
-            fail(e.getMessage());
+        while (data.hasNext(0)) {
+            Example example = data.getExample();
+            fail("Not yet implemented");
+            data.next();
         }
     }
 
