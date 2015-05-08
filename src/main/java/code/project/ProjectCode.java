@@ -1,16 +1,16 @@
-package code;
+package code.project;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Code {
+public class ProjectCode {
     
     private File file;
     
     private List<CodeFile> components;
     
-    public Code(String path) {
+    public ProjectCode(String path) {
         this.file = new File(path);
         this.components = new ArrayList<CodeFile>();
         this.build();
@@ -19,7 +19,7 @@ public class Code {
     private void build() {
         for (File file : this.file.listFiles()) {
             if (file.isDirectory()) {
-                this.add(new Package(file));
+                this.add(new ProjectPackage(file));
             }
         }
     }

@@ -1,10 +1,10 @@
-package code;
+package code.project;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConstructorMember implements CodeComponent {
+public class ProjectConstructorMember implements CodeComponent {
 
     private Constructor<?> constructor;
     
@@ -12,19 +12,19 @@ public class ConstructorMember implements CodeComponent {
     
     private int order;
 
-    private List<ParameterMember> parameterTypes;
+    private List<ProjectParameterMember> parameterTypes;
 
-    public ConstructorMember(Constructor<?> constructor, int order) {
+    public ProjectConstructorMember(Constructor<?> constructor, int order) {
         this.constructor = constructor;
         this.name = constructor.getName().substring(constructor.getName().lastIndexOf('.') + 1);
         this.order = order;
-        this.parameterTypes = new ArrayList<ParameterMember>();
+        this.parameterTypes = new ArrayList<ProjectParameterMember>();
         this.build();
     }
     
     public void build() {
         for (Class<?> parameterType : constructor.getParameterTypes()) {
-            this.parameterTypes.add(new ParameterMember(parameterType));
+            this.parameterTypes.add(new ProjectParameterMember(parameterType));
         }
     }
 
@@ -36,7 +36,7 @@ public class ConstructorMember implements CodeComponent {
         return order;
     }
 
-    public List<ParameterMember> getParametersType() {
+    public List<ProjectParameterMember> getParametersType() {
         return parameterTypes;
     }
 

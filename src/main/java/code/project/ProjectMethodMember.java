@@ -1,11 +1,11 @@
-package code;
+package code.project;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MethodMember implements CodeComponent  {
+public class ProjectMethodMember implements CodeComponent  {
 
     private Method method;
     
@@ -15,20 +15,20 @@ public class MethodMember implements CodeComponent  {
     
     private String clazzName;
 
-    private List<ParameterMember> parameterTypes;
+    private List<ProjectParameterMember> parameterTypes;
     
-    public MethodMember(Method method) {
+    public ProjectMethodMember(Method method) {
         this.method = method;
         this.name = method.getName();
         this.returnType = method.getReturnType().toString();
         this.clazzName = method.getDeclaringClass().getSimpleName();
-        this.parameterTypes = new ArrayList<ParameterMember>();
+        this.parameterTypes = new ArrayList<ProjectParameterMember>();
         this.build();
     }
     
     public void build() {
         for (Class<?> parameterType : method.getParameterTypes()) {
-            this.parameterTypes.add(new ParameterMember(parameterType));
+            this.parameterTypes.add(new ProjectParameterMember(parameterType));
         }
     }
     
@@ -44,7 +44,7 @@ public class MethodMember implements CodeComponent  {
         return clazzName;
     }
 
-    public List<ParameterMember> getParametersType() {
+    public List<ProjectParameterMember> getParametersType() {
         return parameterTypes;
     }
     
