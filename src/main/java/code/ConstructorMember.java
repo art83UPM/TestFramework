@@ -15,6 +15,7 @@ public class ConstructorMember implements CodeComponent {
     private List<ParameterMember> parameterTypes;
 
     public ConstructorMember(Constructor<?> constructor, int order) {
+        this.constructor = constructor;
         this.name = constructor.getName().substring(constructor.getName().lastIndexOf('.') + 1);
         this.order = order;
         this.parameterTypes = new ArrayList<ParameterMember>();

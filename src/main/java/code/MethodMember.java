@@ -18,6 +18,7 @@ public class MethodMember implements CodeComponent  {
     private List<ParameterMember> parameterTypes;
     
     public MethodMember(Method method) {
+        this.method = method;
         this.name = method.getName();
         this.returnType = method.getReturnType().toString();
         this.clazzName = method.getDeclaringClass().getSimpleName();

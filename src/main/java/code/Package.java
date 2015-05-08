@@ -13,8 +13,12 @@ public class Package extends CodeFile {
     private List<CodeFile> components;
     
     public Package(File file) {
+        this(file, null);
+    }
+
+    public Package(File file, String fatherName) {
         this.file = file;
-        this.name = this.file.getName();
+        this.name = fatherName == null ? this.file.getName() : fatherName+"."+this.file.getName();
         this.components = new ArrayList<CodeFile>();
         this.build();
     }
@@ -22,11 +26,13 @@ public class Package extends CodeFile {
     public void build() {
         for (File file : this.file.listFiles()) {
             if (file.isDirectory()) {
-                this.add(new Package(file));
+                this.add(new Package(file, this.getName()));
             } else if (file.isFile()) {
                 String className = this.name+"."+file.getName().split("\\.")[0];
                 try {
-                    this.add(new Clazz(Class.forName(className)));
+                    System.out.println(className);
+//                    this.add(new Clazz(Class.forName(className)));
+                    this.add(new Clazz(TestFrameworkClassLoader.getClassLoader().loadClass(className)));
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
