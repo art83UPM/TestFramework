@@ -5,11 +5,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import code.Clazz;
-import code.ConstructorMember;
-import code.MethodMember;
-import code.ParameterMember;
-import code.Visitor;
+import code.project.ProjectClazz;
+import code.project.ProjectConstructorMember;
+import code.project.ProjectMethodMember;
+import code.project.ProjectPackage;
+import code.project.ProjectParameterMember;
+import code.project.Visitor;
 
 public class TestWriter implements Visitor {
 
@@ -23,7 +24,7 @@ public class TestWriter implements Visitor {
         this.path = path;
     }
 
-    public void visit(Clazz clazz) {
+    public void visit(ProjectClazz clazz) {
         this.file = new File(path + File.separator + clazz.getName() + "Test.java");
         try {
             writer = new BufferedWriter(new FileWriter(file));
@@ -48,11 +49,11 @@ public class TestWriter implements Visitor {
         }
     }
 
-    public void visit(ConstructorMember constructorMember) {//TODO que los constructores esten ordenados
+    public void visit(ProjectConstructorMember constructorMember) {//TODO que los constructores esten ordenados
         try {
             writer.write(this.printTabs(1) + "@Test\n");
             writer.write(this.printTabs(1) + "public void test" + constructorMember.getName());
-            for (ParameterMember parameterMember : constructorMember.getParametersType()) {
+            for (ProjectParameterMember parameterMember : constructorMember.getParametersType()) {
                 writer.write(parameterMember.getType());
             }
             writer.write("() {\n");
@@ -68,9 +69,9 @@ public class TestWriter implements Visitor {
         }
     }
 
-    public void visit(MethodMember methodMember) {//TODO que los metodos esten ordenados
+    public void visit(ProjectMethodMember methodMember) {//TODO que los metodos esten ordenados
         String nameAndParametersType = methodMember.getName();
-        for (ParameterMember parameterMember : methodMember.getParametersType()) {
+        for (ProjectParameterMember parameterMember : methodMember.getParametersType()) {
             nameAndParametersType += parameterMember.getType();
         }
         try {
@@ -91,7 +92,13 @@ public class TestWriter implements Visitor {
             e.printStackTrace();
         }
     }
-
+    
+    @Override
+    public void visit(ProjectPackage package1) {
+        // TODO Auto-generated method stub
+        
+    }
+ 
     public void close() {
         try {
             writer.write("}\n\n");
@@ -108,4 +115,6 @@ public class TestWriter implements Visitor {
         }
         return result;
     }
+
+   
 }

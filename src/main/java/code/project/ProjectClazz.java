@@ -1,32 +1,39 @@
-package code;
+package code.project;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Clazz implements Visitable {
+public class ProjectClazz extends CodeFile {
 
+    private Class<?> clazz;
+    
     private String name;
 
     private String myPackage;
 
-    private List<ConstructorMember> constructorMemberList;
+    private List<ProjectConstructorMember> constructorMemberList;
 
-    private List<MethodMember> methodMemberList;
+    private List<ProjectMethodMember> methodMemberList;
 
-    public Clazz(Class<?> clazz) {
+    public ProjectClazz(Class<?> clazz) {
+        this.clazz = clazz;
         name = clazz.getSimpleName();
         myPackage = clazz.getPackage().getName();
-        constructorMemberList = new ArrayList<ConstructorMember>();
+        constructorMemberList = new ArrayList<ProjectConstructorMember>();
+        this.build();
+    }
+
+    public void build() {
         int order = 0;
         for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
-            ConstructorMember constructorMember = new ConstructorMember(constructor, order++);
+            ProjectConstructorMember constructorMember = new ProjectConstructorMember(constructor, order++);
             constructorMemberList.add(constructorMember);
         }
-        methodMemberList = new ArrayList<MethodMember>();
+        methodMemberList = new ArrayList<ProjectMethodMember>();
         for (Method method : clazz.getDeclaredMethods()) {
-            MethodMember methodMember = new MethodMember(method);
+            ProjectMethodMember methodMember = new ProjectMethodMember(method);
             methodMemberList.add(methodMember);
         }
     }
@@ -39,20 +46,20 @@ public class Clazz implements Visitable {
         return myPackage;
     }
 
-    public List<ConstructorMember> getConstructorMemberList() {
+    public List<ProjectConstructorMember> getConstructorMemberList() {
         return constructorMemberList;
     }
 
-    public List<MethodMember> getMethodMemberList() {
+    public List<ProjectMethodMember> getMethodMemberList() {
         return methodMemberList;
     }
 
     public void accept(Visitor visitor) {
         visitor.visit(this);
-        for (ConstructorMember constructorMember : constructorMemberList) {
+        for (ProjectConstructorMember constructorMember : constructorMemberList) {
             constructorMember.accept(visitor);
         }
-        for (MethodMember methodMember : methodMemberList) {
+        for (ProjectMethodMember methodMember : methodMemberList) {
             methodMember.accept(visitor);
         }
     }

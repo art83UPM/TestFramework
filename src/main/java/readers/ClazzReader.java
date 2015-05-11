@@ -1,6 +1,6 @@
 package readers;
 
-import code.Clazz;
+import code.project.ProjectClazz;
 
 public class ClazzReader {
 	
@@ -10,8 +10,8 @@ public class ClazzReader {
         this.clazz = clazz;
     }
 
-    public Clazz read(){		
-		Clazz result = new Clazz(this.clazz);
+    public ProjectClazz read(){		
+		ProjectClazz result = new ProjectClazz(this.clazz);
 		return result;
 	}
 
