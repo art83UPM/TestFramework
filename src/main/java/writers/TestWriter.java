@@ -39,7 +39,7 @@ public class TestWriter implements Visitor {
             writer.write(this.printTabs(1) + "private " + clazz.getName() + "TestDataReader data;\n\n");
             writer.write(this.printTabs(1) + "@BeforeClass\n");
             writer.write(this.printTabs(1) + "public void init() {\n");
-            writer.write(this.printTabs(2) + "\tdata = new " + clazz.getName() + "TestDataReader();\n");
+            writer.write(this.printTabs(2) + "   data = new " + clazz.getName() + "TestDataReader();\n");
             writer.write(this.printTabs(1) + "}\n\n");
             writer.write(this.printTabs(1) + "@After\n");
             writer.write(this.printTabs(1) + "public void reset() {\n");
