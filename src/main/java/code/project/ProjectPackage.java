@@ -7,11 +7,11 @@ import java.util.List;
 import code.Margin;
 import code.TestFrameworkClassLoader;
 
-public class ProjectPackage extends CodeFile {
+public class ProjectPackage extends ProjectCodeFile {
 
     private File file;
 
-    private List<CodeFile> components;
+    private List<ProjectCodeFile> components;
 
     public ProjectPackage(File file) {
         this(file, null);
@@ -20,7 +20,7 @@ public class ProjectPackage extends CodeFile {
     public ProjectPackage(File file, String fatherName) {
         this.file = file;
         this.name = fatherName == null ? this.file.getName() : fatherName + "." + this.file.getName();
-        this.components = new ArrayList<CodeFile>();
+        this.components = new ArrayList<ProjectCodeFile>();
         System.out.println(Margin.instance().tabs() + "Paquete: " + this.name);
         this.build();
     }
@@ -48,23 +48,23 @@ public class ProjectPackage extends CodeFile {
         }
     }
 
-    public void add(CodeFile component) {
+    public void add(ProjectCodeFile component) {
         Margin.instance().inc();
         this.components.add(component);
         Margin.instance().dec();
     }
 
-    public void remove(CodeFile component) {
+    public void remove(ProjectCodeFile component) {
         this.components.remove(component);
     }
 
-    public List<CodeFile> getComponents() {
+    public List<ProjectCodeFile> getComponents() {
         return this.components;
     }
 
     @Override
     public void accept(Visitor visitor) {
-        for (CodeFile codeComponent : components) {
+        for (ProjectCodeFile codeComponent : components) {
             codeComponent.accept(visitor);
         }
     }
@@ -74,14 +74,14 @@ public class ProjectPackage extends CodeFile {
         System.out.println(Margin.instance().tabs() + "compruebo si en " + this.getName() + " está el método: " + projectMember.getName()
                 + " --> ");
         if (this.name.equals(projectPackage.getName())) {
-            for (CodeFile codeFile : components) {
+            for (ProjectCodeFile codeFile : components) {
                 if (codeFile.exist(projectMember, projectClazz)) {
                     return true;
                 }
             }
         } else {
             Margin.instance().inc();
-            for (CodeFile codeFile : components) {
+            for (ProjectCodeFile codeFile : components) {
                 if (codeFile instanceof ProjectPackage) {
                     Margin.instance().inc();
                     if (codeFile.exist(projectMember, projectClazz, projectPackage)) {
