@@ -1,15 +1,41 @@
 package code.config;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 public class ConfigCode {
-    private List<ConfigCodeFile> configPackageList;
+    private File file;
+    private JSONObject code;
+    private List<ConfigPackage> configPackagesList;
     
-    public ConfigCode(List<ConfigCodeFile> configPackageList){
-        this.configPackageList = configPackageList;
+    public ConfigCode(String path){
+        this.file = new File(path);
+        JSONParser parser = new JSONParser();
+        try {
+            JSONObject json = (JSONObject) parser.parse(new FileReader(file));
+            this.code = (JSONObject) json.get("code");
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }        
+        this.configPackagesList =new ArrayList<ConfigPackage>();
+        this.build();
     }
 
-    public ConfigCode() {
-        // TODO Auto-generated constructor stub
-    }    
+    private void build() {
+        JSONArray packages = (JSONArray) this.code.get("packages");
+        if(!packages.isEmpty()) {
+            for (Object jsonPackage : packages) {
+               this.configPackagesList.add(new ConfigPackage((JSONObject) jsonPackage));
+            }
+        }
+    }
+    
 }
