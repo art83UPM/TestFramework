@@ -1,5 +1,5 @@
 package code.config;
 
-public class ConfigCodeFile {
+public abstract class ConfigCodeFile {
 
 }
