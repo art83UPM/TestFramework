@@ -11,7 +11,7 @@ public class ExampleTestDataReader extends TestDataReader {
     private Example example;
 
     public ExampleTestDataReader() {
-        super("Example.xls");
+        super("C:\\Users\\nyuron\\Desktop\\Example.xlsx");
     }
 
     public boolean hasNext() {
@@ -89,9 +89,9 @@ public class ExampleTestDataReader extends TestDataReader {
             return false;
         }
     }
-
+    
     private boolean tryCase0() throws DataReaderException {
-        String x = this.getDataReader().getString("getExample");
+        String x = this.getString("getExample");
         if (!x.equalsIgnoreCase("x")) {
             throw new InvalidDataReaderException("Data under column \"getExample\" at row: " + this.getDataReader().getRow()
                     + " should be x or X");
@@ -101,14 +101,14 @@ public class ExampleTestDataReader extends TestDataReader {
     }
 
     private boolean tryCase1() throws DataReaderException {
-        int value1 = this.getDataReader().getInt("getExampleIntValue1");
+        int value1 = this.getInt("getExampleIntValue1");
         this.example = new Example(value1);
         return true;
     }
 
     private boolean tryCase2() throws DataReaderException {
-        int value1 = this.getDataReader().getInt("getExampleIntIntValue1");
-        int value2 = this.getDataReader().getInt("getExampleIntIntValue2");
+        int value1 = this.getInt("getExampleIntIntValue1");
+        int value2 = this.getInt("getExampleIntIntValue2");
         this.example = new Example(value1, value2);
         return true;
     }
@@ -118,63 +118,172 @@ public class ExampleTestDataReader extends TestDataReader {
     }
 
     public int getM1Result() {
-        return this.getInt("getM1Result");
+        int result = 0;
+        try {
+            return this.getInt("getM1Result");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1Result");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public int getM1IntX() {
-        return this.getInt("getM1IntX");
+        int result = 0;
+        try {
+            return this.getInt("getM1IntX");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1IntX");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public int getM1IntResult() {
-        return this.getInt("getM1IntResult");
+        int result = 0;
+        try {
+            return this.getInt("getM1IntResult");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1IntResult");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public int getM1FloatResult() {
-        return this.getInt("getM1FloatResult");
+        int result = 0;
+        try {
+            return this.getInt("getM1FloatResult");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1FloatResult");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public float getM1FloatX() {
-        return this.getFloat("getM1FloatX");
-
+        float result = 0;
+        try {
+            return this.getFloat("getM1FloatX");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1FloatX");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public int getM1DoubleResult() {
-        return this.getInt("getM1DoubleResult");
+        int result = 0;
+        try {
+            return this.getInt("getM1DoubleResult");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1DoubleResult");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public double getM1DoubleX() {
-        return this.getDouble("getM1DoubleX");
+        double result = 0;
+        try {
+            return this.getDouble("getM1DoubleX");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1DoubleX");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
 
     }
 
     public int getM1BooleanResult() {
-        return this.getInt("getM1BooleanResult");
+        int result = 0;
+        try {
+            return this.getInt("getM1BooleanResult");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1BooleanResult");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public boolean getM1BooleanX() {
-        return this.getBoolean("getM1BooleanX");
-
+        boolean result = false;
+        try {
+            return this.getBoolean("getM1BooleanX");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1BooleanX");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public int getM1StringResult() {
-        return this.getInt("getM1StringResult");
+        int result = 0;
+        try {
+            return this.getInt("getM1StringResult");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1StringResult");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public String getM1StringX() {
-        return this.getString("getM1StringX");
-
+        String result = null;
+        try {
+            return this.getString("getM1StringX");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1StringX");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public int getM1IntIntResult() {
-        return this.getInt("getM1IntIntResult");
+        int result = 0;
+        try {
+            return this.getInt("getM1IntIntResult");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1IntIntResult");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public int getM1IntIntX() {
-        return this.getInt("getM1IntIntX");
+        int result = 0;
+        try {
+            return this.getInt("getM1IntIntX");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1IntIntX");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
     public int getM1IntIntY() {
-        return this.getInt("getM1IntIntY");
+        int result = 0;
+        try {
+            return this.getInt("getM1IntIntY");
+        } catch (DataReaderException e) {
+            System.out.println("Error in getM1IntIntY");
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return result;
     }
 
 }

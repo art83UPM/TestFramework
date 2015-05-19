@@ -2,6 +2,7 @@ package readers;
 
 import exceptions.DataReaderException;
 import exceptions.InvalidDataSheetException;
+import exceptions.TypeDataReaderException;
 
 public abstract class TestDataReader {
 
@@ -24,52 +25,61 @@ public abstract class TestDataReader {
         dataReader.reset();
     }
 
-    protected int getInt(String columnName) {
+    public int getCurrentRow() {
+        return this.getDataReader().getRow();
+    }
+    
+    protected int getInt(String columnName) throws DataReaderException {
         int result = 0;
         try {
-            result = dataReader.getInt(columnName);
-        } catch (DataReaderException e) {
+        result = dataReader.getInt(columnName);
+        } catch (TypeDataReaderException e) {
             System.out.println(e.getMessage());
+            System.exit(0);
         }
         return result;
     }
 
-    protected float getFloat(String columnName) {
+    protected float getFloat(String columnName) throws DataReaderException {
         float result = (float) 0.0;
         try {
-            result = dataReader.getFloat(columnName);
-        } catch (DataReaderException e){
+        result = dataReader.getFloat(columnName);
+        } catch (TypeDataReaderException e) {
             System.out.println(e.getMessage());
+            System.exit(0);
         }
         return result;
     }
 
-    protected double getDouble(String columnName) {
+    protected double getDouble(String columnName) throws DataReaderException {
         double result = 0.0;
         try {
-            result = dataReader.getDouble(columnName);
-        } catch (DataReaderException e) {
+        result = dataReader.getDouble(columnName);
+        } catch (TypeDataReaderException e) {
             System.out.println(e.getMessage());
+            System.exit(0);
         }
         return result;
     }
 
-    protected boolean getBoolean(String columnName) {
+    protected boolean getBoolean(String columnName) throws DataReaderException {
         boolean result = false;
         try {
-            result = dataReader.getBoolean(columnName);
-        } catch (DataReaderException e) {
+        result = dataReader.getBoolean(columnName);
+        } catch (TypeDataReaderException e) {
             System.out.println(e.getMessage());
+            System.exit(0);
         }
         return result;
     }
 
-    protected String getString(String columnName) {
+    protected String getString(String columnName) throws DataReaderException {
         String result = null;
         try {
             result = dataReader.getString(columnName);
-        } catch (DataReaderException e) {
+        } catch (TypeDataReaderException e) {
             System.out.println(e.getMessage());
+            System.exit(0);
         }
         return result;
     }

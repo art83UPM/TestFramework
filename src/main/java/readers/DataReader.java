@@ -16,6 +16,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import exceptions.DataReaderException;
 import exceptions.EmptyDataReaderException;
 import exceptions.InvalidDataSheetException;
+import exceptions.InvalidHeaderDataReaderException;
 import exceptions.TypeDataReaderException;
 
 public class DataReader {
@@ -33,7 +34,7 @@ public class DataReader {
     public DataReader(String filePath) throws InvalidDataSheetException {
         this.workbook = this.readWorkbookFromFile(filePath);
         this.currentSheet = this.workbook.getSheetAt(0);
-        this.rowIterator = this.currentSheet.iterator();
+        this.rowIterator = this.currentSheet.rowIterator();
         if (!this.hasNext()) {
             throw new InvalidDataSheetException("The excel sheet is empty and contains no headers");
         }
@@ -68,7 +69,9 @@ public class DataReader {
     }
 
     public void reset() {
-        this.rowIterator = this.currentSheet.iterator();
+        this.rowIterator = this.currentSheet.rowIterator();
+        this.next();
+        this.next();
     }
 
     public void next() {
@@ -84,24 +87,24 @@ public class DataReader {
     public String getString(String name) throws DataReaderException {
         Cell cell = this.getCell(name);
         if (!this.isStringCell(cell)) {
-            throw new TypeDataReaderException("Data in row "+this.currentRow.getRowNum()+ " for header "+name+" is not a String");
+            throw new TypeDataReaderException("Data in row " + this.currentRow.getRowNum() + " for header " + name + " is not a String");
         }
         String value = cell.getStringCellValue();
         if (!this.checkStringFormat(value)) {
-            throw new TypeDataReaderException("Incorrect String format in row "+this.currentRow.getRowNum()+ " for header "+name);
+            throw new TypeDataReaderException("Incorrect String format in row " + this.currentRow.getRowNum() + " for header " + name);
         }
         return value.substring(1, value.length() - 1);
     }
-    
+
     private boolean checkStringFormat(String string) {
         boolean check = true;
         if (!(string.startsWith("\"") && string.endsWith("\""))) {
             check = false;
         }
         char[] charArray = string.toCharArray();
-        for (int i = 1; i < charArray.length-1; i++) {
-            if(charArray[i] == '"') {
-                check = charArray[i-1] == '\\';
+        for (int i = 1; i < charArray.length - 1; i++) {
+            if (charArray[i] == '"') {
+                check = charArray[i - 1] == '\\';
             }
         }
         return check;
@@ -111,17 +114,17 @@ public class DataReader {
         Cell cell = this.getCell(name);
         if (this.isNumericCell(cell)) {
             double value = cell.getNumericCellValue();
-            if (value % (int) value == 0) {
+            if ((value == Math.floor(value))) {
                 return (int) value;
             }
         }
-        throw new TypeDataReaderException("Data in row "+this.currentRow.getRowNum()+ " for header "+name+" is not an Integer");
+        throw new TypeDataReaderException("Data in row " + this.currentRow.getRowNum() + " for header " + name + " is not an Integer");
     }
 
     public float getFloat(String name) throws DataReaderException {
         Cell cell = this.getCell(name);
         if (!this.isNumericCell(cell)) {
-            throw new TypeDataReaderException("Data in row "+this.currentRow.getRowNum()+ " for header "+name+" is not a Float");
+            throw new TypeDataReaderException("Data in row " + this.currentRow.getRowNum() + " for header " + name + " is not a Float");
         }
         return (float) cell.getNumericCellValue();
     }
@@ -129,7 +132,7 @@ public class DataReader {
     public double getDouble(String name) throws DataReaderException {
         Cell cell = this.getCell(name);
         if (!this.isNumericCell(cell)) {
-            throw new TypeDataReaderException("Data in row "+this.currentRow.getRowNum()+ " for header "+name+" is not a Double");
+            throw new TypeDataReaderException("Data in row " + this.currentRow.getRowNum() + " for header " + name + " is not a Double");
         }
         return cell.getNumericCellValue();
     }
@@ -142,22 +145,27 @@ public class DataReader {
             } else if (cell.getStringCellValue().equalsIgnoreCase("false")) {
                 return false;
             } else {
-                throw new TypeDataReaderException("The String in row "+this.currentRow.getRowNum()+ " for header "+name+" is not \"true\" or \"false\"");
+                throw new TypeDataReaderException("The String in row " + this.currentRow.getRowNum() + " for header " + name
+                        + " is not \"true\" or \"false\"");
             }
         } else if (!this.isBooleanCell(cell)) {
-            throw new TypeDataReaderException("Data in row "+this.currentRow.getRowNum()+ " for header "+name+" is not a Boolean or a String with the values \"true\" or \"false\"");      
+            throw new TypeDataReaderException("Data in row " + this.currentRow.getRowNum() + " for header " + name
+                    + " is not a Boolean or a String with the values \"true\" or \"false\"");
         }
         return cell.getBooleanCellValue();
     }
 
-    private int getHeader(String name) {
+    private int getHeader(String name) throws InvalidHeaderDataReaderException {
+        if (!this.headers.containsKey(name)) {
+            throw new InvalidHeaderDataReaderException("The header " + name + " does not exist");
+        }
         return this.headers.get(name);
     }
 
-    private Cell getCell(String name) throws EmptyDataReaderException {
-        Cell cell = this.currentRow.getCell(this.getHeader(name));;
+    private Cell getCell(String name) throws DataReaderException {
+        Cell cell = this.currentRow.getCell(this.getHeader(name));
         if (this.isEmptyCell(cell)) {
-            throw new EmptyDataReaderException("The cell in row "+this.currentRow.getRowNum()+ " for header "+name+" is empty");
+            throw new EmptyDataReaderException("The cell in row " + this.currentRow.getRowNum() + " for header " + name + " is empty");
         }
         return cell;
     }
@@ -166,26 +174,26 @@ public class DataReader {
         return cell.getCellType() == Cell.CELL_TYPE_NUMERIC
                 || (cell.getCellType() == Cell.CELL_TYPE_FORMULA && cell.getCachedFormulaResultType() == Cell.CELL_TYPE_NUMERIC);
     }
-    
+
     private boolean isStringCell(Cell cell) {
         return cell.getCellType() == Cell.CELL_TYPE_STRING
                 || (cell.getCellType() == Cell.CELL_TYPE_FORMULA && cell.getCachedFormulaResultType() == Cell.CELL_TYPE_STRING);
     }
-    
+
     private boolean isBooleanCell(Cell cell) {
         return cell.getCellType() == Cell.CELL_TYPE_BOOLEAN
                 || (cell.getCellType() == Cell.CELL_TYPE_FORMULA && cell.getCachedFormulaResultType() == Cell.CELL_TYPE_BOOLEAN);
     }
 
-    private boolean isEmptyCell(Cell cell) throws EmptyDataReaderException {
+    private boolean isEmptyCell(Cell cell) {
         return (cell == null || cell.getCellType() == Cell.CELL_TYPE_BLANK);
     }
 
     public int getRow() {
         return this.currentRow.getRowNum();
     }
-    
+
     public int getDataRowCount() {
-        return this.currentSheet.getPhysicalNumberOfRows() -1;
+        return this.currentSheet.getPhysicalNumberOfRows() - 1;
     }
 }
