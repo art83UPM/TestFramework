@@ -1,10 +1,11 @@
 package code.config;
 
-public class ConfigConstructorMember extends ConfigMember{
+import org.json.simple.JSONObject;
 
-    public ConfigConstructorMember(String name, String state, String test) {
-        super(name, state, test);
-        // TODO Auto-generated constructor stub
+public class ConfigConstructorMember extends ConfigMember {
+    
+    public ConfigConstructorMember(JSONObject jsonConstructor) {
+        super(jsonConstructor);
     }
    
 }
