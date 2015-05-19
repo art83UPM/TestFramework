@@ -7,7 +7,7 @@ import java.util.List;
 
 import code.Margin;
 
-public class ProjectClazz extends CodeFile {
+public class ProjectClazz extends ProjectCodeFile {
 
     private Class<?> clazz;
 

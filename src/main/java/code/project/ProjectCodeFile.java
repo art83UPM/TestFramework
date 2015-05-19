@@ -1,6 +1,6 @@
 package code.project;
 
-public abstract class CodeFile implements CodeComponent {
+public abstract class ProjectCodeFile implements CodeComponent {
 
     protected String name;
 

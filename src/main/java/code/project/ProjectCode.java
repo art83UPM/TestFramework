@@ -10,11 +10,11 @@ public class ProjectCode {
 
     private File file;
 
-    private List<CodeFile> components;
+    private List<ProjectCodeFile> components;
 
     public ProjectCode(String path) {
         this.file = new File(path);
-        this.components = new ArrayList<CodeFile>();
+        this.components = new ArrayList<ProjectCodeFile>();
         this.build();
     }
 
@@ -28,12 +28,12 @@ public class ProjectCode {
         }
     }
 
-    private void add(CodeFile component) {
+    private void add(ProjectCodeFile component) {
         this.components.add(component);
     }
 
     public boolean exist(ProjectMember projectMember, ProjectClazz projectClazz, ProjectPackage projectPackage) {
-        for (CodeFile codeFile : components) {
+        for (ProjectCodeFile codeFile : components) {
             if (codeFile.exist(projectMember, projectClazz, projectPackage)) {
                 System.out.println(Margin.instance().tabs() + "Sí está!");
                 return true;

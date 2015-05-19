@@ -1,8 +1,10 @@
 package code;
 
+import code.config.ConfigCode;
 import code.project.ProjectClazz;
 import code.project.ProjectCode;
 import readers.ClazzReader;
+import writers.ConfigWriter;
 import writers.HeaderDataWriter;
 import writers.TestWriter;
 
@@ -22,6 +24,11 @@ public class TestGenerator {
         
         testWriter.close();
         headerDataWriter.close();
+
+        ConfigCode configCode = new ConfigCode();
+        ConfigWriter configWriter = new ConfigWriter("C:\\Users\\nyuron\\Desktop", main);
+        //main.accept(configWriter);
+
     }
 
     public void classReaderTester(String clazzName) {
