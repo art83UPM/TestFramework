@@ -1,4 +1,4 @@
-package exceptions;
+package readers.exceptions;
 
 public class DataReaderException extends Exception {
 

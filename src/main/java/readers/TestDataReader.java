@@ -1,8 +1,8 @@
 package readers;
 
-import exceptions.DataReaderException;
-import exceptions.InvalidDataSheetException;
-import exceptions.TypeDataReaderException;
+import readers.exceptions.DataReaderException;
+import readers.exceptions.InvalidDataSheetException;
+import readers.exceptions.TypeDataReaderException;
 
 public abstract class TestDataReader {
 
