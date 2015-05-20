@@ -11,6 +11,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import code.Margin;
+
 public class ConfigCode {
     private File file;
     private JSONObject code;
@@ -36,6 +38,16 @@ public class ConfigCode {
                this.configPackagesList.add(new ConfigPackage((JSONObject) jsonPackage));
             }
         }
+    }
+    
+    public boolean exist(ConfigMember configMember) {
+        for (ConfigPackage configPackage : configPackagesList) {
+            if (configPackage.exist(configMember)) {
+                System.out.println(Margin.instance().tabs() + "Sí está!");
+                return true;
+            }
+        }
+        return false;
     }
     
 }
