@@ -24,11 +24,11 @@ public abstract class ProjectMember {
     public abstract String getName();
     
     public ProjectClazz getProjectClazz() {
-        return projectClazz;
+        return this.projectClazz;
     }    
 
     public List<ProjectParameterMember> getParametersType() {
-        return parameterTypes;
+        return this.parameterTypes;
     }
 
     public abstract void accept(Visitor visitor);

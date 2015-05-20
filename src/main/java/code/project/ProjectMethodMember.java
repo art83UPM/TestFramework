@@ -8,14 +8,14 @@ import code.Margin;
 
 public class ProjectMethodMember extends ProjectMember implements CodeComponent {
 
-    private String returnType;    
+    private String returnType;
 
     public ProjectMethodMember(Method method, ProjectClazz projectClazz) {
         super(method, projectClazz);
         this.name = method.getName();
         this.returnType = method.getReturnType().getSimpleName();
         this.parameterTypes = new ArrayList<ProjectParameterMember>();
-        System.out.println(Margin.instance().tabs() + "Método: " + this.name);
+        System.out.println(Margin.instance().tabs() + "Método: " + this.name + " de la clase: " + this.projectClazz.getName());
         this.build(method);
     }
 

@@ -11,35 +11,35 @@ public class ProjectPackage extends ProjectCodeFile {
 
     private File file;
 
+    private ProjectPackage fatherPackage;
+
     private List<ProjectCodeFile> components;
 
-    public ProjectPackage(File file) {
-        this(file, null);
-    }
-
-    public ProjectPackage(File file, String fatherName) {
+    public ProjectPackage(File file, ProjectPackage projectPackage) {
         this.file = file;
-        this.name = fatherName == null ? this.file.getName() : fatherName + "." + this.file.getName();
+        this.fatherPackage = projectPackage;
+        this.name = fatherPackage == null ? this.file.getName() : fatherPackage.getName() + "." + this.file.getName();
         this.components = new ArrayList<ProjectCodeFile>();
         System.out.println(Margin.instance().tabs() + "Paquete: " + this.name);
         this.build();
     }
 
-    public ProjectPackage(String name) {
-        this.name = name;
+    public ProjectPackage(String name, ProjectPackage projectPackage) {
+        this.fatherPackage = projectPackage;
+        this.name = fatherPackage == null ? name : fatherPackage.getName() + "." + name;
     }
 
     private void build() {
         for (File file : this.file.listFiles()) {
             if (file.isDirectory()) {
                 Margin.instance().inc();
-                this.add(new ProjectPackage(file, this.getName()));
+                this.add(new ProjectPackage(file, this));
                 Margin.instance().dec();
             } else if (file.isFile()) {
                 String className = this.name + "." + file.getName().split("\\.")[0];
                 try {
                     Margin.instance().inc();
-                    this.add(new ProjectClazz(TestFrameworkClassLoader.getClassLoader().loadClass(className)));
+                    this.add(new ProjectClazz(TestFrameworkClassLoader.getClassLoader().loadClass(className), this));
                     Margin.instance().dec();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
@@ -70,35 +70,20 @@ public class ProjectPackage extends ProjectCodeFile {
     }
 
     @Override
-    public boolean exist(ProjectMember projectMember, ProjectClazz projectClazz, ProjectPackage projectPackage) {
+    public boolean exist(ProjectMember projectMember) {           
         System.out.println(Margin.instance().tabs() + "compruebo si en " + this.getName() + " está el método: " + projectMember.getName()
                 + " --> ");
-        if (this.name.equals(projectPackage.getName())) {
-            for (ProjectCodeFile codeFile : components) {
-                if (codeFile.exist(projectMember, projectClazz)) {
+        Margin.instance().inc();
+        if (projectMember.getProjectClazz().getProjectPackage().getName().contains(this.getName())) {              
+            for (ProjectCodeFile codeFile : components) {                
+                if (codeFile.exist(projectMember)) {
                     return true;
                 }
             }
-        } else {
-            Margin.instance().inc();
-            for (ProjectCodeFile codeFile : components) {
-                if (codeFile instanceof ProjectPackage) {
-                    Margin.instance().inc();
-                    if (codeFile.exist(projectMember, projectClazz, projectPackage)) {
-                        return true;
-                    }
-                    Margin.instance().dec();
-                }
-            }
+        }else{
+            Margin.instance().dec();
         }
-        Margin.instance().dec();
         System.out.println(Margin.instance().tabs() + "No está!");
-
-        return false;
-    }
-
-    @Override
-    public boolean exist(ProjectMember projectMember, ProjectClazz projectClazz) {
         return false;
     }
 
