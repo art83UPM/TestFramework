@@ -2,20 +2,15 @@ package code.project;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.List;
 
 import code.Margin;
 
 public class ProjectConstructorMember extends ProjectMember implements CodeComponent {
 
-    private String name;
-
     private int order;
 
-    private List<ProjectParameterMember> parameterTypes;
-
-    public ProjectConstructorMember(Constructor<?> constructor, int order) {
-        super(constructor);
+    public ProjectConstructorMember(Constructor<?> constructor, int order, ProjectClazz projectClazz) {
+        super(constructor, projectClazz);
         this.name = constructor.getName().substring(constructor.getName().lastIndexOf('.') + 1);
         this.order = order;
         this.parameterTypes = new ArrayList<ProjectParameterMember>();
@@ -23,8 +18,9 @@ public class ProjectConstructorMember extends ProjectMember implements CodeCompo
         this.build(constructor);
     }
 
-    public ProjectConstructorMember(String name, ArrayList<ProjectParameterMember> arrayList) {
+    public ProjectConstructorMember(String name, ProjectClazz projectClazz, ArrayList<ProjectParameterMember> arrayList) {
         this.name = name;
+        this.projectClazz = projectClazz;
         this.parameterTypes = new ArrayList<ProjectParameterMember>();
     }
 
@@ -42,10 +38,6 @@ public class ProjectConstructorMember extends ProjectMember implements CodeCompo
         return order;
     }
 
-    public List<ProjectParameterMember> getParametersType() {
-        return parameterTypes;
-    }
-
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }
@@ -57,6 +49,11 @@ public class ProjectConstructorMember extends ProjectMember implements CodeCompo
             Margin.instance().inc();
             System.out.print(Margin.instance().tabs() + "compruebo si " + this.toString() + " es igual al método: "
                     + projectConstructorMember.toString() + " --> ");
+            if (!projectClazz.equals(projectConstructorMember.getProjectClazz())) {
+                System.out.println("La clase no coincide.");
+                Margin.instance().dec();
+                return false;
+            }
             if (!this.getName().equals(projectConstructorMember.getName())) {
                 System.out.println("El nombre del método no coincide.");
                 Margin.instance().dec();
