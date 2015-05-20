@@ -14,6 +14,8 @@ public class ConfigMember {
         this.status = (String) this.jsonMember.get("status");
         this.test = (String) this.jsonMember.get("test");
     }
-    
-    
+
+    public String getName() {
+        return name;
+    }   
 }
