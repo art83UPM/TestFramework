@@ -38,4 +38,21 @@ public class ConfigPackage {
         }
     }
 
+    public boolean exist(ConfigMember configMember) {
+        if(!configClazzesList.isEmpty()){
+            for (ConfigClazz configClazz : configClazzesList) {
+                if(configClazz.exist(configMember)) {
+                    return true;
+                }
+            }
+        }else if(!configPackagesList.isEmpty()){
+            for (ConfigPackage configPackage : configPackagesList) {
+                if (configPackage.exist(configMember)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
