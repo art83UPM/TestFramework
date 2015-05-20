@@ -37,4 +37,21 @@ public class ConfigClazz {
             }
         }
     }
+
+    public boolean exist(ConfigMember configMember) {
+        if(!configConstructorList.isEmpty()){
+            for (ConfigConstructorMember configConstructorMember : configConstructorList) {
+                if(configConstructorMember.equals(configMember)){
+                    return true;
+                }
+            }
+        }else if(!configMethodList.isEmpty()){
+            for (ConfigMethodMember configMethodMember : configMethodList) {
+                if(configMethodMember.equals(configMember)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
