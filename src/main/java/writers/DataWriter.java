@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -22,8 +23,6 @@ public class DataWriter {
 
     private XSSFCell currentCell;
 
-    private static final String SHEET_NAME = "DATA";
-
     private static final int STARTING_ROW = 1;
 
     private static final int STARTING_CELL = 1;
@@ -31,8 +30,6 @@ public class DataWriter {
     public DataWriter(String fileName) {
         this.fileName = fileName;
         this.workbook = new XSSFWorkbook();
-        this.currentSheet = this.workbook.createSheet(SHEET_NAME);
-        this.currentRow = this.currentSheet.createRow(STARTING_ROW);
     }
 
     public void save() {
@@ -57,16 +54,35 @@ public class DataWriter {
     }
 
     private void nextCell() {
-        if (this.currentCell == null) {
-            this.currentCell = this.currentRow.createCell(STARTING_CELL);
-        } else {
-        this.currentCell = this.currentRow.createCell(this.currentCell.getColumnIndex() + 1);
+        this.setCell(this.currentCell.getColumnIndex() + 1);
+    }
+
+    public void setSheet(String name) {
+        this.currentSheet = this.workbook.getSheet(name);
+        if (this.currentSheet == null) {
+            this.currentSheet = this.workbook.createSheet(name);
+        }
+        this.setRow(STARTING_ROW);
+        this.setLastCell();
+    }
+
+    private void setRow(int row) {
+        this.currentRow = this.currentSheet.getRow(row);
+        if (this.currentRow == null) {
+            this.currentRow = this.currentSheet.createRow(row);
         }
     }
 
-    public void nextRow() {
-        this.currentRow = this.currentSheet.createRow(this.currentRow.getRowNum() + 1);
-        this.currentCell = this.currentRow.createCell(STARTING_CELL);
+    private void setCell(int cell) {
+        this.currentCell = this.currentRow.getCell(cell, Row.CREATE_NULL_AS_BLANK);
+    }
+
+    private void setLastCell() {
+        if (this.currentRow.getLastCellNum() < 0) {
+            this.setCell(STARTING_CELL);
+        } else {
+            this.setCell(this.currentRow.getLastCellNum());
+        }
     }
 
 }
