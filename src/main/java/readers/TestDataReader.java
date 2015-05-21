@@ -9,12 +9,7 @@ public abstract class TestDataReader {
     private DataReader dataReader;
 
     public TestDataReader(String excelFile) {
-        try {
-            this.dataReader = new DataReader(excelFile);
-        } catch (InvalidDataSheetException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
+        this.dataReader = new DataReader(excelFile);
     }
     
     protected DataReader getDataReader() {
@@ -27,6 +22,15 @@ public abstract class TestDataReader {
 
     public int getCurrentRow() {
         return this.getDataReader().getRow();
+    }
+    
+    public void setMethodToTest(String name) {
+        try {
+            this.getDataReader().setSheet(name);
+        } catch (InvalidDataSheetException e) {
+            System.out.println("The sheet \""+name+"\" does not exist");
+            System.exit(0);
+        }
     }
     
     protected int getInt(String columnName) throws DataReaderException {

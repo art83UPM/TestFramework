@@ -31,9 +31,12 @@ public class DataReader {
 
     private HashMap<String, Integer> headers;
 
-    public DataReader(String filePath) throws InvalidDataSheetException {
+    public DataReader(String filePath) {
         this.workbook = this.readWorkbookFromFile(filePath);
-        this.currentSheet = this.workbook.getSheetAt(0);
+    }
+
+    public void setSheet(String name) throws InvalidDataSheetException {
+        this.currentSheet = this.workbook.getSheet(name);
         this.rowIterator = this.currentSheet.rowIterator();
         if (!this.hasNext()) {
             throw new InvalidDataSheetException("The excel sheet is empty and contains no headers");
@@ -46,7 +49,7 @@ public class DataReader {
             this.currentRow = null;
         }
     }
-
+    
     private XSSFWorkbook readWorkbookFromFile(String filePath) {
         XSSFWorkbook workbook = null;
         try {
@@ -69,18 +72,21 @@ public class DataReader {
     }
 
     public void reset() {
+        assert this.rowIterator == null : "rowIterator not set";
         this.rowIterator = this.currentSheet.rowIterator();
         this.next();
         this.next();
     }
 
     public void next() {
+        assert this.currentSheet == null : "currentSheet not set, use setSheet before calling next";
         if (this.hasNext()) {
             this.currentRow = (XSSFRow) this.rowIterator.next();
         }
     }
 
     public boolean hasNext() {
+        assert this.rowIterator == null : "rowIterator not set";
         return this.rowIterator.hasNext();
     }
 
