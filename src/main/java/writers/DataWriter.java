@@ -49,8 +49,9 @@ public class DataWriter {
     }
 
     public void write(String text) {
-        this.nextCell();
+        assert this.currentSheet == null : "currentSheet not set, use setSheet before calling write";
         this.currentCell.setCellValue(text);
+        this.nextCell();
     }
 
     private void nextCell() {
