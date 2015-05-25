@@ -6,7 +6,7 @@ import java.util.List;
 
 import code.Margin;
 
-public class ProjectCode {
+public class ProjectCode implements CodeComponent {
 
     private File file;
 
@@ -40,5 +40,12 @@ public class ProjectCode {
             }
         }
         return false;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        for (ProjectCodeFile codeComponent : components) {
+            codeComponent.accept(visitor);
+        }        
     }
 }

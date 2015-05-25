@@ -27,15 +27,15 @@ public class ConfigCode {
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }        
-        this.configPackagesList =new ArrayList<ConfigPackage>();
+        this.configPackagesList = new ArrayList<ConfigPackage>();
         this.build();
     }
 
-    private void build() {
+    private void build() {        
         JSONArray packages = (JSONArray) this.code.get("packages");
-        if(!packages.isEmpty()) {
+        if(packages != null) {
             for (Object jsonPackage : packages) {
-               this.configPackagesList.add(new ConfigPackage((JSONObject) jsonPackage));
+               this.configPackagesList.add(new ConfigPackage((JSONObject) jsonPackage, null));
             }
         }
     }
