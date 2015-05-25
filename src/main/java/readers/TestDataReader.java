@@ -1,7 +1,9 @@
 package readers;
 
+
+import java.util.List;
+
 import readers.exceptions.DataReaderException;
-import readers.exceptions.InvalidDataSheetException;
 import readers.exceptions.TypeDataReaderException;
 
 public abstract class TestDataReader {
@@ -24,13 +26,13 @@ public abstract class TestDataReader {
         return this.getDataReader().getRow();
     }
     
-    public void setMethodToTest(String name) {
-        try {
-            this.getDataReader().setSheet(name);
-        } catch (InvalidDataSheetException e) {
-            System.out.println("The sheet \""+name+"\" does not exist");
-            System.exit(0);
-        }
+    public void setTestTarget(String name) {
+        this.getDataReader().setSheet(name);
+    }
+    
+    public List<String> getConstructors() {
+        this.setTestTarget("Constructors");
+        return this.getDataReader().getHeaders();
     }
     
     protected int getInt(String columnName) throws DataReaderException {
