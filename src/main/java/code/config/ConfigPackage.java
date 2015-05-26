@@ -67,9 +67,14 @@ public class ConfigPackage extends ConfigCodeFile{
     }
 
     public ConfigCodeFile getChild() {
-        return null;
-        // TODO Auto-generated method stub
-        
+        return this.configCodeFileList.get(0);        
+    }
+
+    public void add(ConfigCodeFile child) {
+        if(!this.configCodeFileList.contains(child)) {
+            configCodeFileList.add(child);
+        }
+        configCodeFileList.get(configCodeFileList.indexOf(child)).add(child.getChild());
     }
 
 }
