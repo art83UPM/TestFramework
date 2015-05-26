@@ -25,9 +25,9 @@ public class TestGenerator {
         testWriter.close();
         headerDataWriter.close();
 
-        ConfigCode configCode = new ConfigCode();
-        ConfigWriter configWriter = new ConfigWriter("C:\\Users\\nyuron\\Desktop", main);
-        //main.accept(configWriter);
+        ConfigWriter configWriter = new ConfigWriter("C:\\Users\\nyuron\\Desktop", test);
+        main.accept(configWriter);
+        
 
     }
 
