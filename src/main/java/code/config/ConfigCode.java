@@ -15,10 +15,12 @@ import code.Margin;
 
 public class ConfigCode {
     private File file;
+
     private JSONObject code;
+
     private List<ConfigPackage> configPackagesList;
-    
-    public ConfigCode(String path){
+
+    public ConfigCode(String path) {
         this.file = new File(path);
         JSONParser parser = new JSONParser();
         try {
@@ -26,20 +28,20 @@ public class ConfigCode {
             this.code = (JSONObject) json.get("code");
         } catch (IOException | ParseException e) {
             e.printStackTrace();
-        }        
+        }
         this.configPackagesList = new ArrayList<ConfigPackage>();
         this.build();
     }
 
-    private void build() {        
+    private void build() {
         JSONArray packages = (JSONArray) this.code.get("packages");
-        if(packages != null) {
+        if (packages != null) {
             for (Object jsonPackage : packages) {
-               this.configPackagesList.add(new ConfigPackage((JSONObject) jsonPackage, null));
+                this.configPackagesList.add(new ConfigPackage((JSONObject) jsonPackage, null));
             }
         }
     }
-    
+
     public boolean exist(ConfigMember configMember) {
         for (ConfigPackage configPackage : configPackagesList) {
             if (configPackage.exist(configMember)) {
@@ -49,5 +51,13 @@ public class ConfigCode {
         }
         return false;
     }
-    
+
+    public void add(ConfigMethodMember configMethodMember) {
+        ConfigPackage configPackage = configMethodMember.getRoot(); //TODO metodo GETROOT en configMember
+        if (!configPackagesList.contains(configPackage)) { // TODO metodo EQUALS en ConfigPackage
+            configPackagesList.add(configPackage);
+        }        
+        configPackagesList.get(configPackagesList.indexOf(configPackage)).add(configPackage.getChild());
+    }
+
 }
