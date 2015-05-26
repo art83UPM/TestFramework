@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 
 import code.Margin;
 
-public class ConfigClazz {
+public class ConfigClazz extends ConfigCodeFile {
     private JSONObject jsonClazz;
 
     private ConfigPackage configPackage;
