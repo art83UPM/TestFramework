@@ -15,9 +15,7 @@ public class ConfigClazz extends ConfigCodeFile {
 
     private String name;
 
-    private List<ConfigConstructorMember> configConstructorList;
-
-    private List<ConfigMethodMember> configMethodList;
+    private List<ConfigMember> configMemberList;
 
     public ConfigClazz(JSONObject jsonClazz, ConfigPackage configPackage) {
         this.jsonClazz = jsonClazz;
@@ -25,8 +23,7 @@ public class ConfigClazz extends ConfigCodeFile {
         this.name = (String) this.jsonClazz.get("name");
         Margin.instance().inc();
         System.out.println(Margin.instance().tabs() + this.name);
-        this.configConstructorList = new ArrayList<ConfigConstructorMember>();
-        this.configMethodList = new ArrayList<ConfigMethodMember>();
+        this.configMemberList = new ArrayList<ConfigMember>();
         this.build();
     }
 
@@ -39,13 +36,13 @@ public class ConfigClazz extends ConfigCodeFile {
         JSONArray jsonConstructors = (JSONArray) this.jsonClazz.get("constructors");
         if (jsonConstructors != null) {
             for (Object jsonConstructor : jsonConstructors) {
-                this.configConstructorList.add(new ConfigConstructorMember((JSONObject) jsonConstructor, this));
+                this.configMemberList.add(new ConfigConstructorMember((JSONObject) jsonConstructor, this));
             }
         }
         JSONArray jsonMethods = (JSONArray) this.jsonClazz.get("methods");
         if (jsonMethods != null) {
             for (Object jsonMethod : jsonMethods) {
-                this.configMethodList.add(new ConfigMethodMember((JSONObject) jsonMethod, this));
+                this.configMemberList.add(new ConfigMethodMember((JSONObject) jsonMethod, this));
             }
         }
         Margin.instance().dec();
@@ -64,18 +61,9 @@ public class ConfigClazz extends ConfigCodeFile {
         System.out.println(Margin.instance().tabs() + "Compruebo si en la clase " + this.name + " esta el método: "
                 + configMember.getName() + " -->");
         if (this.getName().equals(configMember.getConfigClazz().getName())) {
-            if (!configConstructorList.isEmpty()) {
-                for (ConfigConstructorMember configConstructorMember : configConstructorList) {
-                    if (configConstructorMember.equals(configMember)) {
-                        System.out.println(Margin.instance().tabs() + "Siiiiii!!");
-                        Margin.instance().dec();
-                        return true;
-                    }
-                }
-            }
-            if (!configMethodList.isEmpty()) {
-                for (ConfigMethodMember configMethodMember : configMethodList) {
-                    if (configMethodMember.equals(configMember)) {
+            if (!configMemberList.isEmpty()) {
+                for (ConfigMember confirMember : configMemberList) {
+                    if (confirMember.equals(configMember)) {
                         System.out.println(Margin.instance().tabs() + "Siiiiii!!");
                         Margin.instance().dec();
                         return true;
@@ -86,5 +74,15 @@ public class ConfigClazz extends ConfigCodeFile {
         System.out.println(Margin.instance().tabs() + "No está!");
         Margin.instance().dec();
         return false;
+    }
+
+    public ConfigMember getChild() {
+        return this.configMemberList.get(0);
+    }
+
+    @Override
+    public void add(ConfigCodeFile child) {
+        // TODO Auto-generated method stub
+        
     }
 }
