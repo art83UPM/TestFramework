@@ -3,7 +3,7 @@ package readers;
 
 import java.util.List;
 
-import readers.exceptions.DataReaderException;
+import readers.exceptions.EmptyDataReaderException;
 import readers.exceptions.TypeDataReaderException;
 
 public abstract class TestDataReader {
@@ -35,7 +35,7 @@ public abstract class TestDataReader {
         return this.getDataReader().getHeaders();
     }
     
-    protected int getInt(String columnName) throws DataReaderException {
+    protected int getInt(String columnName) throws EmptyDataReaderException {
         int result = 0;
         try {
         result = dataReader.getInt(columnName);
@@ -46,7 +46,7 @@ public abstract class TestDataReader {
         return result;
     }
 
-    protected float getFloat(String columnName) throws DataReaderException {
+    protected float getFloat(String columnName) throws EmptyDataReaderException {
         float result = (float) 0.0;
         try {
         result = dataReader.getFloat(columnName);
@@ -57,7 +57,7 @@ public abstract class TestDataReader {
         return result;
     }
 
-    protected double getDouble(String columnName) throws DataReaderException {
+    protected double getDouble(String columnName) throws EmptyDataReaderException {
         double result = 0.0;
         try {
         result = dataReader.getDouble(columnName);
@@ -68,7 +68,7 @@ public abstract class TestDataReader {
         return result;
     }
 
-    protected boolean getBoolean(String columnName) throws DataReaderException {
+    protected boolean getBoolean(String columnName) throws EmptyDataReaderException {
         boolean result = false;
         try {
         result = dataReader.getBoolean(columnName);
@@ -79,7 +79,7 @@ public abstract class TestDataReader {
         return result;
     }
 
-    protected String getString(String columnName) throws DataReaderException {
+    protected String getString(String columnName) throws EmptyDataReaderException {
         String result = null;
         try {
             result = dataReader.getString(columnName);

@@ -13,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import readers.exceptions.DataReaderException;
 import readers.exceptions.EmptyDataReaderException;
 import readers.exceptions.InvalidDataSheetException;
+import readers.exceptions.InvalidHeaderDataReaderException;
 import readers.exceptions.TypeDataReaderException;
 
 public class DataReader {
@@ -70,15 +71,21 @@ public class DataReader {
         return this.currentSheet.getHeaders();
     }
     
-    private Cell getCell(String name) throws DataReaderException {
-        Cell cell = this.currentSheet.getCell(this.currentSheet.getHeader(name));
+    private Cell getCell(String name) throws EmptyDataReaderException {
+        Cell cell = null;
+        try {
+            cell = this.currentSheet.getCell(this.currentSheet.getHeader(name));
+        } catch (InvalidHeaderDataReaderException e) {
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
         if (this.isEmptyCell(cell)) {
             throw new EmptyDataReaderException("The cell in row " + this.currentSheet.getRowNum() + " for header " + name + " is empty");
         }
         return cell;
     }
 
-    public String getString(String name) throws DataReaderException {
+    public String getString(String name) throws TypeDataReaderException, EmptyDataReaderException {
         Cell cell = this.getCell(name);
         if (!this.isStringCell(cell)) {
             throw new TypeDataReaderException("Data in row " + this.currentSheet.getRowNum() + " for header " + name + " is not a String");
@@ -104,7 +111,7 @@ public class DataReader {
         return check;
     }
 
-    public int getInt(String name) throws DataReaderException {
+    public int getInt(String name) throws TypeDataReaderException, EmptyDataReaderException {
         Cell cell = this.getCell(name);
         if (this.isNumericCell(cell)) {
             double value = cell.getNumericCellValue();
@@ -115,7 +122,7 @@ public class DataReader {
         throw new TypeDataReaderException("Data in row " + this.currentSheet.getRowNum() + " for header " + name + " is not an Integer");
     }
 
-    public float getFloat(String name) throws DataReaderException {
+    public float getFloat(String name) throws TypeDataReaderException, EmptyDataReaderException {
         Cell cell = this.getCell(name);
         if (!this.isNumericCell(cell)) {
             throw new TypeDataReaderException("Data in row " + this.currentSheet.getRowNum() + " for header " + name + " is not a Float");
@@ -123,7 +130,7 @@ public class DataReader {
         return (float) cell.getNumericCellValue();
     }
 
-    public double getDouble(String name) throws DataReaderException {
+    public double getDouble(String name) throws TypeDataReaderException, EmptyDataReaderException {
         Cell cell = this.getCell(name);
         if (!this.isNumericCell(cell)) {
             throw new TypeDataReaderException("Data in row " + this.currentSheet.getRowNum() + " for header " + name + " is not a Double");
@@ -131,7 +138,7 @@ public class DataReader {
         return cell.getNumericCellValue();
     }
 
-    public boolean getBoolean(String name) throws DataReaderException {
+    public boolean getBoolean(String name) throws TypeDataReaderException, EmptyDataReaderException {
         Cell cell = this.getCell(name);
         if (this.isStringCell(cell)) {
             if (cell.getStringCellValue().equalsIgnoreCase("true")) {
