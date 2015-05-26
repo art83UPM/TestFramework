@@ -89,7 +89,7 @@ public class ConfigWriter implements Visitor {
                 configMethodMember.setStatus(" ");
             }
         }
-        // TODO Añadir configNew
+        configCodeNew.add(configMethodMember);
     }
 
     @Override
