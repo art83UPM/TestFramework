@@ -85,4 +85,18 @@ public class ConfigClazz extends ConfigCodeFile {
         // TODO Auto-generated method stub
         
     }
+
+	@Override
+	public String getStatus(ConfigMember configMember) {
+		if (this.getName().equals(configMember.getConfigClazz().getName())) {
+            if (!configMemberList.isEmpty()) {
+                for (ConfigMember confirMember : configMemberList) {
+                    if (confirMember.equals(configMember)) {
+                    	return confirMember.getStatus();
+                    }
+                }
+            }
+		}
+		return null;
+	}
 }

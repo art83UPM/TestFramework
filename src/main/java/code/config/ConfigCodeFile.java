@@ -8,4 +8,5 @@ public abstract class ConfigCodeFile {
 
     public abstract ConfigCodeFile getChild();
 
+	public abstract String getStatus(ConfigMember configMember);
 }

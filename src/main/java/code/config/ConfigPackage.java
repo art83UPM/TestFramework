@@ -77,4 +77,18 @@ public class ConfigPackage extends ConfigCodeFile{
         configCodeFileList.get(configCodeFileList.indexOf(child)).add(child.getChild());
     }
 
+    @Override
+	public String getStatus(ConfigMember configMember) {
+		if (configMember.getConfigClazz().getConfigPackage().getName().contains(this.getName())) {
+            if (!configCodeFileList.isEmpty()) {
+                for (ConfigCodeFile configCodeFile : configCodeFileList) {
+                    if (configCodeFile.exist(configMember)) {
+                    	return configCodeFile.getStatus(configMember);
+                    }
+                }
+            }
+		}
+		return " ";
+	}
+
 }

@@ -3,10 +3,7 @@ package writers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
-import code.config.ConfigClazz;
 import code.config.ConfigCode;
 import code.config.ConfigMethodMember;
 import code.project.ProjectClazz;
@@ -78,7 +75,7 @@ public class ConfigWriter implements Visitor {
                 configMethodMember.setStatus("exist");
             } else {
                 configMethodMember.setTest(" ");
-                // TODO ponerle el status del old
+                configMethodMember.setStatus(configCodeOld.getStatus(configMethodMember));
             }
         } else {
             if (test.exist(method)) {

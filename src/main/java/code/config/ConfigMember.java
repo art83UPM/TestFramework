@@ -35,9 +35,13 @@ public class ConfigMember {
         return this.configClazz;
     }
 
-    public void setStatus(String status) {
+	public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getStatus() {
+		return status;
+	}
 
     public void setTest(String test) {
         this.test = test;

@@ -60,4 +60,13 @@ public class ConfigCode {
         configPackagesList.get(configPackagesList.indexOf(configPackage)).add(configPackage.getChild());
     }
 
+	public String getStatus(ConfigMember configMember) {
+		for (ConfigPackage configPackage : configPackagesList) {
+            if (configPackage.exist(configMember)) {
+            	return configPackage.getStatus(configMember);
+            }
+		}
+		return " ";
+	}
+
 }
