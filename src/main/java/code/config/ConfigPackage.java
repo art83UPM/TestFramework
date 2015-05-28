@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 
 import code.Margin;
 
-public class ConfigPackage extends ConfigCodeFile{
+public class ConfigPackage extends ConfigCodeFile {
     private JSONObject jsonPackage;
 
     private ConfigPackage fatherPackage;
@@ -70,9 +70,10 @@ public class ConfigPackage extends ConfigCodeFile{
         return this.configCodeFileList.get(0);        
     }
 
-    public void add(ConfigCodeFile child) {
+    @Override
+    public void add(ConfigCodeScope child) {
         if(!this.configCodeFileList.contains(child)) {
-            configCodeFileList.add(child);
+            configCodeFileList.add((ConfigCodeFile) child);
         }
         configCodeFileList.get(configCodeFileList.indexOf(child)).add(child.getChild());
     }

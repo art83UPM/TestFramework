@@ -76,12 +76,12 @@ public class ConfigClazz extends ConfigCodeFile {
         return false;
     }
 
-    public ConfigMember getChild() {
+    public ConfigCodeScope getChild() {
         return this.configMemberList.get(0);
     }
 
     @Override
-    public void add(ConfigCodeFile child) {
+    public void add(ConfigCodeScope child) {
         // TODO Auto-generated method stub
         
     }

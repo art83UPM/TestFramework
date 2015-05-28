@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 
 import code.Margin;
 
-public class ConfigMember {
+public class ConfigMember extends ConfigCodeScope {
     protected JSONObject jsonMember;
     protected ConfigClazz configClazz;
     protected String name;
@@ -45,5 +45,10 @@ public class ConfigMember {
 
     public void setTest(String test) {
         this.test = test;
-    }       
+    }
+
+	@Override
+	public ConfigCodeScope getChild() {
+		return null;
+	}       
 }
