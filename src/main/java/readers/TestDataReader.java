@@ -26,6 +26,15 @@ public abstract class TestDataReader {
         return this.getDataReader().getRow();
     }
     
+	private String getCurrentSheet() {
+		return this.dataReader.getCurrentSheet().getName();
+	}
+
+	public String getLocationMessage() {
+		return "Testing row: " + this.getCurrentRow() + " from sheet: " + this.getCurrentSheet();
+	}
+
+    
     public void setTestTarget(String name) {
         this.getDataReader().setSheet(name);
     }

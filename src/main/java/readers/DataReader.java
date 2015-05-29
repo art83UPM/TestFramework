@@ -26,6 +26,7 @@ public class DataReader {
 
     public DataReader(String filePath) {
         this.workbook = this.readWorkbookFromFile(filePath);
+        this.sheets = new HashMap<String, DataSheet>();
     }
 
     private XSSFWorkbook readWorkbookFromFile(String filePath) {
@@ -55,7 +56,9 @@ public class DataReader {
     }
 
     public void reset() {
-        this.currentSheet.reset();
+    	for (DataSheet sheet : this.sheets.values()) {
+			sheet.reset();
+		}
     }
 
     public void next() {
@@ -70,6 +73,10 @@ public class DataReader {
     public List<String> getHeaders() {
         return this.currentSheet.getHeaders();
     }
+
+	public DataSheet getCurrentSheet() {
+		return this.currentSheet;
+	}
     
     private Cell getCell(String name) throws EmptyDataReaderException {
         Cell cell = null;

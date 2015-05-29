@@ -60,7 +60,6 @@ public class DataSheet {
         assert this.rowIterator == null : "rowIterator not set";
         this.rowIterator = this.sheet.rowIterator();
         this.next();
-        this.next();
     }
     
     public int getPhysicalNumberOfRows() {
@@ -72,7 +71,7 @@ public class DataSheet {
     }
 
     public int getRowNum() {
-        return this.getRowNum();
+        return this.currentRow.getRowNum()+1;
     }
 
     public int getHeader(String name) throws InvalidHeaderDataReaderException {
@@ -81,4 +80,8 @@ public class DataSheet {
         }
         return this.headers.get(name);
     }
+
+	public String getName() {
+		return this.sheet.getSheetName();
+	}
 }
