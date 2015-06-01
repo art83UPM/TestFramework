@@ -53,7 +53,7 @@ public class ConfigCode {
     }
 
     public void add(ConfigMethodMember configMethodMember) {
-        ConfigPackage configPackage = configMethodMember.getRoot(); //TODO metodo GETROOT en configMember
+        ConfigPackage configPackage = configMethodMember.getRoot();
         if (!configPackagesList.contains(configPackage)) { // TODO metodo EQUALS en ConfigPackage
             configPackagesList.add(configPackage);
         }        

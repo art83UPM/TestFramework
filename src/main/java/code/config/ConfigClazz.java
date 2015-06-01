@@ -80,10 +80,12 @@ public class ConfigClazz extends ConfigCodeFile {
         return this.configMemberList.get(0);
     }
 
+	public ConfigPackage getRoot() {
+		return this.getConfigPackage().getRoot();
+	}
+
     @Override
-    public void add(ConfigCodeScope child) {
-        // TODO Auto-generated method stub
-        
+    public void add(ConfigCodeScope child) {        
     }
 
 	@Override

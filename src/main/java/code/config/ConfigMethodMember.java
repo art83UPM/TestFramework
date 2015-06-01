@@ -34,5 +34,4 @@ public class ConfigMethodMember extends ConfigMember {
             return false;
         }
     }
-
 }

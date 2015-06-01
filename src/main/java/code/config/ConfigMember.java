@@ -47,6 +47,10 @@ public class ConfigMember extends ConfigCodeScope {
         this.test = test;
     }
 
+	public ConfigPackage getRoot() {		
+		return this.getConfigClazz().getRoot();
+	}
+
 	@Override
 	public ConfigCodeScope getChild() {
 		return null;
