@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import readers.exceptions.DataReaderException;
 import readers.exceptions.EmptyDataReaderException;
 import readers.exceptions.InvalidDataSheetException;
 import readers.exceptions.InvalidHeaderDataReaderException;
