@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import code.Margin;
+import code.TestFrameworkClassLoader;
 
 public class ProjectCode {
 
@@ -13,6 +14,7 @@ public class ProjectCode {
     private List<ProjectCodeFile> components;
 
     public ProjectCode(String path) {
+        TestFrameworkClassLoader.setClassLoaderByPath(path);
         this.file = new File(path);
         this.components = new ArrayList<ProjectCodeFile>();
         this.build();
@@ -41,4 +43,10 @@ public class ProjectCode {
         }
         return false;
     }
+
+	public void accept(Visitor visitor) {
+		for (ProjectCodeFile projectCodeFile : components) {
+			projectCodeFile.accept(visitor);
+		}
+	}
 }
