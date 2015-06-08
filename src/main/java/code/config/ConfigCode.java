@@ -53,13 +53,21 @@ public class ConfigCode {
     }
 
     public void add(ConfigMethodMember configMethodMember) {
-        ConfigPackage configPackage = configMethodMember.getRoot();
+    	ConfigPackage configPackage = configMethodMember.getRoot();
 		if (!configPackagesList.contains(configPackage)) {
             configPackagesList.add(configPackage);
         }        
         configPackagesList.get(configPackagesList.indexOf(configPackage)).add(configPackage.getChild());
     }
 
+    public void add(ConfigConstructorMember configConstructorMember) {
+    	ConfigPackage configPackage = configConstructorMember.getRoot();
+		if (!configPackagesList.contains(configPackage)) {
+            configPackagesList.add(configPackage);
+        }        
+        configPackagesList.get(configPackagesList.indexOf(configPackage)).add(configPackage.getChild());		
+	}
+    
 	public String getStatus(ConfigMember configMember) {
 		for (ConfigPackage configPackage : configPackagesList) {
             if (configPackage.exist(configMember)) {
@@ -68,5 +76,7 @@ public class ConfigCode {
 		}
 		return " ";
 	}
+
+	
 
 }
