@@ -14,7 +14,6 @@ public class ProjectCode {
     private List<ProjectCodeFile> components;
 
     public ProjectCode(String path) {
-        TestFrameworkClassLoader.setClassLoaderByPath(path);
         this.file = new File(path);
         this.components = new ArrayList<ProjectCodeFile>();
         this.build();

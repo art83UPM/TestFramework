@@ -3,6 +3,7 @@ package code;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 
 public class TestFrameworkClassLoader extends URLClassLoader{
 
@@ -16,14 +17,19 @@ public class TestFrameworkClassLoader extends URLClassLoader{
         return classLoader;
     }
     
-    public static void setClassLoaderByPath(String path) {
+    public static void setClassLoaderByPath(String paths[]) {
         try {
-            URL baseUrl = new URL("file:///"+path);
-            URL[] urls = {baseUrl};
+        	URL[] urls = new URL[paths.length];
+        	for (int i = 0; i < paths.length; i++) {
+        		urls[i] = new URL("file:///"+paths[i]);
+			}
             classLoader = new TestFrameworkClassLoader(urls);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }
-    
+    public static void setClassLoaderByPath(String path) {
+    	String[] paths = {path};
+    	setClassLoaderByPath(paths);
+    }
 }

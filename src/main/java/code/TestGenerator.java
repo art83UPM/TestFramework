@@ -7,8 +7,14 @@ import code.project.ProjectCode;
 public class TestGenerator {
 
     public TestGenerator(String projectPath) {
-        ProjectCode main = new ProjectCode(projectPath + "\\target\\classes\\");
-        ProjectCode test = new ProjectCode(projectPath + "\\target\\test-classes\\");
+    	String paths[] = {
+    			projectPath + "\\target\\classes\\",
+    			projectPath + "\\target\\test-classes\\"
+    	};
+        TestFrameworkClassLoader.setClassLoaderByPath(paths[0]);
+        ProjectCode main = new ProjectCode(paths[0]);
+        TestFrameworkClassLoader.setClassLoaderByPath(paths);
+        ProjectCode test = new ProjectCode(paths[1]);
         
         TestWriter testWriter = new TestWriter(projectPath + "\\src\\test\\java");
         HeaderDataWriter headerDataWriter = new HeaderDataWriter(projectPath + "\\src\\test\\resources");
@@ -17,7 +23,7 @@ public class TestGenerator {
 //        main.accept(headerDataWriter);
         
         testWriter.close();
-        headerDataWriter.close();
+//        headerDataWriter.close();
 //
 //        ConfigCode configCode = new ConfigCode();
 //        ConfigWriter configWriter = new ConfigWriter("C:\\Users\\nyuron\\Desktop", main);

@@ -3,7 +3,8 @@ package code;
 public class TestFrameworkClassLoaderTest {
 
 	public static void main(String[] args) {
-		TestFrameworkClassLoader.setClassLoaderByPath("C:\\Users\\CarlosDavid\\git\\exampleProject\\target\\classes\\");
+		String[] path = {"C:\\Users\\CarlosDavid\\git\\exampleProject\\target\\classes\\"};
+		TestFrameworkClassLoader.setClassLoaderByPath(path);
 		TestFrameworkClassLoader classLoader = TestFrameworkClassLoader.getClassLoader();
 		try {
 			classLoader.loadClass("spike.Example");
