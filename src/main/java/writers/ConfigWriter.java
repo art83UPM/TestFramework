@@ -3,6 +3,8 @@ package writers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import code.config.ConfigCode;
 import code.config.ConfigConstructorMember;
@@ -38,6 +40,7 @@ public class ConfigWriter implements Visitor {
             } else {
                 File fileBack = new File(this.path + File.separator + "config.back" + ".json");
                 configCodeOld = new ConfigCode(this.path + File.separator + "config.json");
+                Files.copy(file.toPath(), fileBack.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
             e.printStackTrace();
