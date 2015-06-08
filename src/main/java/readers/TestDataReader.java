@@ -1,20 +1,17 @@
 package readers;
 
-import exceptions.DataReaderException;
-import exceptions.InvalidDataSheetException;
-import exceptions.TypeDataReaderException;
+
+import java.util.List;
+
+import readers.exceptions.EmptyDataReaderException;
+import readers.exceptions.TypeDataReaderException;
 
 public abstract class TestDataReader {
 
     private DataReader dataReader;
 
     public TestDataReader(String excelFile) {
-        try {
-            this.dataReader = new DataReader(excelFile);
-        } catch (InvalidDataSheetException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
+        this.dataReader = new DataReader(excelFile);
     }
     
     protected DataReader getDataReader() {
@@ -29,7 +26,25 @@ public abstract class TestDataReader {
         return this.getDataReader().getRow();
     }
     
-    protected int getInt(String columnName) throws DataReaderException {
+	private String getCurrentSheet() {
+		return this.dataReader.getCurrentSheet().getName();
+	}
+
+	public String getLocationMessage() {
+		return "Testing row: " + this.getCurrentRow() + " from sheet: " + this.getCurrentSheet();
+	}
+
+    
+    public void setTestTarget(String name) {
+        this.getDataReader().setSheet(name);
+    }
+    
+    public List<String> getConstructors() {
+        this.setTestTarget("Constructors");
+        return this.getDataReader().getHeaders();
+    }
+    
+    protected int getInt(String columnName) throws EmptyDataReaderException {
         int result = 0;
         try {
         result = dataReader.getInt(columnName);
@@ -40,7 +55,7 @@ public abstract class TestDataReader {
         return result;
     }
 
-    protected float getFloat(String columnName) throws DataReaderException {
+    protected float getFloat(String columnName) throws EmptyDataReaderException {
         float result = (float) 0.0;
         try {
         result = dataReader.getFloat(columnName);
@@ -51,7 +66,7 @@ public abstract class TestDataReader {
         return result;
     }
 
-    protected double getDouble(String columnName) throws DataReaderException {
+    protected double getDouble(String columnName) throws EmptyDataReaderException {
         double result = 0.0;
         try {
         result = dataReader.getDouble(columnName);
@@ -62,7 +77,7 @@ public abstract class TestDataReader {
         return result;
     }
 
-    protected boolean getBoolean(String columnName) throws DataReaderException {
+    protected boolean getBoolean(String columnName) throws EmptyDataReaderException {
         boolean result = false;
         try {
         result = dataReader.getBoolean(columnName);
@@ -73,7 +88,7 @@ public abstract class TestDataReader {
         return result;
     }
 
-    protected String getString(String columnName) throws DataReaderException {
+    protected String getString(String columnName) throws EmptyDataReaderException {
         String result = null;
         try {
             result = dataReader.getString(columnName);

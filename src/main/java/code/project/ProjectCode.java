@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import code.Margin;
+import code.TestFrameworkClassLoader;
 
 public class ProjectCode implements CodeComponent {
 

@@ -22,6 +22,7 @@ public class HeaderDataWriter implements Visitor {
     }
 
     public void visit(ProjectConstructorMember constructorMember) {
+        dataWriter.setSheet("Constructors");
         String header = "get" + constructorMember.getName();
         if (constructorMember.getParametersType().size() == 0) {
             dataWriter.write(header);
@@ -37,6 +38,7 @@ public class HeaderDataWriter implements Visitor {
     }
 
     public void visit(ProjectMethodMember methodMember) {
+        dataWriter.setSheet(methodMember.getName());
         String header = "get" + methodMember.getName();
         for (ProjectParameterMember parameterMember : methodMember.getParametersType()) {
             header += parameterMember.getType();

@@ -28,13 +28,13 @@ public class TestWriter implements Visitor {
         this.file = new File(path + File.separator + clazz.getName() + "Test.java");
         try {
             writer = new BufferedWriter(new FileWriter(file));
-            writer.write("package " + clazz.getPackage() + "Test.generated;\n\n");
+            writer.write("package " + clazz.getProjectPackage() + "Test.generated;\n\n");
             writer.write("import static org.junit.Assert.*;\n\n");
             writer.write("import org.junit.After;\n");
             writer.write("import org.junit.BeforeClass;\n");
             writer.write("import org.junit.Test;\n\n");
-            writer.write("import " + clazz.getPackage() + "." + clazz.getName() + ";\n");
-            writer.write("import " + clazz.getPackage() + ".generated." + clazz.getName() + "TestDataReader;\n\n");
+            writer.write("import " + clazz.getProjectPackage() + "." + clazz.getName() + ";\n");
+            writer.write("import " + clazz.getProjectPackage() + ".generated." + clazz.getName() + "TestDataReader;\n\n");
             writer.write("public class " + clazz.getName() + "Test {\n\n");
             writer.write(this.printTabs(1) + "private " + clazz.getName() + "TestDataReader data;\n\n");
             writer.write(this.printTabs(1) + "@BeforeClass\n");
@@ -80,7 +80,7 @@ public class TestWriter implements Visitor {
             writer.write("() {\n");
             writer.write(this.printTabs(2) + "while (data.hasNext()) {\n");
             writer.write(this.printTabs(3) + "assertEquals(data.get" + nameAndParametersType + "Result(), data.get"
-                    + methodMember.getClazzName() + "()." + methodMember.getName().toLowerCase() + "(");
+                    + methodMember.getProjectClazzName() + "()." + methodMember.getName().toLowerCase() + "(");
             for (int i = 0; i < methodMember.getParametersType().size()-1; i++) {
                 writer.write("data.get"+nameAndParametersType+"Parameter"+i+"(),");
             }
