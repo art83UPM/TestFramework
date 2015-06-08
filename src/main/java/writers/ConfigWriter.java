@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import code.config.ConfigCode;
+import code.config.ConfigConstructorMember;
 import code.config.ConfigMethodMember;
 import code.project.ProjectClazz;
 import code.project.ProjectCode;
@@ -43,15 +44,9 @@ public class ConfigWriter implements Visitor {
         }
     }
 
-    // public void write() {
-    //
-    // try {
-    // writer = new FileWriter(file);
-    // writer.close();
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // }
-    // }
+    public void writeNewConfigCode() { //TODO dado el objeto configCodeNew, atributo de esta clase, imprimirlo en un fichero .json
+    
+    }
 
     public void close() {
         try {
@@ -63,7 +58,25 @@ public class ConfigWriter implements Visitor {
 
     @Override
     public void visit(ProjectConstructorMember constructor) {
-
+    	ConfigConstructorMember configConstructorMember = constructor.getConfigConstructor();
+        if (configCodeOld.exist(configConstructorMember)) {
+            if (test.exist(constructor)) {
+                configConstructorMember.setTest(constructor.getName() + "Test");
+                configConstructorMember.setStatus("exist");
+            } else {
+                configConstructorMember.setTest(" ");
+                configConstructorMember.setStatus(configCodeOld.getStatus(configConstructorMember));
+            }
+        } else {
+            if (test.exist(constructor)) {
+                configConstructorMember.setTest(constructor.getName() + "Test");
+                configConstructorMember.setStatus("exist");                
+            } else {
+                configConstructorMember.setTest(" ");
+                configConstructorMember.setStatus(" ");
+            }
+        }
+        configCodeNew.add(configConstructorMember);
     }
 
     @Override
