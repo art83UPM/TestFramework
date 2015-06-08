@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import code.Margin;
+import code.config.ConfigConstructorMember;
 
 public class ProjectConstructorMember extends ProjectMember implements CodeComponent {
 
@@ -38,6 +39,10 @@ public class ProjectConstructorMember extends ProjectMember implements CodeCompo
         return order;
     }
 
+	public ConfigConstructorMember getConfigConstructor() {
+		return new ConfigConstructorMember(this.getName(), this.getProjectClazz().getConfigClazz());
+	}
+	
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }
