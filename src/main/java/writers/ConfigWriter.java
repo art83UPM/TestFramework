@@ -59,46 +59,14 @@ public class ConfigWriter implements Visitor {
     @Override
     public void visit(ProjectConstructorMember constructor) {
     	ConfigConstructorMember configConstructorMember = constructor.getConfigConstructor();
-        if (configCodeOld.exist(configConstructorMember)) {
-            if (test.exist(constructor)) {
-                configConstructorMember.setTest(constructor.getName() + "Test");
-                configConstructorMember.setStatus("exist");
-            } else {
-                configConstructorMember.setTest(" ");
-                configConstructorMember.setStatus(configCodeOld.getStatus(configConstructorMember));
-            }
-        } else {
-            if (test.exist(constructor)) {
-                configConstructorMember.setTest(constructor.getName() + "Test");
-                configConstructorMember.setStatus("exist");                
-            } else {
-                configConstructorMember.setTest(" ");
-                configConstructorMember.setStatus(" ");
-            }
-        }
+    	configConstructorMember.setTestAndStatus(configCodeOld, test, constructor);        
         configCodeNew.add(configConstructorMember);
     }
 
     @Override
     public void visit(ProjectMethodMember method) {
         ConfigMethodMember configMethodMember = method.getConfigMethod();
-        if (configCodeOld.exist(configMethodMember)) {
-            if (test.exist(method)) {
-                configMethodMember.setTest(method.getName() + "Test");
-                configMethodMember.setStatus("exist");
-            } else {
-                configMethodMember.setTest(" ");
-                configMethodMember.setStatus(configCodeOld.getStatus(configMethodMember));
-            }
-        } else {
-            if (test.exist(method)) {
-                configMethodMember.setTest(method.getName() + "Test");
-                configMethodMember.setStatus("exist");                
-            } else {
-                configMethodMember.setTest(" ");
-                configMethodMember.setStatus(" ");
-            }
-        }
+        configMethodMember.setTestAndStatus(configCodeOld, test, method);       
         configCodeNew.add(configMethodMember);
     }
 
