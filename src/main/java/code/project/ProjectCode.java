@@ -7,7 +7,7 @@ import java.util.List;
 import code.Margin;
 import code.TestFrameworkClassLoader;
 
-public class ProjectCode {
+public class ProjectCode implements CodeComponent {
 
     private File file;
 
@@ -23,7 +23,7 @@ public class ProjectCode {
         for (File file : this.file.listFiles()) {
             if (file.isDirectory()) {
                 Margin.instance().inc();
-                this.add(new ProjectPackage(file));
+                this.add(new ProjectPackage(file, null));
                 Margin.instance().dec();
             }
         }
@@ -33,9 +33,9 @@ public class ProjectCode {
         this.components.add(component);
     }
 
-    public boolean exist(ProjectMember projectMember, ProjectClazz projectClazz, ProjectPackage projectPackage) {
+    public boolean exist(ProjectMember projectMember) {
         for (ProjectCodeFile codeFile : components) {
-            if (codeFile.exist(projectMember, projectClazz, projectPackage)) {
+            if (codeFile.exist(projectMember)) {
                 System.out.println(Margin.instance().tabs() + "Sí está!");
                 return true;
             }
@@ -43,9 +43,10 @@ public class ProjectCode {
         return false;
     }
 
-	public void accept(Visitor visitor) {
-		for (ProjectCodeFile projectCodeFile : components) {
-			projectCodeFile.accept(visitor);
-		}
-	}
+    @Override
+    public void accept(Visitor visitor) {
+        for (ProjectCodeFile codeComponent : components) {
+            codeComponent.accept(visitor);
+        }        
+    }
 }

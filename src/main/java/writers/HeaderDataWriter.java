@@ -50,9 +50,7 @@ public class HeaderDataWriter implements Visitor {
     }
     
     @Override
-    public void visit(ProjectPackage package1) {
-        // TODO Auto-generated method stub
-        
+    public void visit(ProjectPackage package1) {        
     }
 
     public void close() {

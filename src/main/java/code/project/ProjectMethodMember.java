@@ -5,31 +5,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import code.Margin;
+import code.config.ConfigMethodMember;
 
 public class ProjectMethodMember extends ProjectMember implements CodeComponent {
 
-    private String name;
-
     private String returnType;
 
-    private String clazzName;
-
-    private List<ProjectParameterMember> parameterTypes;
-
-    public ProjectMethodMember(Method method) {
-        super(method);
+    public ProjectMethodMember(Method method, ProjectClazz projectClazz) {
+        super(method, projectClazz);
         this.name = method.getName();
         this.returnType = method.getReturnType().getSimpleName();
-        this.clazzName = method.getDeclaringClass().getSimpleName();
         this.parameterTypes = new ArrayList<ProjectParameterMember>();
-        System.out.println(Margin.instance().tabs() + "Método: " + this.name);
+        System.out.println(Margin.instance().tabs() + "Método: " + this.name + " de la clase: " + this.projectClazz.getName());
         this.build(method);
     }
 
-    public ProjectMethodMember(String name, String returnType, String clazzName, List<ProjectParameterMember> parameterType) {
+    public ProjectMethodMember(String name, ProjectClazz projectClazz, String returnType, List<ProjectParameterMember> parameterType) {
         this.name = name;
+        this.projectClazz = projectClazz;
         this.returnType = returnType;
-        this.clazzName = clazzName;
         this.parameterTypes = new ArrayList<ProjectParameterMember>();
     }
 
@@ -43,16 +37,12 @@ public class ProjectMethodMember extends ProjectMember implements CodeComponent 
         return name.toString().substring(0, 1).toUpperCase() + name.toString().substring(1);
     }
 
+    public String getProjectClazzName() {
+    	return this.projectClazz.getName();
+    }
+    
     public String getReturnType() {
         return returnType;
-    }
-
-    public String getClazzName() {
-        return clazzName;
-    }
-
-    public List<ProjectParameterMember> getParametersType() {
-        return parameterTypes;
     }
 
     public void accept(Visitor visitor) {
@@ -66,8 +56,8 @@ public class ProjectMethodMember extends ProjectMember implements CodeComponent 
             Margin.instance().inc();
             System.out.print(Margin.instance().tabs() + "compruebo si " + this.toString() + " es igual al método: "
                     + projectMethodMember.toString() + " --> ");
-            if (!clazzName.equals(projectMethodMember.getClazzName())) {
-                System.out.println("El nombre de la clase no coincide.");
+            if (!projectClazz.equals(projectMethodMember.getProjectClazz())) {
+                System.out.println("La clase no coincide.");
                 Margin.instance().dec();
                 return false;
             }
@@ -96,7 +86,11 @@ public class ProjectMethodMember extends ProjectMember implements CodeComponent 
 
     @Override
     public String toString() {
-        return name + " [" + returnType + ", " + clazzName + ", " + parameterTypes + "]";
+        return name + " [" + returnType + ", " + this.projectClazz.getName() + ", " + parameterTypes + "]";
+    }
+
+    public ConfigMethodMember getConfigMethod() {
+        return new ConfigMethodMember(this.getName(), this.getProjectClazz().getConfigClazz());        
     }
 
 }
