@@ -24,32 +24,37 @@ public class TestWriter implements Visitor {
         this.path = path;
     }
 
+    private String packagePath(ProjectClazz clazz) {
+    	return clazz.getProjectPackage().getName().replace(".", File.separator);
+	}
+    
     public void visit(ProjectClazz clazz) {
-        this.file = new File(path + File.separator + clazz.getName() + "Test.java");
+        this.file = new File(path + packagePath(clazz) + File.separator + clazz.getName() + "Test.java");
         try {
             writer = new BufferedWriter(new FileWriter(file));
-            writer.write("package " + clazz.getProjectPackage() + "Test.generated;\n\n");
+            writer.write("package " + clazz.getProjectPackage().getName() + ";\n\n"); // This was at the end of the package: Test.generated. Reason?
             writer.write("import static org.junit.Assert.*;\n\n");
             writer.write("import org.junit.After;\n");
             writer.write("import org.junit.BeforeClass;\n");
             writer.write("import org.junit.Test;\n\n");
-            writer.write("import " + clazz.getProjectPackage() + "." + clazz.getName() + ";\n");
-            writer.write("import " + clazz.getProjectPackage() + ".generated." + clazz.getName() + "TestDataReader;\n\n");
+            writer.write("import " + clazz.getProjectPackage().getName() + "." + clazz.getName() + ";\n");
+            writer.write("import " + clazz.getProjectPackage().getName() + "._dataReaders." + clazz.getName() + "TestDataReader;\n\n");
             writer.write("public class " + clazz.getName() + "Test {\n\n");
-            writer.write(this.printTabs(1) + "private " + clazz.getName() + "TestDataReader data;\n\n");
+            writer.write(this.printTabs(1) + "private static " + clazz.getName() + "TestDataReader data;\n\n");
             writer.write(this.printTabs(1) + "@BeforeClass\n");
-            writer.write(this.printTabs(1) + "public void init() {\n");
+            writer.write(this.printTabs(1) + "public static void init() {\n");
             writer.write(this.printTabs(2) + "   data = new " + clazz.getName() + "TestDataReader();\n");
             writer.write(this.printTabs(1) + "}\n\n");
             writer.write(this.printTabs(1) + "@After\n");
             writer.write(this.printTabs(1) + "public void reset() {\n");
+            writer.write(this.printTabs(2) + "data.reset();\n");
             writer.write(this.printTabs(1) + "}\n\n");
         } catch (IOException e1) {
             e1.printStackTrace();
         }
     }
 
-    public void visit(ProjectConstructorMember constructorMember) {//TODO que los constructores esten ordenados
+	public void visit(ProjectConstructorMember constructorMember) {//TODO que los constructores esten ordenados
         try {
             writer.write(this.printTabs(1) + "@Test\n");
             writer.write(this.printTabs(1) + "public void test" + constructorMember.getName());
@@ -80,11 +85,14 @@ public class TestWriter implements Visitor {
             writer.write("() {\n");
             writer.write(this.printTabs(2) + "while (data.hasNext()) {\n");
             writer.write(this.printTabs(3) + "assertEquals(data.get" + nameAndParametersType + "Result(), data.get"
-                    + methodMember.getProjectClazzName() + "()." + methodMember.getName().toLowerCase() + "(");
+                    + methodMember.getProjectClazzName() + "()." + methodMember.getName().substring(0, 1).toLowerCase() + methodMember.getName().substring(1) + "(");
             for (int i = 0; i < methodMember.getParametersType().size()-1; i++) {
                 writer.write("data.get"+nameAndParametersType+"Parameter"+i+"(),");
             }
-            writer.write("data.get"+nameAndParametersType+"Parameter"+ (methodMember.getParametersType().size()-1)+"()));\n");
+            if (methodMember.getParametersType().size() > 0) {
+            	writer.write("data.get"+nameAndParametersType+"Parameter"+ (methodMember.getParametersType().size()-1)+"()");
+            }
+            writer.write("));\n");
             writer.write(this.printTabs(3) + "data.next();\n");
             writer.write(this.printTabs(2) + "}\n");
             writer.write(this.printTabs(1) + "}\n\n");
