@@ -66,7 +66,6 @@ public class TestWriter implements Visitor {
             writer.write(this.printTabs(3) + "" + constructorMember.getName() + " " + constructorMember.getName().toLowerCase()
                     + " = data.get" + constructorMember.getName() + "();\n");
             writer.write(this.printTabs(3) + "fail(\"Not yet implemented\");\n");
-            writer.write(this.printTabs(3) + "data.next();\n");
             writer.write(this.printTabs(2) + "}\n");
             writer.write(this.printTabs(1) + "}\n\n");
         } catch (IOException e) {
@@ -84,6 +83,7 @@ public class TestWriter implements Visitor {
             writer.write(this.printTabs(1) + "public void test" + nameAndParametersType);
             writer.write("() {\n");
             writer.write(this.printTabs(2) + "while (data.hasNext()) {\n");
+            writer.write(this.printTabs(3) + "data.next();\n");
             writer.write(this.printTabs(3) + "assertEquals(data.get" + nameAndParametersType + "Result(), data.get"
                     + methodMember.getProjectClazzName() + "()." + methodMember.getName().substring(0, 1).toLowerCase() + methodMember.getName().substring(1) + "(");
             for (int i = 0; i < methodMember.getParametersType().size()-1; i++) {
@@ -93,7 +93,6 @@ public class TestWriter implements Visitor {
             	writer.write("data.get"+nameAndParametersType+"Parameter"+ (methodMember.getParametersType().size()-1)+"()");
             }
             writer.write("));\n");
-            writer.write(this.printTabs(3) + "data.next();\n");
             writer.write(this.printTabs(2) + "}\n");
             writer.write(this.printTabs(1) + "}\n\n");
         } catch (IOException e) {
