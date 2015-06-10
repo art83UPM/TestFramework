@@ -7,12 +7,9 @@ import code.Margin;
 
 public class ProjectConstructorMember extends ProjectMember implements CodeComponent {
 
-    private int order;
-
     public ProjectConstructorMember(Constructor<?> constructor, int order, ProjectClazz projectClazz) {
         super(constructor, projectClazz);
         this.name = constructor.getName().substring(constructor.getName().lastIndexOf('.') + 1);
-        this.order = order;
         this.parameterTypes = new ArrayList<ProjectParameterMember>();
         System.out.println(Margin.instance().tabs() + "Constructor: " + this.name);
         this.build(constructor);
@@ -34,8 +31,8 @@ public class ProjectConstructorMember extends ProjectMember implements CodeCompo
         return this.name;
     }
 
-    public int getOrder() {
-        return order;
+    public int getParameterNumber() {
+        return this.parameterTypes.size();
     }
 
     public void accept(Visitor visitor) {
