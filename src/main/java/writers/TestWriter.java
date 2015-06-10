@@ -62,7 +62,7 @@ public class TestWriter implements Visitor {
                 writer.write(parameterMember.getType());
             }
             writer.write("() {\n");
-            writer.write(this.printTabs(2) + "while (data.hasNext(" + constructorMember.getOrder() + ")) {\n");
+            writer.write(this.printTabs(2) + "while (data.hasNext(" + constructorMember.getParameterNumber() + ")) {\n");
             writer.write(this.printTabs(3) + "" + constructorMember.getName() + " " + constructorMember.getName().toLowerCase()
                     + " = data.get" + constructorMember.getName() + "();\n");
             writer.write(this.printTabs(3) + "fail(\"Not yet implemented\");\n");
