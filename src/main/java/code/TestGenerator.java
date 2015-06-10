@@ -20,10 +20,10 @@ public class TestGenerator {
         HeaderDataWriter headerDataWriter = new HeaderDataWriter(projectPath + "\\src\\test\\resources\\");
         
         main.accept(testWriter);
-//        main.accept(headerDataWriter);
+        main.accept(headerDataWriter);
         
         testWriter.close();
-//        headerDataWriter.close();
+        headerDataWriter.close();
 //
 //        ConfigCode configCode = new ConfigCode();
 //        ConfigWriter configWriter = new ConfigWriter("C:\\Users\\nyuron\\Desktop", main);

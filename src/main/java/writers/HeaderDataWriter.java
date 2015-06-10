@@ -24,13 +24,13 @@ public class HeaderDataWriter implements Visitor {
     public void visit(ProjectConstructorMember constructorMember) {
         dataWriter.setSheet("Constructors");
         String header = "get" + constructorMember.getName();
-        if (constructorMember.getParametersType().size() == 0) {
+        if (constructorMember.getParameterNumber() == 0) {
             dataWriter.write(header);
         } else {
             for (ProjectParameterMember parameterMember : constructorMember.getParametersType()) {
                 header += parameterMember.getType();
             }
-            for (int i = 0; i < constructorMember.getParametersType().size(); i++) {
+            for (int i = 0; i < constructorMember.getParameterNumber(); i++) {
                 dataWriter.write(header + "Parameter" + i);
             }
         }
@@ -38,11 +38,11 @@ public class HeaderDataWriter implements Visitor {
     }
 
     public void visit(ProjectMethodMember methodMember) {
-        dataWriter.setSheet(methodMember.getName());
         String header = "get" + methodMember.getName();
         for (ProjectParameterMember parameterMember : methodMember.getParametersType()) {
             header += parameterMember.getType();
         }
+        dataWriter.setSheet(header);
         for (int i = 0; i < methodMember.getParametersType().size(); i++) {
             dataWriter.write(header + "Parameter" + i);
         }
