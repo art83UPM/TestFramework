@@ -6,6 +6,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import writers.ConfigWriter;
 import code.Margin;
 
 public class ConfigPackage extends ConfigCodeFile {
@@ -112,5 +113,14 @@ public class ConfigPackage extends ConfigCodeFile {
 		if (!name.equals(configPackage.name))
 			return false;
 		return true;
+	}
+
+	@Override
+	public void accept(ConfigWriter configWriter) {
+		configWriter.visit(this);
+		for (ConfigCodeFile configCodeFile : configCodeFileList) {
+            configCodeFile.accept(configWriter);
+        }	
+		configWriter.visitPackageBack();
 	}
 }

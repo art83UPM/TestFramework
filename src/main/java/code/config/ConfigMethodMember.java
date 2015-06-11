@@ -2,6 +2,7 @@ package code.config;
 
 import org.json.simple.JSONObject;
 
+import writers.ConfigWriter;
 import code.Margin;
 import code.project.ProjectCode;
 import code.project.ProjectMethodMember;
@@ -40,4 +41,19 @@ public class ConfigMethodMember extends ConfigMember {
             return false;
         }
     }
+
+	@Override
+	public void accept(ConfigWriter configWriter) {
+		configWriter.visit(this);		
+	}
+
+	@Override
+	public boolean isConfigConstructor() {
+		return false;
+	}
+
+	@Override
+	public boolean isConfigMethod() {
+		return true;
+	}
 }

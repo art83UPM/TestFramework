@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import writers.ConfigWriter;
 import code.Margin;
 
 public class ConfigCode {
@@ -77,6 +78,9 @@ public class ConfigCode {
 		return " ";
 	}
 
-	
-
+	public void accept(ConfigWriter configWriter) {		
+		for (ConfigPackage configPackage : configPackagesList) {
+            configPackage.accept(configWriter);
+        }		
+	}
 }
