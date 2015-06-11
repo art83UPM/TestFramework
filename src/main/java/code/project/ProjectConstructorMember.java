@@ -43,7 +43,7 @@ public class ProjectConstructorMember extends ProjectMember implements CodeCompo
 		return new ConfigConstructorMember(this.getName(), this.getProjectClazz().getConfigClazz());
 	}
 	
-    public void accept(Visitor visitor) {
+    public void accept(ProjectVisitor visitor) {
         visitor.visit(this);
     }
 

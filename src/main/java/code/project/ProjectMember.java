@@ -31,6 +31,6 @@ public abstract class ProjectMember {
         return this.parameterTypes;
     }
 
-    public abstract void accept(Visitor visitor);
+    public abstract void accept(ProjectVisitor visitor);
     
 }

@@ -5,9 +5,9 @@ import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;
 import code.project.ProjectPackage;
 import code.project.ProjectParameterMember;
-import code.project.Visitor;
+import code.project.ProjectVisitor;
 
-public class HeaderDataWriter implements Visitor {
+public class HeaderDataWriter implements ProjectVisitor {
 
     private DataWriter dataWriter;
 

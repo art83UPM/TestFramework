@@ -45,7 +45,7 @@ public class ProjectMethodMember extends ProjectMember implements CodeComponent 
         return returnType;
     }
 
-    public void accept(Visitor visitor) {
+    public void accept(ProjectVisitor visitor) {
         visitor.visit(this);
     }
 
