@@ -2,11 +2,12 @@ package code.config;
 
 import org.json.simple.JSONObject;
 
+import writers.ConfigWriter;
 import code.Margin;
 import code.project.ProjectCode;
 import code.project.ProjectMember;
 
-public class ConfigMember extends ConfigCodeScope {
+public abstract class ConfigMember extends ConfigCodeScope {
     protected JSONObject jsonMember;
     protected ConfigClazz configClazz;
     protected String name;
@@ -49,6 +50,10 @@ public class ConfigMember extends ConfigCodeScope {
         this.test = test;
     }
 
+	public String getTest() {
+		return test;
+	}
+
 	public ConfigPackage getRoot() {		
 		return this.getConfigClazz().getRoot();
 	}
@@ -76,5 +81,12 @@ public class ConfigMember extends ConfigCodeScope {
 	@Override
 	public ConfigCodeScope getChild() {
 		return null;
-	}       
+	}
+
+	public abstract void accept(ConfigWriter configWriter);
+
+	public abstract boolean isConfigConstructor();
+
+	public abstract boolean isConfigMethod();	
+	
 }
