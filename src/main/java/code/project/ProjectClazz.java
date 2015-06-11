@@ -52,7 +52,7 @@ public class ProjectClazz extends ProjectCodeFile {
         return memberList;
     }
 
-    public void accept(Visitor visitor) {
+    public void accept(ProjectVisitor visitor) {
         visitor.visit(this);
         for (ProjectMember member : memberList) {
             member.accept(visitor);
