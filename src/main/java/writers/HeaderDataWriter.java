@@ -1,5 +1,7 @@
 package writers;
 
+import java.io.File;
+
 import code.project.ProjectClazz;
 import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;
@@ -17,8 +19,12 @@ public class HeaderDataWriter implements Visitor {
         this.path = path;
     }
 
+    private String packagePath(ProjectClazz clazz) {
+    	return clazz.getProjectPackage().getName().replace(".", File.separator);
+	}
+    
     public void visit(ProjectClazz clazz) {
-        this.dataWriter = new DataWriter(path + "\\" + clazz.getName() + "TestData.xlsx");
+        this.dataWriter = new DataWriter(path + packagePath(clazz) + File.separator + clazz.getName() + "TestData.xlsx");
     }
 
     public void visit(ProjectConstructorMember constructorMember) {

@@ -34,7 +34,11 @@ public abstract class TestDataReader {
 		return "Testing row: " + this.getCurrentRow() + " from sheet: " + this.getCurrentSheet();
 	}
 
-    
+	public boolean hasNext() {
+		this.setTestTarget("Constructors");
+		return this.getDataReader().hasNext();
+	}
+	
     public void setTestTarget(String name) {
         this.getDataReader().setSheet(name);
     }

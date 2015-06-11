@@ -35,6 +35,7 @@ public class DataWriter {
     public void save() {
         try {
             File file = new File(fileName);
+            file.mkdirs();
             if (file.exists()) {
                 file.delete();
             }

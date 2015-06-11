@@ -1,5 +1,6 @@
 package code;
 
+import writers.DataReaderWriter;
 import writers.HeaderDataWriter;
 import writers.TestWriter;
 import code.project.ProjectCode;
@@ -18,12 +19,15 @@ public class TestGenerator {
         
         TestWriter testWriter = new TestWriter(projectPath + "\\src\\test\\java\\");
         HeaderDataWriter headerDataWriter = new HeaderDataWriter(projectPath + "\\src\\test\\resources\\");
+        DataReaderWriter dataReaderWriter = new DataReaderWriter(projectPath + "\\src\\test\\java\\", projectPath + "\\src\\test\\resources\\");
         
         main.accept(testWriter);
         main.accept(headerDataWriter);
+        main.accept(dataReaderWriter);
         
         testWriter.close();
         headerDataWriter.close();
+        dataReaderWriter.close();
 //
 //        ConfigCode configCode = new ConfigCode();
 //        ConfigWriter configWriter = new ConfigWriter("C:\\Users\\nyuron\\Desktop", main);
