@@ -58,13 +58,9 @@ public class TestWriter implements Visitor {
 	public void visit(ProjectConstructorMember constructorMember) {//TODO que los constructores esten ordenados
         try {
             writer.write(this.printTabs(1) + "@Test\n");
-            writer.write(this.printTabs(1) + "public void test" + constructorMember.getName());
-            for (ProjectParameterMember parameterMember : constructorMember.getParametersType()) {
-                writer.write(parameterMember.getType());
-            }
-            writer.write("() {\n");
-            writer.write(this.printTabs(2) + "while (data.hasNext(" + constructorMember.getParameterNumber() + ")) {\n");
-            writer.write(this.printTabs(3) + "" + constructorMember.getName() + " " + constructorMember.getName().toLowerCase()
+            writer.write(this.printTabs(1) + "public void test" + constructorMember.getNameWithParams() + "() {\n");
+            writer.write(this.printTabs(2) + "while (data.hasNext(\"" + constructorMember.getNameWithParams() + "\")) {\n");
+            writer.write(this.printTabs(3) + constructorMember.getName() + " " + constructorMember.getName().toLowerCase()
                     + " = data.get" + constructorMember.getName() + "();\n");
             writer.write(this.printTabs(3) + "fail(\"Not yet implemented\");\n");
             writer.write(this.printTabs(2) + "}\n");
@@ -75,23 +71,19 @@ public class TestWriter implements Visitor {
     }
 
     public void visit(ProjectMethodMember methodMember) {//TODO que los metodos esten ordenados
-        String nameAndParametersType = methodMember.getName();
-        for (ProjectParameterMember parameterMember : methodMember.getParametersType()) {
-            nameAndParametersType += parameterMember.getType();
-        }
         try {
             writer.write(this.printTabs(1) + "@Test\n");
-            writer.write(this.printTabs(1) + "public void test" + nameAndParametersType);
+            writer.write(this.printTabs(1) + "public void test" + methodMember.getNameWithParams());
             writer.write("() {\n");
             writer.write(this.printTabs(2) + "while (data.hasNext()) {\n");
             writer.write(this.printTabs(3) + "data.next();\n");
-            writer.write(this.printTabs(3) + "assertEquals(data.get" + nameAndParametersType + "Result(), data.get"
+            writer.write(this.printTabs(3) + "assertEquals(data.get" + methodMember.getNameWithParams() + "Result(), data.get"
                     + methodMember.getProjectClazzName() + "()." + methodMember.getName().substring(0, 1).toLowerCase() + methodMember.getName().substring(1) + "(");
             for (int i = 0; i < methodMember.getParametersType().size()-1; i++) {
-                writer.write("data.get"+nameAndParametersType+"Parameter"+i+"(),");
+                writer.write("data.get"+methodMember.getNameWithParams()+"Parameter"+i+"(),");
             }
             if (methodMember.getParametersType().size() > 0) {
-            	writer.write("data.get"+nameAndParametersType+"Parameter"+ (methodMember.getParametersType().size()-1)+"()");
+            	writer.write("data.get"+methodMember.getNameWithParams()+"Parameter"+ (methodMember.getParametersType().size()-1)+"()");
             }
             writer.write("));\n");
             writer.write(this.printTabs(2) + "}\n");
