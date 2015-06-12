@@ -30,6 +30,15 @@ public abstract class ProjectMember {
     public List<ProjectParameterMember> getParametersType() {
         return this.parameterTypes;
     }
+    
+
+	public String getNameWithParams() {
+		String nameWithParams = this.getName();
+        for (ProjectParameterMember parameterMember : this.getParametersType()) {
+            nameWithParams += parameterMember.getType();
+        }
+        return nameWithParams;
+	}
 
     public abstract void accept(Visitor visitor);
     
