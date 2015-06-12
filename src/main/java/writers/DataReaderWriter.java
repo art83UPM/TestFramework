@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import readers.TestDataReader;
 import code.project.ProjectClazz;
 import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;
@@ -47,7 +48,7 @@ public class DataReaderWriter implements Visitor {
             writer.write("import readers.exceptions.EmptyDataReaderException;\n");
             writer.write("import readers.exceptions.InvalidDataReaderException;\n");
             writer.write("import spike.Example;\n\n");
-            writer.write("public class " + clazz.getName() + "TestDataReader {\n\n");
+            writer.write("public class " + clazz.getName() + "TestDataReader extends TestDataReader {\n\n");
             writer.write(this.printTabs(1) + "private " + clazz.getName() + " " + clazz.getName().toLowerCase() + ";\n\n");
             writer.write(this.printTabs(1) + "private final static int CONSTRUCTOR_QUANTITY = " + clazz.getConstructorMemberList().size() + ";\n\n");
             
@@ -84,7 +85,7 @@ public class DataReaderWriter implements Visitor {
             writer.write(this.printTabs(1) + "private boolean existsConstructor(int constructMode) {\n");
             writer.write(this.printTabs(2) + "boolean exists = true;\n");
             writer.write(this.printTabs(2) + "switch (constructMode) {\n");
-            ***
+            *** 
             writer.write(this.printTabs(1) + "}\n\n");
            
         } catch (IOException e1) {
