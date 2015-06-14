@@ -18,24 +18,17 @@ public class HeaderDataWriter implements Visitor {
     public HeaderDataWriter(String path) {
         this.path = path;
     }
-
-    private String packagePath(ProjectClazz clazz) {
-    	return clazz.getProjectPackage().getName().replace(".", File.separator);
-	}
     
     public void visit(ProjectClazz clazz) {
-        this.dataWriter = new DataWriter(path + packagePath(clazz) + File.separator + clazz.getName() + "TestData.xlsx");
+        this.dataWriter = new DataWriter(path + clazz.getPackagePath() + File.separator + clazz.getName() + "TestData.xlsx");
     }
 
     public void visit(ProjectConstructorMember constructorMember) {
         dataWriter.setSheet("Constructors");
-        String header = "get" + constructorMember.getName();
+        String header = "get" + constructorMember.getNameWithParams();
         if (constructorMember.getParameterNumber() == 0) {
             dataWriter.write(header);
         } else {
-            for (ProjectParameterMember parameterMember : constructorMember.getParametersType()) {
-                header += parameterMember.getType();
-            }
             for (int i = 0; i < constructorMember.getParameterNumber(); i++) {
                 dataWriter.write(header + "Parameter" + i);
             }

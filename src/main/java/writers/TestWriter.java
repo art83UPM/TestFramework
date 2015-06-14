@@ -9,7 +9,6 @@ import code.project.ProjectClazz;
 import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;
 import code.project.ProjectPackage;
-import code.project.ProjectParameterMember;
 import code.project.Visitor;
 
 public class TestWriter implements Visitor {
@@ -23,13 +22,9 @@ public class TestWriter implements Visitor {
     public TestWriter(String path) {
         this.path = path;
     }
-
-    private String packagePath(ProjectClazz clazz) {
-    	return clazz.getProjectPackage().getName().replace(".", File.separator);
-	}
     
     public void visit(ProjectClazz clazz) {
-    	this.file = new File(path + packagePath(clazz) + File.separator + clazz.getName() + "Test.java");
+    	this.file = new File(path + clazz.getPackagePath() + File.separator + clazz.getName() + "Test.java");
     	this.file.mkdirs();
         try {
             writer = new BufferedWriter(new FileWriter(file));

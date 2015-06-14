@@ -7,7 +7,7 @@ import code.Margin;
 
 public class ProjectConstructorMember extends ProjectMember implements CodeComponent {
 
-    public ProjectConstructorMember(Constructor<?> constructor, int order, ProjectClazz projectClazz) {
+    public ProjectConstructorMember(Constructor<?> constructor, ProjectClazz projectClazz) {
         super(constructor, projectClazz);
         this.name = constructor.getName().substring(constructor.getName().lastIndexOf('.') + 1);
         this.parameterTypes = new ArrayList<ProjectParameterMember>();
