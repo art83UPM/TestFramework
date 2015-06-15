@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import code.project.ProjectClazz;
 import code.project.ProjectConstructorMember;
@@ -13,7 +15,17 @@ import code.project.ProjectParameterMember;
 import code.project.Visitor;
 
 public class DataReaderWriter implements Visitor {
-
+    
+    private static Map<String, String> initializations;
+    
+    private static final String[][] mapData = {
+        {"int", "int result = 0;"},
+        {"String", "String result = null;"},
+        {"float", "float result = 0;"},
+        {"double", "double result = 0;"},
+        {"boolean", "boolean result = false;"}
+    };
+    
     private File file;
 
     private String path;
@@ -25,6 +37,10 @@ public class DataReaderWriter implements Visitor {
     public DataReaderWriter(String path, String resourcesPath) {
         this.path = path;
         this.resourcesPath = resourcesPath;
+        initializations = new HashMap<String, String>();
+        for (String[] initialization : mapData) {
+            initializations.put(initialization[0], initialization[1]);
+        }
     }
 
     private String printTabs(int numTabs) {
@@ -177,8 +193,40 @@ public class DataReaderWriter implements Visitor {
 
     @Override
     public void visit(ProjectMethodMember methodMember) {
-        // TODO Auto-generated method stub
+        try {
+            writer.write(this.printTabs(1) + "public "+ methodMember.getReturnType() +" get"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "Result() {\n");
+            writer.write(this.printTabs(2) + "this.setTestTarget(\"test"+ Capitalizer.capitalize(methodMember.getName()) + "\");\n");
+            writer.write(this.printTabs(2) + "this.getDataReader().next();\n");
+            writer.write(this.printTabs(2) + initializations.get(methodMember.getReturnType()) + "\n");
+            writer.write(this.printTabs(2) + "try {\n");
+            writer.write(this.printTabs(3) + "result = this.get" + Capitalizer.capitalize(methodMember.getReturnType())+"(\"get"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "Result\");\n");
+            writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {\n");
+            writer.write(this.printTabs(3) + "System.out.println(\"Error in " +"get"+ Capitalizer.capitalize(methodMember.getName()) + "Result\");\n");
+            writer.write(this.printTabs(3) + "System.out.println(e.getMessage());\n");
+            writer.write(this.printTabs(3) + "System.exit(0);\n");
+            writer.write(this.printTabs(2) + "}\n");
+            writer.write(this.printTabs(2) + "return result;\n");
+            writer.write(this.printTabs(1) + "}\n\n");
 
+            for (int i = 0; i < methodMember.getParametersType().size(); i++) {
+                ProjectParameterMember parameter = methodMember.getParametersType().get(i);
+                writer.write(this.printTabs(1) + "public "+ parameter.getType() +" get"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "Parameter"+ i +"() {\n");
+                writer.write(this.printTabs(2) + "this.setTestTarget(\"test"+ Capitalizer.capitalize(methodMember.getName()) + "\");\n");
+                writer.write(this.printTabs(2) + initializations.get(parameter.getType()) + "\n");
+                writer.write(this.printTabs(2) + "try {\n");
+                writer.write(this.printTabs(3) + "result = this.get" + Capitalizer.capitalize(parameter.getType())+"(\"get"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "Parameter" + i +"\");\n");
+                writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {\n");
+                writer.write(this.printTabs(3) + "System.out.println(\"Error in " +"get"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "Parameter" + i +"\");\n");
+                writer.write(this.printTabs(3) + "System.out.println(e.getMessage());\n");
+                writer.write(this.printTabs(3) + "System.exit(0);\n");
+                writer.write(this.printTabs(2) + "}\n");
+                writer.write(this.printTabs(2) + "return result;\n");
+                writer.write(this.printTabs(1) + "}\n\n");
+            }
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
