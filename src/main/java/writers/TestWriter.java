@@ -25,7 +25,7 @@ public class TestWriter implements Visitor {
     
     public void visit(ProjectClazz clazz) {
     	this.file = new File(path + clazz.getPackagePath() + File.separator + clazz.getName() + "Test.java");
-    	this.file.mkdirs();
+    	this.file.getParentFile().mkdirs();
         try {
             writer = new BufferedWriter(new FileWriter(file));
             writer.write("package " + clazz.getProjectPackage().getName() + ";\n\n"); // This was at the end of the package: Test.generated. Reason?

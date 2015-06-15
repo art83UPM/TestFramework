@@ -15,12 +15,6 @@ public class ProjectConstructorMember extends ProjectMember implements CodeCompo
         this.build(constructor);
     }
 
-    public ProjectConstructorMember(String name, ProjectClazz projectClazz, ArrayList<ProjectParameterMember> arrayList) {
-        this.name = name;
-        this.projectClazz = projectClazz;
-        this.parameterTypes = new ArrayList<ProjectParameterMember>();
-    }
-
     private void build(Constructor<?> constructor) {
         for (Class<?> parameterType : constructor.getParameterTypes()) {
             this.parameterTypes.add(new ProjectParameterMember(parameterType));
