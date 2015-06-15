@@ -44,7 +44,7 @@ public class DataReaderWriter implements Visitor {
             writer.write("import readers.TestDataReader;\n");
             writer.write("import readers.exceptions.EmptyDataReaderException;\n");
             writer.write("import readers.exceptions.InvalidDataReaderException;\n");
-            writer.write("import " + clazz.getProjectPackage().getName() + " " + clazz.getName() + ";\n\n");
+            writer.write("import " + clazz.getProjectPackage().getName() + "." + clazz.getName() + ";\n\n");
             writer.write("public class " + clazz.getName() + "TestDataReader extends TestDataReader {\n\n");
             writer.write(this.printTabs(1) + "private " + clazz.getName() + " " + clazz.getName().toLowerCase() + ";\n\n");
             writer.write(this.printTabs(1) + "private final static String[] CONSTRUCTOR_NAMES = {");
@@ -58,8 +58,9 @@ public class DataReaderWriter implements Visitor {
             writer.write("};\n\n");
 
             writer.write(this.printTabs(1) + "public " + clazz.getName() + "TestDataReader() {\n");
-            writer.write(this.printTabs(2) + "super(" + this.resourcesPath + clazz.getPackagePath() + clazz.getName() + "TestData.xlsx"
-                    + ");\n");
+            String dataSheetPath = this.resourcesPath + clazz.getPackagePath() + clazz.getName() + "TestData.xlsx";
+            dataSheetPath = dataSheetPath.replace("\\", "\\\\");
+            writer.write(this.printTabs(2) + "super(\"" + dataSheetPath + "\");\n");
             writer.write(this.printTabs(1) + "}\n\n");
 
             writer.write(this.printTabs(1) + "public boolean hasNext(String constructorName) {\n");
@@ -138,11 +139,11 @@ public class DataReaderWriter implements Visitor {
                             + "\");\n");
                 }
             }
-            writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {");
+            writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {\n");
             writer.write(this.printTabs(3) + "return false;\n");
             writer.write(this.printTabs(2) + "}\n");
             writer.write(this.printTabs(2) + "return true;\n");
-            writer.write(this.printTabs(1) + "}\n");
+            writer.write(this.printTabs(1) + "}\n\n");
 
             writer.write(this.printTabs(1) + "private void construct" + constructorMember.getNameWithParams() + "() {\n");
             if (constructorMember.getParameterNumber() == 0) {
@@ -152,7 +153,7 @@ public class DataReaderWriter implements Visitor {
                 writer.write(this.printTabs(2) + "try {\n");
                 for (int j = 0; j < constructorMember.getParametersType().size(); j++) {
                     ProjectParameterMember parameter = constructorMember.getParametersType().get(j);
-                    writer.write(this.printTabs(3) + parameter.getType() + constructorMember.getNameWithParams() + "Parameter" + j
+                    writer.write(this.printTabs(3) + parameter.getType() + " " + constructorMember.getNameWithParams() + "Parameter" + j
                             + " = this.get" + Capitalizer.capitalize(parameter.getType()) + "(\"get"
                             + constructorMember.getNameWithParams() + "Parameter" + j + "\");\n");
                 }
@@ -165,8 +166,8 @@ public class DataReaderWriter implements Visitor {
                     }
                 }
                 writer.write(");\n");
+                writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {}");
             }
-            writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {}");
             writer.write(this.printTabs(1) + "}\n\n");
 
         } catch (IOException e) {

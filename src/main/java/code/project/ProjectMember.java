@@ -3,6 +3,8 @@ package code.project;
 import java.lang.reflect.AccessibleObject;
 import java.util.List;
 
+import writers.Capitalizer;
+
 public abstract class ProjectMember {
     
     protected AccessibleObject accessibleObject;
@@ -35,7 +37,7 @@ public abstract class ProjectMember {
 	public String getNameWithParams() {
 		String nameWithParams = this.getName();
         for (ProjectParameterMember parameterMember : this.getParametersType()) {
-            nameWithParams += parameterMember.getType();
+            nameWithParams += Capitalizer.capitalize(parameterMember.getType());
         }
         return nameWithParams;
 	}
