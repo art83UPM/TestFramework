@@ -15,16 +15,19 @@ public class ProjectClazz extends ProjectCodeFile {
 
     private ProjectPackage projectPackage;
 
-    private List<ProjectConstructorMember> ConstructorMemberList;
+    private List<ProjectConstructorMember> constructorMemberList;
 
-    private List<ProjectMethodMember> MethodMemberList;
+    private List<ProjectMethodMember> methodMemberList;
+    
+    private List<ProjectMember> memberList;
 
     public ProjectClazz(Class<?> clazz, ProjectPackage projectPackage) {
         this.clazz = clazz;
         name = clazz.getSimpleName();
         this.projectPackage = projectPackage;
-        ConstructorMemberList = new ArrayList<ProjectConstructorMember>();
-        MethodMemberList = new ArrayList<ProjectMethodMember>();
+        constructorMemberList = new ArrayList<ProjectConstructorMember>();
+        methodMemberList = new ArrayList<ProjectMethodMember>();
+        memberList = new ArrayList<ProjectMember>();
         System.out.println(Margin.instance().tabs() + "Clase: " + this.name);
         this.build();
     }
@@ -37,14 +40,16 @@ public class ProjectClazz extends ProjectCodeFile {
     private void build() {
         for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
             Margin.instance().inc();
-            ConstructorMemberList.add(new ProjectConstructorMember(constructor, this));
+            constructorMemberList.add(new ProjectConstructorMember(constructor, this));
             Margin.instance().dec();
         }
         for (Method method : clazz.getDeclaredMethods()) {
             Margin.instance().inc();        
-            MethodMemberList.add(new ProjectMethodMember(method, this));
+            methodMemberList.add(new ProjectMethodMember(method, this));
             Margin.instance().dec();
         }
+        memberList.addAll(constructorMemberList);
+        memberList.addAll(methodMemberList);
     }
 
     public ProjectPackage getProjectPackage() {
@@ -52,12 +57,12 @@ public class ProjectClazz extends ProjectCodeFile {
     }
 
     public List<ProjectConstructorMember> getConstructorMemberList() {
-        return ConstructorMemberList;
+        return constructorMemberList;
     }
 
     public void accept(Visitor visitor) {
         visitor.visit(this);
-        for (ProjectMember member : ConstructorMemberList) {
+        for (ProjectMember member : memberList) {
             member.accept(visitor);
         }
     }
@@ -67,7 +72,7 @@ public class ProjectClazz extends ProjectCodeFile {
         System.out.println(Margin.instance().tabs() + "compruebo si en la clase " + this.getName() + " está el método: "
                 + projectMember.getName() + " --> ");
         if (this.getName().equals(projectMember.getProjectClazz().getName())) {
-            for (ProjectMember projectMemberIt : ConstructorMemberList) {
+            for (ProjectMember projectMemberIt : memberList) {
                 if (projectMember.equals(projectMemberIt)) {
                     System.out.println(Margin.instance().tabs() + "Si estaba!");
                     Margin.instance().dec();
