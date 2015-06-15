@@ -24,14 +24,14 @@ public class ConfigCode {
     public ConfigCode(String path) {
         this.file = new File(path);
         JSONParser parser = new JSONParser();
+        this.configPackagesList = new ArrayList<ConfigPackage>();  
         try {
             JSONObject json = (JSONObject) parser.parse(new FileReader(file));
             this.code = (JSONObject) json.get("code");
+            this.build();
         } catch (IOException | ParseException e) {
             e.printStackTrace();
-        }
-        this.configPackagesList = new ArrayList<ConfigPackage>();
-        this.build();
+        }              
     }
 
     private void build() {
