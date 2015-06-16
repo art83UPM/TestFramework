@@ -44,7 +44,7 @@ public class ProjectCode implements CodeComponent {
     }
 
     @Override
-    public void accept(Visitor visitor) {
+    public void accept(ProjectVisitor visitor) {
         for (ProjectCodeFile codeComponent : components) {
             codeComponent.accept(visitor);
         }        

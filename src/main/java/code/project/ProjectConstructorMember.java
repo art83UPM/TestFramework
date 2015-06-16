@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 import code.Margin;
+import code.config.ConfigConstructorMember;
 
 public class ProjectConstructorMember extends ProjectMember implements CodeComponent {
 
@@ -29,7 +30,11 @@ public class ProjectConstructorMember extends ProjectMember implements CodeCompo
         return this.parameterTypes.size();
     }
 
-    public void accept(Visitor visitor) {
+	public ConfigConstructorMember getConfigConstructor() {
+		return new ConfigConstructorMember(this.getName(), this.getProjectClazz().getConfigClazz());
+	}
+	
+    public void accept(ProjectVisitor visitor) {
         visitor.visit(this);
     }
 

@@ -2,9 +2,12 @@ package code.config;
 
 import org.json.simple.JSONObject;
 
+import writers.ConfigWriter;
 import code.Margin;
+import code.project.ProjectCode;
+import code.project.ProjectMember;
 
-public class ConfigMember extends ConfigCodeScope {
+public abstract class ConfigMember extends ConfigCodeScope {
     protected JSONObject jsonMember;
     protected ConfigClazz configClazz;
     protected String name;
@@ -47,12 +50,45 @@ public class ConfigMember extends ConfigCodeScope {
         this.test = test;
     }
 
-	public ConfigPackage getRoot() {		
-		return this.getConfigClazz().getRoot();
+	public String getTest() {
+		return test;
+	}
+
+	public ConfigPackage getRoot() {
+		ConfigClazz configClazz = this.getConfigClazz();
+		configClazz.add(this);
+		return configClazz.getRoot();
+	}
+	
+	public void setTestAndStatus(ConfigCode configCodeOld, ProjectCode test, ProjectMember member) {
+		if (configCodeOld != null && configCodeOld.exist(this)) {
+            if (test.exist(member)) {
+                this.setTest(member.getName() + "Test");
+                this.setStatus("exist");
+            } else {
+                this.setTest(" ");
+                this.setStatus(configCodeOld.getStatus(this));
+            }
+        } else {
+            if (test.exist(member)) {
+                this.setTest(member.getName() + "Test");
+                this.setStatus("exist");                
+            } else {
+                this.setTest(" ");
+                this.setStatus(" ");
+            }
+        }
 	}
 
 	@Override
 	public ConfigCodeScope getChild() {
 		return null;
-	}       
+	}
+
+	public abstract void accept(ConfigWriter configWriter);
+
+	public abstract boolean isConfigConstructor();
+
+	public abstract boolean isConfigMethod();	
+	
 }

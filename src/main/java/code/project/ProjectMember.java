@@ -42,6 +42,6 @@ public abstract class ProjectMember {
         return nameWithParams;
 	}
 
-    public abstract void accept(Visitor visitor);
+    public abstract void accept(ProjectVisitor visitor);
     
 }

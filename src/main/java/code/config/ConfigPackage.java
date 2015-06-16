@@ -6,6 +6,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import writers.ConfigWriter;
 import code.Margin;
 
 public class ConfigPackage extends ConfigCodeFile {
@@ -30,6 +31,7 @@ public class ConfigPackage extends ConfigCodeFile {
 	public ConfigPackage(String name, ConfigPackage configPackage) {
 		this.name = fatherPackage == null ? name : fatherPackage.getName() + "." + name;
 		this.fatherPackage = configPackage;
+		this.configCodeFileList = new ArrayList<ConfigCodeFile>();
 	}
 
 	private void build() {
@@ -74,8 +76,9 @@ public class ConfigPackage extends ConfigCodeFile {
 		return this.configCodeFileList.get(0);
 	}
 
-	public ConfigPackage getRoot() {
+	public ConfigPackage getRoot() {		
 		if (this.getFatherPackage() != null) {
+			fatherPackage.add(this);
 			return fatherPackage;
 		} else {
 			return this;
@@ -87,7 +90,7 @@ public class ConfigPackage extends ConfigCodeFile {
 		if (!this.configCodeFileList.contains(child)) {
 			configCodeFileList.add((ConfigCodeFile) child);
 		}
-		configCodeFileList.get(configCodeFileList.indexOf(child)).add(child.getChild());
+		//TODO configCodeFileList.get(configCodeFileList.indexOf(child)).add(child.getChild());
 	}
 
 	@Override
@@ -107,10 +110,25 @@ public class ConfigPackage extends ConfigCodeFile {
 	@Override
 	public boolean equals(Object obj) {
 		ConfigPackage configPackage = (ConfigPackage) obj;
-		if (!fatherPackage.equals(configPackage.fatherPackage))
+		if (fatherPackage == null) {
+			if (configPackage.fatherPackage != null)
+				return false;
+		} else if (!fatherPackage.equals(configPackage.fatherPackage))
 			return false;
-		if (!name.equals(configPackage.name))
+		if (name == null) {
+			if (configPackage.name != null)
+				return false;
+		} else if (!name.equals(configPackage.name))
 			return false;
-		return true;
+		return true;		
+	}
+
+	@Override
+	public void accept(ConfigWriter configWriter) {
+		configWriter.visit(this);
+		for (ConfigCodeFile configCodeFile : configCodeFileList) {
+            configCodeFile.accept(configWriter);
+        }	
+		configWriter.visitPackageBack();
 	}
 }

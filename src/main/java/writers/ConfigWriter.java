@@ -1,100 +1,187 @@
 package writers;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
+import code.Margin;
+import code.config.ConfigClazz;
 import code.config.ConfigCode;
+import code.config.ConfigConstructorMember;
+import code.config.ConfigMember;
 import code.config.ConfigMethodMember;
+import code.config.ConfigPackage;
+import code.config.ConfigVisitor;
 import code.project.ProjectClazz;
 import code.project.ProjectCode;
 import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;
 import code.project.ProjectPackage;
-import code.project.Visitor;
+import code.project.ProjectVisitor;
 
-public class ConfigWriter implements Visitor {
+public class ConfigWriter implements ProjectVisitor, ConfigVisitor {
 
-    private String path;
+	private String path;
 
-    private ProjectCode test;
+	private ProjectCode test;
 
-    private File file;
+	private File file;
 
-    private ConfigCode configCodeOld;
+	private ConfigCode configCodeOld;
 
-    private ConfigCode configCodeNew;
+	private ConfigCode configCodeNew;
 
-    private FileWriter writer;
+	private BufferedWriter writer;
 
-    public ConfigWriter(String path, ProjectCode main, ProjectCode test) {
-        this.path = path;
-        this.test = test;
-        try {
-            this.file = new File(this.path + File.separator + "config.json");
-            if (!file.exists()) {
-                file.createNewFile();
-            } else {
-                File fileBack = new File(this.path + File.separator + "config.back" + ".json");
-                configCodeOld = new ConfigCode(this.path + File.separator + "config.json");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	public ConfigWriter(String path, ProjectCode main, ProjectCode test) {
+		this.path = path;
+		this.test = test;
+		try {
+			this.file = new File(this.path + File.separator + "config.json");
+			if (!file.exists()) {
+				file.createNewFile();
+				writer = new BufferedWriter(new FileWriter(file));
+				writer.write("{");
+				writer.write("}");
+				this.close();
+			} else {
+				File fileBack = new File(this.path + File.separator + "config.back" + ".json");
+				configCodeOld = new ConfigCode(this.path + File.separator + "config.json");
+				Files.copy(file.toPath(), fileBack.toPath(), StandardCopyOption.REPLACE_EXISTING);				
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		configCodeNew = new ConfigCode(this.path + File.separator + "config.json");
+	}
 
-    // public void write() {
-    //
-    // try {
-    // writer = new FileWriter(file);
-    // writer.close();
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // }
-    // }
+	public void writeNewConfigCode() {		
+		try {
+			file.createNewFile();
+			writer = new BufferedWriter(new FileWriter(file));
+			writer.write("{");
+			Margin.instance().inc();
+			writer.write(Margin.instance().tabs() + "\n\"code\": {");
+			Margin.instance().inc();
+			writer.write(Margin.instance().tabs() + "\n\"packages\": [");
+			configCodeNew.accept(this);
+			writer.write(Margin.instance().tabs() + "\n]");
+			Margin.instance().dec();
+			writer.write(Margin.instance().tabs() + "\n}");
+			Margin.instance().dec();
+			writer.write("\n}");
+			this.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public void close() {
-        try {
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	public void close() {
+		try {
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    @Override
-    public void visit(ProjectConstructorMember constructor) {
+	@Override
+	public void visit(ProjectConstructorMember constructor) {
+		ConfigConstructorMember configConstructorMember = constructor.getConfigConstructor();
+		configConstructorMember.setTestAndStatus(configCodeOld, test, constructor);
+		configCodeNew.add(configConstructorMember);
+	}
 
-    }
+	@Override
+	public void visit(ProjectMethodMember method) {
+		ConfigMethodMember configMethodMember = method.getConfigMethod();
+		configMethodMember.setTestAndStatus(configCodeOld, test, method);
+		configCodeNew.add(configMethodMember);
+	}
 
-    @Override
-    public void visit(ProjectMethodMember method) {
-        ConfigMethodMember configMethodMember = method.getConfigMethod();
-        if (configCodeOld.exist(configMethodMember)) {
-            if (test.exist(method)) {
-                configMethodMember.setTest(method.getName() + "Test");
-                configMethodMember.setStatus("exist");
-            } else {
-                configMethodMember.setTest(" ");
-                configMethodMember.setStatus(configCodeOld.getStatus(configMethodMember));
-            }
-        } else {
-            if (test.exist(method)) {
-                configMethodMember.setTest(method.getName() + "Test");
-                configMethodMember.setStatus("exist");                
-            } else {
-                configMethodMember.setTest(" ");
-                configMethodMember.setStatus(" ");
-            }
-        }
-        configCodeNew.add(configMethodMember);
-    }
+	@Override
+	public void visit(ProjectClazz clazz) {
+	}
 
-    @Override
-    public void visit(ProjectClazz clazz) {
-    }
+	@Override
+	public void visit(ProjectPackage projectPackage) {
 
-    @Override
-    public void visit(ProjectPackage projectPackage) {
+	}
 
-    }
+	@Override
+	public void visit(ConfigPackage configPackage) {
+		try {
+			Margin.instance().inc();
+			writer.write(Margin.instance().tabs() + "{");
+			writer.write(Margin.instance().tabs() + "\"name\": " + configPackage.getName() + ",");
+			writer.write(Margin.instance().tabs() + "\"classes\": [");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void visitPackageBack() {
+		try {
+			writer.write(Margin.instance().tabs() + "]");
+			writer.write(Margin.instance().tabs() + "},");
+			Margin.instance().dec();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void visit(ConfigClazz configClazz) {
+		try {
+			Margin.instance().inc();
+			writer.write(Margin.instance().tabs() + "{");
+			writer.write(Margin.instance().tabs() + " \"name\": " + configClazz.getName() + ",");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void visitClassBack() {
+		try {
+			writer.write(Margin.instance().tabs() + "},");
+			Margin.instance().dec();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void visit(ConfigMember configMember) {
+		try {
+			Margin.instance().inc();
+			writer.write(Margin.instance().tabs() + "{");
+			writer.write(Margin.instance().tabs() + " \"name\": " + configMember.getName() + ",");
+			writer.write(Margin.instance().tabs() + " \"status\": " + configMember.getStatus() + ",");
+			writer.write(Margin.instance().tabs() + " \"test\": " + configMember.getTest() + ",");
+			writer.write(Margin.instance().tabs() + "},");
+			Margin.instance().dec();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void visitFirstMember(String memberSet) {
+		try {
+			writer.write(Margin.instance().tabs() + " " + memberSet + ": [");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void visitLastMember() {
+		try {
+			writer.write(Margin.instance().tabs() + "],");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

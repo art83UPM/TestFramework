@@ -2,7 +2,10 @@ package code.config;
 
 import org.json.simple.JSONObject;
 
+import writers.ConfigWriter;
 import code.Margin;
+import code.project.ProjectCode;
+import code.project.ProjectConstructorMember;
 
 public class ConfigConstructorMember extends ConfigMember {
 
@@ -13,6 +16,10 @@ public class ConfigConstructorMember extends ConfigMember {
     public ConfigConstructorMember(String name, ConfigClazz configClazz) {
         super(name, configClazz);
     }
+
+	public void setTestAndStatus(ConfigCode configCodeOld, ProjectCode test, ProjectConstructorMember constructor) {
+		super.setTestAndStatus(configCodeOld, test, constructor);		
+	}
 
     @Override
     public boolean equals(Object obj) {
@@ -34,4 +41,18 @@ public class ConfigConstructorMember extends ConfigMember {
             return false;
         }
     }
+
+	@Override
+	public void accept(ConfigWriter configWriter) {
+		configWriter.visit(this);		
+	}
+	
+	public boolean isConfigConstructor() {
+		return true;
+	}
+
+	@Override
+	public boolean isConfigMethod() {
+		return false;
+	}
 }
