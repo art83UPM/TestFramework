@@ -131,11 +131,11 @@ public class ConfigClazz extends ConfigCodeFile {
 
 	private boolean isFirstMethod(ConfigMember configMember) {
 		return configMember.isConfigMethod()
-				&& configMemberList.get(configMemberList.indexOf(configMember) - 1).isConfigConstructor();
+				&& (configMemberList.indexOf(configMember) == 0 || configMemberList.get(configMemberList.indexOf(configMember) - 1).isConfigConstructor());
 	}
 	
 	private boolean ifLastConstructor(ConfigMember configMember) {
-		return configMember.isConfigConstructor() && configMemberList.get(configMemberList.indexOf(configMember) + 1).isConfigMethod();
+		return configMember.isConfigConstructor() && (configMemberList.indexOf(configMember) == configMemberList.size() - 1 || configMemberList.get(configMemberList.indexOf(configMember) + 1).isConfigMethod());
 	} 
 	
 	private boolean ifLastMethod(ConfigMember configMember) {
