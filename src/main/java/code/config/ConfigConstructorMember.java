@@ -18,7 +18,7 @@ public class ConfigConstructorMember extends ConfigMember {
     }
 
 	public void setTestAndStatus(ConfigCode configCodeOld, ProjectCode test, ProjectConstructorMember constructor) {
-		this.setTestAndStatus(configCodeOld, test, constructor);		
+		super.setTestAndStatus(configCodeOld, test, constructor);		
 	}
 
     @Override

@@ -43,30 +43,37 @@ public class ConfigWriter implements ProjectVisitor, ConfigVisitor {
 			this.file = new File(this.path + File.separator + "config.json");
 			if (!file.exists()) {
 				file.createNewFile();
+				writer = new BufferedWriter(new FileWriter(file));
+				writer.write("{");
+				writer.write("}");
+				this.close();
 			} else {
 				File fileBack = new File(this.path + File.separator + "config.back" + ".json");
 				configCodeOld = new ConfigCode(this.path + File.separator + "config.json");
-				Files.copy(file.toPath(), fileBack.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				Files.copy(file.toPath(), fileBack.toPath(), StandardCopyOption.REPLACE_EXISTING);				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		configCodeNew = new ConfigCode(this.path + File.separator + "config.json");
 	}
 
-	public void writeNewConfigCode() {
+	public void writeNewConfigCode() {		
 		try {
+			file.createNewFile();
 			writer = new BufferedWriter(new FileWriter(file));
 			writer.write("{");
 			Margin.instance().inc();
-			writer.write(Margin.instance().tabs() + "code: {");
+			writer.write(Margin.instance().tabs() + "\n\"code\": {");
 			Margin.instance().inc();
-			writer.write(Margin.instance().tabs() + "packages: [");
+			writer.write(Margin.instance().tabs() + "\n\"packages\": [");
 			configCodeNew.accept(this);
-			writer.write(Margin.instance().tabs() + "]");
+			writer.write(Margin.instance().tabs() + "\n]");
 			Margin.instance().dec();
-			writer.write(Margin.instance().tabs() + "}");
+			writer.write(Margin.instance().tabs() + "\n}");
 			Margin.instance().dec();
-			writer.write("}");
+			writer.write("\n}");
+			this.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -108,8 +115,8 @@ public class ConfigWriter implements ProjectVisitor, ConfigVisitor {
 		try {
 			Margin.instance().inc();
 			writer.write(Margin.instance().tabs() + "{");
-			writer.write(Margin.instance().tabs() + "name: " + configPackage.getName() + ",");
-			writer.write(Margin.instance().tabs() + "classes: [");
+			writer.write(Margin.instance().tabs() + "\"name\": " + configPackage.getName() + ",");
+			writer.write(Margin.instance().tabs() + "\"classes\": [");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -131,7 +138,7 @@ public class ConfigWriter implements ProjectVisitor, ConfigVisitor {
 		try {
 			Margin.instance().inc();
 			writer.write(Margin.instance().tabs() + "{");
-			writer.write(Margin.instance().tabs() + " name: " + configClazz.getName() + ",");
+			writer.write(Margin.instance().tabs() + " \"name\": " + configClazz.getName() + ",");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -152,9 +159,9 @@ public class ConfigWriter implements ProjectVisitor, ConfigVisitor {
 		try {
 			Margin.instance().inc();
 			writer.write(Margin.instance().tabs() + "{");
-			writer.write(Margin.instance().tabs() + " name: " + configMember.getName() + ",");
-			writer.write(Margin.instance().tabs() + " status: " + configMember.getStatus() + ",");
-			writer.write(Margin.instance().tabs() + " test: " + configMember.getTest() + ",");
+			writer.write(Margin.instance().tabs() + " \"name\": " + configMember.getName() + ",");
+			writer.write(Margin.instance().tabs() + " \"status\": " + configMember.getStatus() + ",");
+			writer.write(Margin.instance().tabs() + " \"test\": " + configMember.getTest() + ",");
 			writer.write(Margin.instance().tabs() + "},");
 			Margin.instance().dec();
 		} catch (IOException e) {

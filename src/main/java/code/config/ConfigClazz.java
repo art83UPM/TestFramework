@@ -31,6 +31,7 @@ public class ConfigClazz extends ConfigCodeFile {
 	public ConfigClazz(String name, ConfigPackage configPackage) {
 		this.name = name;
 		this.configPackage = configPackage;
+		this.configMemberList = new ArrayList<ConfigMember>();
 	}
 
 	private void build() {
@@ -82,11 +83,14 @@ public class ConfigClazz extends ConfigCodeFile {
 	}
 
 	public ConfigPackage getRoot() {
-		return this.getConfigPackage().getRoot();
+		ConfigPackage configPackage = this.getConfigPackage();
+		configPackage.add(this);
+		return configPackage.getRoot();
 	}
 
 	@Override
 	public void add(ConfigCodeScope child) {
+		this.configMemberList.add((ConfigMember) child);
 	}
 
 	@Override

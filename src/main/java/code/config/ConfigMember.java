@@ -54,12 +54,14 @@ public abstract class ConfigMember extends ConfigCodeScope {
 		return test;
 	}
 
-	public ConfigPackage getRoot() {		
-		return this.getConfigClazz().getRoot();
+	public ConfigPackage getRoot() {
+		ConfigClazz configClazz = this.getConfigClazz();
+		configClazz.add(this);
+		return configClazz.getRoot();
 	}
 	
 	public void setTestAndStatus(ConfigCode configCodeOld, ProjectCode test, ProjectMember member) {
-		if (configCodeOld.exist(this)) {
+		if (configCodeOld != null && configCodeOld.exist(this)) {
             if (test.exist(member)) {
                 this.setTest(member.getName() + "Test");
                 this.setStatus("exist");

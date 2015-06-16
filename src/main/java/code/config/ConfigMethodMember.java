@@ -18,7 +18,7 @@ public class ConfigMethodMember extends ConfigMember {
     }
 
 	public void setTestAndStatus(ConfigCode configCodeOld, ProjectCode test, ProjectMethodMember method) {
-		this.setTestAndStatus(configCodeOld, test, method);
+		super.setTestAndStatus(configCodeOld, test, method);
 	}
     
     @Override

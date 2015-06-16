@@ -65,6 +65,7 @@ public class ProjectPackage extends ProjectCodeFile {
 
     @Override
     public void accept(ProjectVisitor visitor) {
+    	visitor.visit(this);
         for (ProjectCodeFile codeComponent : components) {
             codeComponent.accept(visitor);
         }
