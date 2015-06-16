@@ -73,7 +73,6 @@ public class ConfigPackage extends ConfigCodeFile {
 	}
 
 	public ConfigCodeFile getChild() {
-		System.out.println(configCodeFileList);
 		return this.configCodeFileList.get(0);
 	}
 

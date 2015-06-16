@@ -69,7 +69,6 @@ public class ConfigCode {
 		if (!configPackagesList.contains(configPackage)) {
 			configPackagesList.add(configPackage);
 		}
-		System.out.println(configPackage);
 		configPackagesList.get(configPackagesList.indexOf(configPackage)).add(configPackage.getChild());
 	}
 
