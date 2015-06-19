@@ -1,4 +1,4 @@
-package writers;
+package util;
 
 public class Capitalizer {
 	

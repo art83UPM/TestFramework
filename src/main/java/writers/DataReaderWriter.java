@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import util.Capitalizer;
 import code.project.ProjectClazz;
 import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;

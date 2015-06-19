@@ -3,7 +3,7 @@ package code.project;
 import java.lang.reflect.AccessibleObject;
 import java.util.List;
 
-import writers.Capitalizer;
+import util.Capitalizer;
 
 public abstract class ProjectMember {
     
