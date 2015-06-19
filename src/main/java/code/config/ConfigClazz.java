@@ -141,4 +141,10 @@ public class ConfigClazz extends ConfigCodeFile {
 	private boolean ifLastMethod(ConfigMember configMember) {
 		return configMember.isConfigMethod() && configMember.equals(this.configMemberList.get(configMemberList.size() - 1));
 	}
+
+    @Override
+    public void accept(ConfigVisitor visitor) {
+        // TODO Auto-generated method stub
+        
+    }
 }

@@ -7,7 +7,7 @@ import code.Margin;
 import code.project.ProjectCode;
 import code.project.ProjectConstructorMember;
 
-public class ConfigConstructorMember extends ConfigMember {
+public class ConfigConstructorMember extends ConfigMember implements ConfigComponent {
 
     public ConfigConstructorMember(JSONObject jsonConstructor, ConfigClazz configClazz) {
         super(jsonConstructor, configClazz);
@@ -55,4 +55,10 @@ public class ConfigConstructorMember extends ConfigMember {
 	public boolean isConfigMethod() {
 		return false;
 	}
+
+    @Override
+    public void accept(ConfigVisitor visitor) {
+        // TODO Auto-generated method stub
+        
+    }
 }

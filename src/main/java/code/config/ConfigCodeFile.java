@@ -2,7 +2,7 @@ package code.config;
 
 import writers.ConfigWriter;
 
-public abstract class ConfigCodeFile extends ConfigCodeScope {
+public abstract class ConfigCodeFile extends ConfigCodeScope implements ConfigComponent {
 
     public abstract boolean exist(ConfigMember configMember);
 

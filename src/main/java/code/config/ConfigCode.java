@@ -14,7 +14,7 @@ import org.json.simple.parser.ParseException;
 import writers.ConfigWriter;
 import code.Margin;
 
-public class ConfigCode {
+public class ConfigCode implements ConfigComponent {
 	private File file;
 
 	private JSONObject code;
@@ -86,4 +86,10 @@ public class ConfigCode {
 			configPackage.accept(configWriter);
 		}
 	}
+
+    @Override
+    public void accept(ConfigVisitor visitor) {
+        // TODO Auto-generated method stub
+        
+    }
 }

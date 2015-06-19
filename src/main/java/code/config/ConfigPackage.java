@@ -131,4 +131,10 @@ public class ConfigPackage extends ConfigCodeFile {
         }	
 		configWriter.visitPackageBack();
 	}
+
+    @Override
+    public void accept(ConfigVisitor visitor) {
+        // TODO Auto-generated method stub
+        
+    }
 }
