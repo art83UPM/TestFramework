@@ -36,7 +36,7 @@ public class ProjectPackage extends ProjectCodeFile {
                 Margin.instance().inc();
                 this.add(new ProjectPackage(file, this));
                 Margin.instance().dec();
-            } else if (file.isFile()) {
+            } else if (file.isFile() && file.getName().endsWith(".class")) {
                 String className = this.name + "." + file.getName().split("\\.")[0];
                 try {
                     Margin.instance().inc();

@@ -15,7 +15,7 @@ public class TestGenerator {
         TestFrameworkClassLoader.setClassLoaderByPath(paths[0]);
         ProjectCode main = new ProjectCode(paths[0]);
         TestFrameworkClassLoader.setClassLoaderByPath(paths);
-//        ProjectCode test = new ProjectCode(paths[1]);
+        ProjectCode test = new ProjectCode(paths[1]);
         
         TestWriter testWriter = new TestWriter(projectPath + "\\src\\test\\java\\");
         HeaderDataWriter headerDataWriter = new HeaderDataWriter(projectPath + "\\src\\test\\resources\\");
