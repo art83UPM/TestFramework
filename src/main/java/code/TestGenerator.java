@@ -3,6 +3,7 @@ package code;
 import writers.DataReaderWriter;
 import writers.HeaderDataWriter;
 import writers.TestWriter;
+import code.config.ConfigCode;
 import code.project.ProjectCode;
 
 public class TestGenerator {
@@ -28,11 +29,10 @@ public class TestGenerator {
         testWriter.close();
         headerDataWriter.close();
         dataReaderWriter.close();
-//
-//        ConfigCode configCode = new ConfigCode();
-//        ConfigWriter configWriter = new ConfigWriter("C:\\Users\\nyuron\\Desktop", main);
-        //main.accept(configWriter);
 
+        ConfigCode configCode = new ConfigCode(projectPath + "\\testConfig\\", main, test);
+        //TODO cruzar datos de main y test  
+        //ConfigWriter configWriter = new ConfigWriter("C:\\Users\\nyuron\\Desktop", main);
 
     }
 

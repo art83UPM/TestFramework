@@ -28,7 +28,7 @@ public class TestWriter implements ProjectVisitor {
     	this.file.getParentFile().mkdirs();
         try {
             writer = new BufferedWriter(new FileWriter(file));
-            writer.write("package " + clazz.getProjectPackage().getName() + ";\n\n"); // This was at the end of the package: Test.generated. Reason?
+            writer.write("package " + clazz.getProjectPackage().getName() + ";\n\n");
             writer.write("import static org.junit.Assert.*;\n\n");
             writer.write("import org.junit.After;\n");
             writer.write("import org.junit.BeforeClass;\n");
@@ -50,7 +50,7 @@ public class TestWriter implements ProjectVisitor {
         }
     }
 
-	public void visit(ProjectConstructorMember constructorMember) {//TODO que los constructores esten ordenados
+	public void visit(ProjectConstructorMember constructorMember) {
         try {
             writer.write(this.printTabs(1) + "@Test\n");
             writer.write(this.printTabs(1) + "public void test" + constructorMember.getNameWithParams() + "() {\n");
@@ -65,7 +65,7 @@ public class TestWriter implements ProjectVisitor {
         }
     }
 
-    public void visit(ProjectMethodMember methodMember) {//TODO que los metodos esten ordenados
+    public void visit(ProjectMethodMember methodMember) {
         try {
             writer.write(this.printTabs(1) + "@Test\n");
             writer.write(this.printTabs(1) + "public void test" + methodMember.getNameWithParams());

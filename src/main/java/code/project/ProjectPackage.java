@@ -6,7 +6,6 @@ import java.util.List;
 
 import code.Margin;
 import code.TestFrameworkClassLoader;
-import code.config.ConfigPackage;
 
 public class ProjectPackage extends ProjectCodeFile {
 
@@ -96,13 +95,5 @@ public class ProjectPackage extends ProjectCodeFile {
             return false;
         }
         return true;
-    }
-
-    public ConfigPackage getConfigPackage() {
-        if(fatherPackage == null) {
-            return new ConfigPackage(this.getName(), null);
-        }else{
-            return new ConfigPackage(this.getName(), fatherPackage.getConfigPackage());
-        }
     }
 }

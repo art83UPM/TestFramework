@@ -2,7 +2,6 @@ package code.config;
 
 import org.json.simple.JSONObject;
 
-import writers.ConfigWriter;
 import code.Margin;
 import code.project.ProjectCode;
 import code.project.ProjectMember;
@@ -84,8 +83,6 @@ public abstract class ConfigMember extends ConfigCodeScope {
 	public ConfigCodeScope getChild() {
 		return null;
 	}
-
-	public abstract void accept(ConfigWriter configWriter);
 
 	public abstract boolean isConfigConstructor();
 

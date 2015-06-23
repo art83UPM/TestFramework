@@ -6,7 +6,6 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import writers.ConfigWriter;
 import code.Margin;
 
 public class ConfigClazz extends ConfigCodeFile {
@@ -105,46 +104,5 @@ public class ConfigClazz extends ConfigCodeFile {
 			}
 		}
 		return null;
-	}
-
-	@Override
-	public void accept(ConfigWriter configWriter) {
-		configWriter.visit(this);
-		for (ConfigMember configMember : configMemberList) {
-			if (this.isFirstConstructor(configMember)) {
-				configWriter.visitFirstMember("Constructor");
-			}
-			if (this.isFirstMethod(configMember)) {
-				configWriter.visitFirstMember("Methods");
-			}
-			configMember.accept(configWriter);
-			if(this.ifLastConstructor(configMember) || this.ifLastMethod(configMember)) {
-				configWriter.visitLastMember();
-			}
-		}
-		configWriter.visitClassBack();
 	}	
-
-	private boolean isFirstConstructor(ConfigMember configMember) {
-		return configMember.isConfigConstructor() && configMember.equals(configMemberList.get(0));
-	}
-
-	private boolean isFirstMethod(ConfigMember configMember) {
-		return configMember.isConfigMethod()
-				&& (configMemberList.indexOf(configMember) == 0 || configMemberList.get(configMemberList.indexOf(configMember) - 1).isConfigConstructor());
-	}
-	
-	private boolean ifLastConstructor(ConfigMember configMember) {
-		return configMember.isConfigConstructor() && (configMemberList.indexOf(configMember) == configMemberList.size() - 1 || configMemberList.get(configMemberList.indexOf(configMember) + 1).isConfigMethod());
-	} 
-	
-	private boolean ifLastMethod(ConfigMember configMember) {
-		return configMember.isConfigMethod() && configMember.equals(this.configMemberList.get(configMemberList.size() - 1));
-	}
-
-    @Override
-    public void accept(ConfigVisitor visitor) {
-        // TODO Auto-generated method stub
-        
-    }
 }

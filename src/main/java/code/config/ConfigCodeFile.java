@@ -1,8 +1,13 @@
 package code.config;
 
-import writers.ConfigWriter;
 
-public abstract class ConfigCodeFile extends ConfigCodeScope implements ConfigComponent {
+public abstract class ConfigCodeFile extends ConfigCodeScope {
+    
+    protected String name;
+    
+    public String getName() {
+        return this.name;
+    }
 
     public abstract boolean exist(ConfigMember configMember);
 
@@ -12,5 +17,4 @@ public abstract class ConfigCodeFile extends ConfigCodeScope implements ConfigCo
 
 	public abstract String getStatus(ConfigMember configMember);
 
-	public abstract void accept(ConfigWriter configWriter);
 }

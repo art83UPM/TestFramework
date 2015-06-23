@@ -17,7 +17,6 @@ public class CreateConfigFileTest {
         ProjectCode test = new ProjectCode(paths[1]);
         
         ConfigWriter configWriter = new ConfigWriter("C:\\Users\\Irene\\Desktop", main, test);
-        main.accept(configWriter);
         configWriter.writeNewConfigCode();
 	}
 	

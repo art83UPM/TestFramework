@@ -2,12 +2,11 @@ package code.config;
 
 import org.json.simple.JSONObject;
 
-import writers.ConfigWriter;
 import code.Margin;
 import code.project.ProjectCode;
 import code.project.ProjectMethodMember;
 
-public class ConfigMethodMember extends ConfigMember implements ConfigComponent {
+public class ConfigMethodMember extends ConfigMember {
 
     public ConfigMethodMember(JSONObject jsonMethod, ConfigClazz configClazz) {
         super(jsonMethod, configClazz);
@@ -43,11 +42,6 @@ public class ConfigMethodMember extends ConfigMember implements ConfigComponent 
     }
 
 	@Override
-	public void accept(ConfigWriter configWriter) {
-		configWriter.visit(this);		
-	}
-
-	@Override
 	public boolean isConfigConstructor() {
 		return false;
 	}
@@ -56,10 +50,4 @@ public class ConfigMethodMember extends ConfigMember implements ConfigComponent 
 	public boolean isConfigMethod() {
 		return true;
 	}
-
-    @Override
-    public void accept(ConfigVisitor visitor) {
-        // TODO Auto-generated method stub
-        
-    }
 }

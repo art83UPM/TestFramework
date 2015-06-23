@@ -11,85 +11,45 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import writers.ConfigWriter;
-import code.Margin;
+import code.project.ProjectCode;
+import code.project.ProjectCodeFile;
 
-public class ConfigCode implements ConfigComponent {
-	private File file;
+public class ConfigCode {
+    private File file;
+    
+    private List<ConfigCodeFile> packages;
 
-	private JSONObject code;
+    private JSONObject oldConfigCode;
 
-	private List<ConfigPackage> configPackagesList;
+    private ProjectCode main;
 
-	public ConfigCode(String path) {
-		this.file = new File(path);
-		JSONParser parser = new JSONParser();
-		this.configPackagesList = new ArrayList<ConfigPackage>();
-		try {
-			JSONObject json = (JSONObject) parser.parse(new FileReader(file));
-			this.code = (JSONObject) json.get("code");
+    private ProjectCode test;
 
-		} catch (IOException | ParseException e) {
-			e.printStackTrace();
-		}
-		if (this.code != null) {
-			this.build();
-		}
-	}
+    public ConfigCode(String path, ProjectCode main, ProjectCode test) {
+        this.file = new File(path);
+        this.packages = new ArrayList<ConfigCodeFile>();
+        try {
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(new FileReader(file));
+            this.oldConfigCode = (JSONObject) json.get("code");
 
-	private void build() {
-		JSONArray packages = (JSONArray) this.code.get("packages");
-		if (packages != null) {
-			for (Object jsonPackage : packages) {
-				this.configPackagesList.add(new ConfigPackage((JSONObject) jsonPackage, null));
-			}
-		}
-	}
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        this.main = main;
+        this.test = test;
+        this.build();
+    }
 
-	public boolean exist(ConfigMember configMember) {
-		for (ConfigPackage configPackage : configPackagesList) {
-			if (configPackage.exist(configMember)) {
-				System.out.println(Margin.instance().tabs() + "Sí está!");
-				return true;
-			}
-		}
-		return false;
-	}
+    private void build() {
+        for (ProjectCodeFile mainComponent : main.getComponents()) {
+            this.add(new ConfigPackage(mainComponent, null));
+        }
+        //TODO test
+        //TODO oldConfig
+    }
 
-	public void add(ConfigMethodMember configMethodMember) {
-		ConfigPackage configPackage = configMethodMember.getRoot();
-		if (!configPackagesList.contains(configPackage)) {
-			configPackagesList.add(configPackage);
-		}
-		configPackagesList.get(configPackagesList.indexOf(configPackage)).add(configPackage.getChild());
-	}
-
-	public void add(ConfigConstructorMember configConstructorMember) {
-		ConfigPackage configPackage = configConstructorMember.getRoot();
-		if (!configPackagesList.contains(configPackage)) {
-			configPackagesList.add(configPackage);
-		}
-		configPackagesList.get(configPackagesList.indexOf(configPackage)).add(configPackage.getChild());
-	}
-
-	public String getStatus(ConfigMember configMember) {
-		for (ConfigPackage configPackage : configPackagesList) {
-			if (configPackage.exist(configMember)) {
-				return configPackage.getStatus(configMember);
-			}
-		}
-		return " ";
-	}
-
-	public void accept(ConfigWriter configWriter) {
-		for (ConfigPackage configPackage : configPackagesList) {
-			configPackage.accept(configWriter);
-		}
-	}
-
-    @Override
-    public void accept(ConfigVisitor visitor) {
-        // TODO Auto-generated method stub
-        
+    public void add(ConfigPackage component) {
+        this.packages.add(component);
     }
 }

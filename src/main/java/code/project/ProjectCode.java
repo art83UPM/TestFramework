@@ -48,4 +48,8 @@ public class ProjectCode implements CodeComponent {
             codeComponent.accept(visitor);
         }        
     }
+
+    public List<ProjectCodeFile> getComponents() {
+        return this.components;
+    }
 }

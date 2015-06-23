@@ -6,47 +6,30 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import writers.ConfigWriter;
 import code.Margin;
+import code.project.ProjectCodeFile;
+import code.project.ProjectPackage;
 
 public class ConfigPackage extends ConfigCodeFile {
-	private JSONObject jsonPackage;
+    
+    private ProjectPackage projectPackage;
 
 	private ConfigPackage fatherPackage;
 
-	private String name;
-
-	private List<ConfigCodeFile> configCodeFileList;
-
-	public ConfigPackage(JSONObject jsonPackage, ConfigPackage configPackage) {
-		this.jsonPackage = jsonPackage;
-		this.fatherPackage = configPackage;
-		this.name = fatherPackage == null ? (String) this.jsonPackage.get("name") : fatherPackage.getName()
-				+ "." + (String) this.jsonPackage.get("name");
-		System.out.println(Margin.instance().tabs() + this.name);
-		this.configCodeFileList = new ArrayList<ConfigCodeFile>();
-		this.build();
-	}
-
-	public ConfigPackage(String name, ConfigPackage configPackage) {
-		this.name = fatherPackage == null ? name : fatherPackage.getName() + "." + name;
-		this.fatherPackage = configPackage;
-		this.configCodeFileList = new ArrayList<ConfigCodeFile>();
+	private List<ConfigCodeFile> components;
+	
+	public ConfigPackage(ProjectCodeFile projectPackage, ConfigPackage parentPackage) {
+	    this.projectPackage = (ProjectPackage) projectPackage;
+	    this.fatherPackage = parentPackage;
+	    this.name = this.projectPackage.getName().split(".")[this.projectPackage.getName().length()-1];
+	    this.components = new ArrayList<ConfigCodeFile>();
+	    this.build();
 	}
 
 	private void build() {
-		JSONArray packages = (JSONArray) this.jsonPackage.get("packages");
-		if (packages != null) {
-			for (Object jsonPackage : packages) {
-				this.configCodeFileList.add(new ConfigPackage((JSONObject) jsonPackage, this));
-			}
-		}
-		JSONArray clazzes = (JSONArray) this.jsonPackage.get("classes");
-		if (clazzes != null) {
-			for (Object jsonClazz : clazzes) {
-				this.configCodeFileList.add(new ConfigClazz((JSONObject) jsonClazz, this));
-			}
-		}
+		for (ProjectCodeFile component : this.projectPackage.getComponents()) {
+            
+        }
 	}
 
 	public String getName() {
@@ -122,19 +105,4 @@ public class ConfigPackage extends ConfigCodeFile {
 			return false;
 		return true;		
 	}
-
-	@Override
-	public void accept(ConfigWriter configWriter) {
-		configWriter.visit(this);
-		for (ConfigCodeFile configCodeFile : configCodeFileList) {
-            configCodeFile.accept(configWriter);
-        }	
-		configWriter.visitPackageBack();
-	}
-
-    @Override
-    public void accept(ConfigVisitor visitor) {
-        // TODO Auto-generated method stub
-        
-    }
 }
