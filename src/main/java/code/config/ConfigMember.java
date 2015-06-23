@@ -1,91 +1,50 @@
 package code.config;
 
-import org.json.simple.JSONObject;
-
-import code.Margin;
-import code.project.ProjectCode;
+import util.Capitalizer;
 import code.project.ProjectMember;
 
-public abstract class ConfigMember extends ConfigCodeScope {
-    protected JSONObject jsonMember;
-    protected ConfigClazz configClazz;
-    protected String name;
-    protected String status;
-    protected String test;
+public abstract class ConfigMember {
+
+    private ConfigClazz parentClazz;
+
+    private ProjectMember projectMember;
     
-    public ConfigMember(JSONObject jsonMember, ConfigClazz configClazz) {
-        this.jsonMember = jsonMember;
-        this.configClazz = configClazz;
-        this.name = (String) this.jsonMember.get("name");
-        Margin.instance().inc();
-        System.out.println(Margin.instance().tabs() + this.name);
-        this.status = (String) this.jsonMember.get("status");
-        this.test = (String) this.jsonMember.get("test");
-        Margin.instance().dec();
-    }
+    private String name;
+
+    private String status;
+
+    private String test;
     
-    public ConfigMember(String name, ConfigClazz configClazz) {
-        this.configClazz = configClazz;
-        this.name = name;
+    public ConfigMember(ProjectMember projectMember, ConfigClazz configClazz) {
+        this.parentClazz = configClazz;
+        this.projectMember = projectMember;
+        this.name = projectMember.getNameWithParams();
+        this.status = "default";
+        this.test = "test" + Capitalizer.capitalize(projectMember.getNameWithParams());
     }
 
     public String getName() {
         return this.name;
     }
 
-    public ConfigClazz getConfigClazz() {
-        return this.configClazz;
-    }
-
-	public void setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
     public String getStatus() {
-		return status;
-	}
+        return status;
+    }
 
     public void setTest(String test) {
         this.test = test;
     }
 
-	public String getTest() {
-		return test;
-	}
+    public String getTest() {
+        return test;
+    }
 
-	public ConfigPackage getRoot() {
-		ConfigClazz configClazz = this.getConfigClazz();
-		configClazz.add(this);
-		return configClazz.getRoot();
-	}
-	
-	public void setTestAndStatus(ConfigCode configCodeOld, ProjectCode test, ProjectMember member) {
-		if (configCodeOld != null && configCodeOld.exist(this)) {
-            if (test.exist(member)) {
-                this.setTest(member.getName() + "Test");
-                this.setStatus("exist");
-            } else {
-                this.setTest(" ");
-                this.setStatus(configCodeOld.getStatus(this));
-            }
-        } else {
-            if (test.exist(member)) {
-                this.setTest(member.getName() + "Test");
-                this.setStatus("exist");                
-            } else {
-                this.setTest(" ");
-                this.setStatus(" ");
-            }
-        }
-	}
+    public abstract boolean isConfigConstructor();
 
-	@Override
-	public ConfigCodeScope getChild() {
-		return null;
-	}
+    public abstract boolean isConfigMethod();
 
-	public abstract boolean isConfigConstructor();
-
-	public abstract boolean isConfigMethod();	
-	
 }

@@ -7,102 +7,45 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import code.Margin;
+import code.project.ProjectClazz;
+import code.project.ProjectCodeFile;
+import code.project.ProjectConstructorMember;
+import code.project.ProjectMethodMember;
+import code.project.ProjectPackage;
 
 public class ConfigClazz extends ConfigCodeFile {
-	private JSONObject jsonClazz;
 
-	private ConfigPackage configPackage;
+    private ProjectClazz projectClazz;
+    
+    private ConfigPackage parentPackage;
 
-	private String name;
+    private List<ConfigMember> components;
+    private List<ConfigConstructorMember> constructors;
+    private List<ConfigMethodMember> methods;
 
-	private List<ConfigMember> configMemberList;
+    public ConfigClazz(ProjectCodeFile component, ConfigPackage parentPackage) {
+        this.parentPackage = parentPackage;
+        this.projectClazz = (ProjectClazz) component;
+        this.name = this.projectClazz.getName();
+        this.constructors = new ArrayList<ConfigConstructorMember>();
+        this.methods = new ArrayList<ConfigMethodMember>();
+        this.components = new ArrayList<ConfigMember>();
+        this.build();
+    }
 
-	public ConfigClazz(JSONObject jsonClazz, ConfigPackage configPackage) {
-		this.jsonClazz = jsonClazz;
-		this.configPackage = configPackage;
-		this.name = (String) this.jsonClazz.get("name");
-		Margin.instance().inc();
-		System.out.println(Margin.instance().tabs() + this.name);
-		this.configMemberList = new ArrayList<ConfigMember>();
-		this.build();
-	}
+    private void build() {
+        for (ProjectConstructorMember component : this.projectClazz.getConstructors()) {
+            this.constructors.add(new ConfigConstructorMember(component, this));
+        }
+        for (ProjectMethodMember component : this.projectClazz.getMethods()) {
+            this.methods.add(new ConfigMethodMember(component, this));
+        }
+        components.addAll(this.constructors);
+        components.addAll(this.methods);
+    }
+    
+    public String getName() {
+        return name;
+    }
 
-	public ConfigClazz(String name, ConfigPackage configPackage) {
-		this.name = name;
-		this.configPackage = configPackage;
-		this.configMemberList = new ArrayList<ConfigMember>();
-	}
-
-	private void build() {
-		JSONArray jsonConstructors = (JSONArray) this.jsonClazz.get("constructors");
-		if (jsonConstructors != null) {
-			for (Object jsonConstructor : jsonConstructors) {
-				this.configMemberList.add(new ConfigConstructorMember((JSONObject) jsonConstructor, this));
-			}
-		}
-		JSONArray jsonMethods = (JSONArray) this.jsonClazz.get("methods");
-		if (jsonMethods != null) {
-			for (Object jsonMethod : jsonMethods) {
-				this.configMemberList.add(new ConfigMethodMember((JSONObject) jsonMethod, this));
-			}
-		}
-		Margin.instance().dec();
-	}
-
-	public ConfigPackage getConfigPackage() {
-		return configPackage;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public boolean exist(ConfigMember configMember) {
-		Margin.instance().inc();
-		System.out.println(Margin.instance().tabs() + "Compruebo si en la clase " + this.name
-				+ " esta el método: " + configMember.getName() + " -->");
-		if (this.getName().equals(configMember.getConfigClazz().getName())) {
-			if (!configMemberList.isEmpty()) {
-				for (ConfigMember confirMember : configMemberList) {
-					if (confirMember.equals(configMember)) {
-						System.out.println(Margin.instance().tabs() + "Siiiiii!!");
-						Margin.instance().dec();
-						return true;
-					}
-				}
-			}
-		}
-		System.out.println(Margin.instance().tabs() + "No está!");
-		Margin.instance().dec();
-		return false;
-	}
-
-	public ConfigCodeScope getChild() {
-		return this.configMemberList.get(0);
-	}
-
-	public ConfigPackage getRoot() {
-		ConfigPackage configPackage = this.getConfigPackage();
-		configPackage.add(this);
-		return configPackage.getRoot();
-	}
-
-	@Override
-	public void add(ConfigCodeScope child) {
-		this.configMemberList.add((ConfigMember) child);
-	}
-
-	@Override
-	public String getStatus(ConfigMember configMember) {
-		if (this.getName().equals(configMember.getConfigClazz().getName())) {
-			if (!configMemberList.isEmpty()) {
-				for (ConfigMember confirMember : configMemberList) {
-					if (confirMember.equals(configMember)) {
-						return confirMember.getStatus();
-					}
-				}
-			}
-		}
-		return null;
-	}	
 }

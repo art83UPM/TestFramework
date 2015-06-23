@@ -44,7 +44,7 @@ public class ConfigWriter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		configCodeNew = new ConfigCode(this.path + File.separator + "config.json");
+		configCodeNew = new ConfigCode(this.path + File.separator + "config.json", main, test);
 	}
 
 	public void writeNewConfigCode() {		

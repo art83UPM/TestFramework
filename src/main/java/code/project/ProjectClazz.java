@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import code.Margin;
-import code.config.ConfigClazz;
 
 public class ProjectClazz extends ProjectCodeFile {
 
@@ -96,12 +95,16 @@ public class ProjectClazz extends ProjectCodeFile {
         }
         return true;
     }
-
-    public ConfigClazz getConfigClazz() {
-        return new ConfigClazz(this.getName(), this.getProjectPackage().getConfigPackage());
-    }
     
     public String getPackagePath() {
     	return this.getProjectPackage().getName().replace(".", File.separator);
 	}
+
+    public List<ProjectConstructorMember> getConstructors() {
+        return this.constructorMemberList;
+    }
+    
+    public List<ProjectMethodMember> getMethods() {
+        return this.methodMemberList;
+    }
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import code.Margin;
-import code.config.ConfigMethodMember;
 
 public class ProjectMethodMember extends ProjectMember implements CodeComponent {
 
@@ -87,10 +86,6 @@ public class ProjectMethodMember extends ProjectMember implements CodeComponent 
     @Override
     public String toString() {
         return name + " [" + returnType + ", " + this.projectClazz.getName() + ", " + parameterTypes + "]";
-    }
-
-    public ConfigMethodMember getConfigMethod() {
-        return new ConfigMethodMember(this.getName(), this.getProjectClazz().getConfigClazz());        
     }
 
 }
