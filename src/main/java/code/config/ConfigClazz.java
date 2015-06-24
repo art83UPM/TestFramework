@@ -6,12 +6,10 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import code.Margin;
 import code.project.ProjectClazz;
 import code.project.ProjectCodeFile;
 import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;
-import code.project.ProjectPackage;
 
 public class ConfigClazz extends ConfigCodeFile {
 
@@ -46,6 +44,23 @@ public class ConfigClazz extends ConfigCodeFile {
     
     public String getName() {
         return name;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", this.name);
+        JSONArray constructors = new JSONArray();
+        for (ConfigConstructorMember constructor : this.constructors) {
+            constructors.add(constructor.toJson());
+        }
+        json.put("constructors", constructors);
+        JSONArray methods = new JSONArray();
+        for (ConfigMethodMember method : this.methods) {
+            methods.add(method.toJson());
+        }
+        json.put("methods", methods);
+        return json;
     }
 
 }

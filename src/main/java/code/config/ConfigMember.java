@@ -1,6 +1,7 @@
 package code.config;
 
-import util.Capitalizer;
+import org.json.simple.JSONObject;
+
 import code.project.ProjectMember;
 
 public abstract class ConfigMember {
@@ -20,7 +21,7 @@ public abstract class ConfigMember {
         this.projectMember = projectMember;
         this.name = projectMember.getNameWithParams();
         this.status = "default";
-        this.test = "test" + Capitalizer.capitalize(projectMember.getNameWithParams());
+        this.test = "";
     }
 
     public String getName() {
@@ -41,6 +42,15 @@ public abstract class ConfigMember {
 
     public String getTest() {
         return test;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", this.name);
+        json.put("status", this.status);
+        json.put("test", this.test);
+        return json;
     }
 
     public abstract boolean isConfigConstructor();

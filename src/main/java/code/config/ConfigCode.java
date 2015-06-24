@@ -17,7 +17,7 @@ import code.project.ProjectCodeFile;
 public class ConfigCode {
     private File file;
     
-    private List<ConfigCodeFile> packages;
+    private List<ConfigPackage> packages;
 
     private JSONObject oldConfigCode;
 
@@ -27,7 +27,7 @@ public class ConfigCode {
 
     public ConfigCode(String path, ProjectCode main, ProjectCode test) {
         this.file = new File(path);
-        this.packages = new ArrayList<ConfigCodeFile>();
+        this.packages = new ArrayList<ConfigPackage>();
         try {
             JSONParser parser = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(new FileReader(file));
@@ -51,5 +51,18 @@ public class ConfigCode {
 
     public void add(ConfigPackage component) {
         this.packages.add(component);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        JSONObject code = new JSONObject();
+        JSONArray packages = new JSONArray();
+        for (ConfigPackage configPackage : this.packages) {
+            packages.add(configPackage.toJson());
+        }
+        code.put("packages", packages);
+        json.put("code", code);
+        return json;
     }
 }
