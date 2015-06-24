@@ -8,4 +8,6 @@ public interface ProjectVisitor {
 	void visit(ProjectConstructorMember projectConstructorMember);
 
 	void visit(ProjectMethodMember projectMethodMember);
+	
+	void close();
 }

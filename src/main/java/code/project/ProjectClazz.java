@@ -64,6 +64,7 @@ public class ProjectClazz extends ProjectCodeFile {
         for (ProjectMember member : memberList) {
             member.accept(visitor);
         }
+        visitor.close();
     }
 
     @Override

@@ -55,6 +55,12 @@ public class DataReaderWriter implements ProjectVisitor {
     @Override
     public void visit(ProjectClazz clazz) {
         this.file = new File(path + clazz.getPackagePath() + File.separator + "_dataReaders" + File.separator + clazz.getName()+ "TestDataReader.java");
+        this.file.getParentFile().mkdirs();
+        try {
+            this.file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         try {
             writer = new BufferedWriter(new FileWriter(file));
             writer.write("package " + clazz.getProjectPackage().getName() + "._dataReaders;\n\n");
@@ -93,7 +99,7 @@ public class DataReaderWriter implements ProjectVisitor {
             writer.write(this.printTabs(1) + "public void next() {\n");
             writer.write(this.printTabs(2) + "this.getDataReader().next();\n");
             writer.write(this.printTabs(2) + "int i = 0;\n");
-            writer.write(this.printTabs(2) + "this.example = null;\n");
+            writer.write(this.printTabs(2) + "this." + Capitalizer.unCapitalize(clazz.getName()) + "= null;\n");
             writer.write(this.printTabs(2) + "while (i < CONSTRUCTOR_NAMES.length && !this.existsConstructor(CONSTRUCTOR_NAMES[i])) {\n");
             writer.write(this.printTabs(3) + "i++;\n");
             writer.write(this.printTabs(2) + "}\n");
@@ -101,7 +107,7 @@ public class DataReaderWriter implements ProjectVisitor {
             writer.write(this.printTabs(1) + "}\n\n");
 
             writer.write(this.printTabs(1) + "public void next(String constructorName) {\n");
-            writer.write(this.printTabs(2) + "this.example = null;\n");
+            writer.write(this.printTabs(2) + "this." + Capitalizer.unCapitalize(clazz.getName()) + "= null;\n");
             writer.write(this.printTabs(2) + "this.construct(constructorName);\n");
             writer.write(this.printTabs(1) + "}\n\n");
 
