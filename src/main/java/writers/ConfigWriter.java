@@ -15,6 +15,8 @@ public class ConfigWriter {
 
 	private String path;
 
+    private ProjectCode main;
+	
 	private ProjectCode test;
 
 	private File file;
@@ -27,19 +29,17 @@ public class ConfigWriter {
 
 	public ConfigWriter(String path, ProjectCode main, ProjectCode test) {
 		this.path = path;
+		this.main = main;
 		this.test = test;
 		try {
 			this.file = new File(this.path + File.separator + "config.json");
-			if (!file.exists()) {
-				file.createNewFile();
-				writer = new BufferedWriter(new FileWriter(file));
-				writer.write("{");
-				writer.write("}");
-				this.close();
-			} else {
+	        this.file.getParentFile().mkdirs();
+			if (file.exists()) {
 				File fileBack = new File(this.path + File.separator + "config.back" + ".json");
-				configCodeOld = new ConfigCode(this.path + File.separator + "config.json");
+				//configCodeOld = new ConfigCode(this.path + File.separator + "config.json");
 				Files.copy(file.toPath(), fileBack.toPath(), StandardCopyOption.REPLACE_EXISTING);				
+			} else {
+		         file.createNewFile();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -51,17 +51,7 @@ public class ConfigWriter {
 		try {
 			file.createNewFile();
 			writer = new BufferedWriter(new FileWriter(file));
-			writer.write("{");
-			Margin.instance().inc();
-			writer.write(Margin.instance().tabs() + "\n\"code\": {");
-			Margin.instance().inc();
-			writer.write(Margin.instance().tabs() + "\n\"packages\": [");
-			configCodeNew.accept(this);
-			writer.write(Margin.instance().tabs() + "\n]");
-			Margin.instance().dec();
-			writer.write(Margin.instance().tabs() + "\n}");
-			Margin.instance().dec();
-			writer.write("\n}");
+			writer.write(this.configCodeNew.toJson().toJSONString());
 			this.close();
 		} catch (IOException e) {
 			e.printStackTrace();
