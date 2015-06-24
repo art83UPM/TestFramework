@@ -16,7 +16,7 @@ public class TestGenerator {
         TestFrameworkClassLoader.setClassLoaderByPath(paths[0]);
         ProjectCode main = new ProjectCode(paths[0]);
         TestFrameworkClassLoader.setClassLoaderByPath(paths);
-        ProjectCode test = new ProjectCode(paths[1]);
+        //ProjectCode test = new ProjectCode(paths[1]);
         
         TestWriter testWriter = new TestWriter(projectPath + "\\src\\test\\java\\");
         HeaderDataWriter headerDataWriter = new HeaderDataWriter(projectPath + "\\src\\test\\resources\\");
@@ -25,12 +25,8 @@ public class TestGenerator {
         main.accept(testWriter);
         main.accept(headerDataWriter);
         main.accept(dataReaderWriter);
-        
-        testWriter.close();
-        headerDataWriter.close();
-        dataReaderWriter.close();
 
-        ConfigCode configCode = new ConfigCode(projectPath + "\\testConfig\\", main, test);
+//        ConfigCode configCode = new ConfigCode(projectPath + "\\testConfig\\", main, test);
         //TODO cruzar datos de main y test  
         //ConfigWriter configWriter = new ConfigWriter("C:\\Users\\nyuron\\Desktop", main);
 
