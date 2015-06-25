@@ -14,16 +14,21 @@ import code.project.ProjectMethodMember;
 public class ConfigClazz extends ConfigCodeFile {
 
     private ProjectClazz projectClazz;
-    
+
+    private ProjectClazz testClazz;
+
     private ConfigPackage parentPackage;
 
     private List<ConfigMember> components;
+
     private List<ConfigConstructorMember> constructors;
+
     private List<ConfigMethodMember> methods;
 
-    public ConfigClazz(ProjectCodeFile component, ConfigPackage parentPackage) {
+    public ConfigClazz(ProjectCodeFile component, ConfigPackage parentPackage, ProjectClazz testClazz) {
         this.parentPackage = parentPackage;
         this.projectClazz = (ProjectClazz) component;
+        this.testClazz = testClazz;
         this.name = this.projectClazz.getName();
         this.constructors = new ArrayList<ConfigConstructorMember>();
         this.methods = new ArrayList<ConfigMethodMember>();
@@ -32,20 +37,20 @@ public class ConfigClazz extends ConfigCodeFile {
     }
 
     private void build() {
-        for (ProjectConstructorMember component : this.projectClazz.getConstructors()) {
-            this.constructors.add(new ConfigConstructorMember(component, this));
+        for (ProjectConstructorMember constructor : this.projectClazz.getConstructors()) {
+            this.constructors.add(new ConfigConstructorMember(constructor, this, this.testClazz.getTestMethod(constructor.getNameWithParams())));
         }
-        for (ProjectMethodMember component : this.projectClazz.getMethods()) {
-            this.methods.add(new ConfigMethodMember(component, this));
+        for (ProjectMethodMember method : this.projectClazz.getMethods()) {
+            this.methods.add(new ConfigMethodMember(method, this, this.testClazz.getTestMethod(method.getNameWithParams())));
         }
         components.addAll(this.constructors);
         components.addAll(this.methods);
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     @SuppressWarnings("unchecked")
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

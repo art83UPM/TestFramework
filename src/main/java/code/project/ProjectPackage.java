@@ -63,11 +63,11 @@ public class ProjectPackage extends ProjectCodeFile {
     public List<ProjectCodeFile> getComponents() {
         return this.components;
     }
-    
+
     public List<ProjectPackage> getPackages() {
         return this.packages;
     }
-    
+
     public List<ProjectClazz> getClazzes() {
         return this.clazzes;
     }
@@ -105,5 +105,23 @@ public class ProjectPackage extends ProjectCodeFile {
             return false;
         }
         return true;
+    }
+
+    public ProjectPackage getPackage(String name) {
+        for (ProjectPackage projectPackage : packages) {
+            if (projectPackage.getName().equals(name)) {
+                return projectPackage;
+            }
+        }
+        return null;
+    }
+
+    public ProjectClazz getClazz(String name) {
+        for (ProjectClazz clazz : clazzes) {
+            if (clazz.getName().equals(name + "Test")) {
+                return clazz;
+            }
+        }
+        return null;
     }
 }

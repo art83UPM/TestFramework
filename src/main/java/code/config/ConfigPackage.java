@@ -14,6 +14,8 @@ public class ConfigPackage extends ConfigCodeFile {
 
     private ProjectPackage projectPackage;
 
+    private ProjectPackage testPackage;
+
     private ConfigPackage parentPackage;
 
     private List<ConfigPackage> packages;
@@ -22,9 +24,10 @@ public class ConfigPackage extends ConfigCodeFile {
 
     private List<ConfigCodeFile> components;
 
-    public ConfigPackage(ProjectCodeFile projectPackage, ConfigPackage parentPackage) {
-        this.projectPackage = (ProjectPackage) projectPackage;
+    public ConfigPackage(ProjectPackage projectPackage, ConfigPackage parentPackage, ProjectPackage testPackage) {
+        this.projectPackage = projectPackage;
         this.parentPackage = parentPackage;
+        this.testPackage = testPackage;
         this.name = this.projectPackage.getName();
         this.packages = new ArrayList<ConfigPackage>();
         this.clazzes = new ArrayList<ConfigClazz>();
@@ -34,10 +37,10 @@ public class ConfigPackage extends ConfigCodeFile {
 
     private void build() {
         for (ProjectPackage projectPackage : this.projectPackage.getPackages()) {
-            this.packages.add(new ConfigPackage(projectPackage, this));
+            this.packages.add(new ConfigPackage(projectPackage, this, this.testPackage.getPackage(projectPackage.getName())));
         }
         for (ProjectClazz clazz : this.projectPackage.getClazzes()) {
-            this.clazzes.add(new ConfigClazz(clazz, this));
+            this.clazzes.add(new ConfigClazz(clazz, this, this.testPackage.getClazz(clazz.getName())));
         }
         this.components.addAll(packages);
         this.components.addAll(clazzes);

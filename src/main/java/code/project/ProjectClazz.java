@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.Capitalizer;
 import code.Margin;
 
 public class ProjectClazz extends ProjectCodeFile {
@@ -14,9 +15,9 @@ public class ProjectClazz extends ProjectCodeFile {
 
     private ProjectPackage projectPackage;
 
-    private List<ProjectConstructorMember> constructorMemberList;
+    private List<ProjectConstructorMember> constructors;
 
-    private List<ProjectMethodMember> methodMemberList;
+    private List<ProjectMethodMember> methods;
     
     private List<ProjectMember> memberList;
 
@@ -24,8 +25,8 @@ public class ProjectClazz extends ProjectCodeFile {
         this.clazz = clazz;
         name = clazz.getSimpleName();
         this.projectPackage = projectPackage;
-        constructorMemberList = new ArrayList<ProjectConstructorMember>();
-        methodMemberList = new ArrayList<ProjectMethodMember>();
+        constructors = new ArrayList<ProjectConstructorMember>();
+        methods = new ArrayList<ProjectMethodMember>();
         memberList = new ArrayList<ProjectMember>();
         System.out.println(Margin.instance().tabs() + "Clase: " + this.name);
         this.build();
@@ -39,16 +40,16 @@ public class ProjectClazz extends ProjectCodeFile {
     private void build() {
         for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
             Margin.instance().inc();
-            constructorMemberList.add(new ProjectConstructorMember(constructor, this));
+            constructors.add(new ProjectConstructorMember(constructor, this));
             Margin.instance().dec();
         }
         for (Method method : clazz.getDeclaredMethods()) {
             Margin.instance().inc();        
-            methodMemberList.add(new ProjectMethodMember(method, this));
+            methods.add(new ProjectMethodMember(method, this));
             Margin.instance().dec();
         }
-        memberList.addAll(constructorMemberList);
-        memberList.addAll(methodMemberList);
+        memberList.addAll(constructors);
+        memberList.addAll(methods);
     }
 
     public ProjectPackage getProjectPackage() {
@@ -56,7 +57,7 @@ public class ProjectClazz extends ProjectCodeFile {
     }
 
     public List<ProjectConstructorMember> getConstructorMemberList() {
-        return constructorMemberList;
+        return constructors;
     }
 
     public void accept(ProjectVisitor visitor) {
@@ -102,10 +103,19 @@ public class ProjectClazz extends ProjectCodeFile {
 	}
 
     public List<ProjectConstructorMember> getConstructors() {
-        return this.constructorMemberList;
+        return this.constructors;
     }
     
     public List<ProjectMethodMember> getMethods() {
-        return this.methodMemberList;
+        return this.methods;
+    }
+    
+    public ProjectMethodMember getTestMethod(String name) {
+        for (ProjectMethodMember method : methods) {
+            if (method.getNameWithParams().equals("test" + Capitalizer.capitalize(name))) {
+                return method;
+            }
+        }
+        return null;
     }
 }

@@ -33,7 +33,7 @@ public class ProjectMethodMember extends ProjectMember implements CodeComponent 
     }
 
     public String getName() {
-        return name.toString().substring(0, 1).toUpperCase() + name.toString().substring(1);
+        return name;
     }
 
     public String getProjectClazzName() {

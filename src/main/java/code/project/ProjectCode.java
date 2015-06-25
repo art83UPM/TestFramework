@@ -10,11 +10,11 @@ public class ProjectCode implements CodeComponent {
 
     private File file;
 
-    private List<ProjectCodeFile> components;
+    private List<ProjectPackage> components;
 
     public ProjectCode(String path) {
         this.file = new File(path);
-        this.components = new ArrayList<ProjectCodeFile>();
+        this.components = new ArrayList<ProjectPackage>();
         this.build();
     }
 
@@ -28,7 +28,7 @@ public class ProjectCode implements CodeComponent {
         }
     }
 
-    private void add(ProjectCodeFile component) {
+    private void add(ProjectPackage component) {
         this.components.add(component);
     }
 
@@ -49,7 +49,16 @@ public class ProjectCode implements CodeComponent {
         }        
     }
 
-    public List<ProjectCodeFile> getComponents() {
+    public List<ProjectPackage> getComponents() {
         return this.components;
+    }
+
+    public ProjectPackage getPackage(String name) {
+        for (ProjectPackage projectPackage : components) {
+            if (projectPackage.getName().equals(name)) {
+                return projectPackage;
+            }
+        }
+        return null;
     }
 }

@@ -13,8 +13,10 @@ public class ConfigWriterTest {
         };
         TestFrameworkClassLoader.setClassLoaderByPath(paths[0]);
         ProjectCode main = new ProjectCode(paths[0]);
+        TestFrameworkClassLoader.setClassLoaderByPath(paths);
+        ProjectCode test = new ProjectCode(paths[1]);
         
-        ConfigWriter cfgWriter = new ConfigWriter(projectPath + "\\testConfig\\", main, null);
+        ConfigWriter cfgWriter = new ConfigWriter(projectPath + "\\testConfig\\", main, test);
         cfgWriter.writeNewConfigCode();
     }
 

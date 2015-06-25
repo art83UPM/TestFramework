@@ -1,11 +1,13 @@
 package code.config;
 
 import code.project.ProjectMember;
+import code.project.ProjectMethodMember;
 
 public class ConfigConstructorMember extends ConfigMember {
 
-    public ConfigConstructorMember(ProjectMember projectMember, ConfigClazz configClazz) {
+    public ConfigConstructorMember(ProjectMember projectMember, ConfigClazz configClazz, ProjectMethodMember projectMethodMember) {
         super(projectMember, configClazz);
+        this.setTest(projectMethodMember.getNameWithParams());
     }
 	
     @Override
