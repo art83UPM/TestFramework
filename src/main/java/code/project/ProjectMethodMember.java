@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import code.Margin;
+import code.config.ConfigStatus;
 
 public class ProjectMethodMember extends ProjectMember implements CodeComponent {
 
@@ -45,7 +46,10 @@ public class ProjectMethodMember extends ProjectMember implements CodeComponent 
     }
 
     public void accept(ProjectVisitor visitor) {
-        visitor.visit(this);
+        if(this.getConfigMember().getStatus() == ConfigStatus.GENERATE) {
+            visitor.visit(this);
+            this.getConfigMember().setStatus(ConfigStatus.EXISTENT);
+        }
     }
 
     @Override

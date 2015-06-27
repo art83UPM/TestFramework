@@ -36,11 +36,11 @@ public class ConfigPackage extends ConfigCodeFile {
     }
 
     private void build() {
-        JSONArray oldConfigPackages = (JSONArray) jsonPackage.get("packages");
+        JSONArray oldConfigPackages = JsonHelper.getJsonArray(jsonPackage, "packages");
         for (ProjectPackage projectPackage : this.projectPackage.getPackages()) {
             this.packages.add(new ConfigPackage(projectPackage, JsonHelper.getJsonObjectFromArray(projectPackage.getName(), oldConfigPackages), this.testPackage.getPackage(projectPackage.getName())));
         }
-        JSONArray oldConfigClazzes = (JSONArray) jsonPackage.get("classes");
+        JSONArray oldConfigClazzes = JsonHelper.getJsonArray(jsonPackage, "classes");
         for (ProjectClazz clazz : this.projectPackage.getClazzes()) {
             this.clazzes.add(new ConfigClazz(clazz, JsonHelper.getJsonObjectFromArray(projectPackage.getName(), oldConfigClazzes), this.testPackage.getClazz(clazz.getName())));
         }

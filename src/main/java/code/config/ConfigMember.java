@@ -2,14 +2,11 @@ package code.config;
 
 import org.json.simple.JSONObject;
 
+import util.JsonHelper;
 import code.project.ProjectMember;
 import code.project.ProjectMethodMember;
 
 public abstract class ConfigMember {
-
-    private JSONObject jsonMember;
-
-    private ProjectMember projectMember;
     
     private String name;
 
@@ -18,11 +15,10 @@ public abstract class ConfigMember {
     private String test;
     
     public ConfigMember(ProjectMember projectMember, JSONObject oldConfigMember, ProjectMethodMember projectMethodMember) {
-        this.jsonMember= oldConfigMember;
-        this.projectMember = projectMember;
         this.name = projectMember.getNameWithParams();
+        projectMember.setConfigMember(this);
         this.status = ConfigStatus.GENERATE;
-        this.setStatus((String) oldConfigMember.get("status"));
+        this.setStatus(JsonHelper.getString(oldConfigMember, "status"));
         this.test = projectMethodMember.getNameWithParams();
     }
 
@@ -32,14 +28,18 @@ public abstract class ConfigMember {
 
     public void setStatus(String status) {
         for (ConfigStatus configStatus : ConfigStatus.values()) {
-            if (status.equalsIgnoreCase(configStatus.name())) {
+            if (status != null && status.equalsIgnoreCase(configStatus.name())) {
                 this.status = configStatus;
             }
         }
     }
+    
+    public void setStatus(ConfigStatus status) {
+        this.setStatus(status.name());
+    }
 
-    public String getStatus() {
-        return status.name();
+    public ConfigStatus getStatus() {
+        return status;
     }
 
     public void setTest(String test) {

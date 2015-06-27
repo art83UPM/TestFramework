@@ -3,6 +3,7 @@ package code.project;
 import java.lang.reflect.AccessibleObject;
 import java.util.List;
 
+import code.config.ConfigMember;
 import util.Capitalizer;
 
 public abstract class ProjectMember {
@@ -14,6 +15,8 @@ public abstract class ProjectMember {
     protected ProjectClazz projectClazz;
     
     protected List<ProjectParameterMember> parameterTypes;
+
+    private ConfigMember configMember;
 
     public ProjectMember() {
     }
@@ -43,5 +46,13 @@ public abstract class ProjectMember {
 	}
 
     public abstract void accept(ProjectVisitor visitor);
+
+    public void setConfigMember(ConfigMember configMember) {
+        this.configMember = configMember;
+    }
+    
+    public ConfigMember getConfigMember() {
+        return this.configMember;
+    }
     
 }

@@ -1,9 +1,9 @@
 package code;
 
+import writers.ConfigWriter;
 import writers.DataReaderWriter;
 import writers.HeaderDataWriter;
 import writers.TestWriter;
-import code.config.ConfigCode;
 import code.project.ProjectCode;
 
 public class TestGenerator {
@@ -16,8 +16,9 @@ public class TestGenerator {
         TestFrameworkClassLoader.setClassLoaderByPath(paths[0]);
         ProjectCode main = new ProjectCode(paths[0]);
         TestFrameworkClassLoader.setClassLoaderByPath(paths);
-        //ProjectCode test = new ProjectCode(paths[1]);
+        ProjectCode test = new ProjectCode(paths[1]);
         
+        ConfigWriter configWriter = new ConfigWriter(projectPath + "\\testConfig\\", main, test);
         TestWriter testWriter = new TestWriter(projectPath + "\\src\\test\\java\\");
         HeaderDataWriter headerDataWriter = new HeaderDataWriter(projectPath + "\\src\\test\\resources\\");
         DataReaderWriter dataReaderWriter = new DataReaderWriter(projectPath + "\\src\\test\\java\\", projectPath + "\\src\\test\\resources\\");
@@ -26,9 +27,7 @@ public class TestGenerator {
         main.accept(headerDataWriter);
         main.accept(dataReaderWriter);
 
-//        ConfigCode configCode = new ConfigCode(projectPath + "\\testConfig\\", main, test);
-        //TODO cruzar datos de main y test  
-        //ConfigWriter configWriter = new ConfigWriter("C:\\Users\\nyuron\\Desktop", main);
+        configWriter.writeNewConfigCode();
 
     }
 

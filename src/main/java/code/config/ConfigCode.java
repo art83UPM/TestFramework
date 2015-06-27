@@ -26,7 +26,7 @@ public class ConfigCode {
 
     public ConfigCode(File file, ProjectCode main, ProjectCode test) {
         this.packages = new ArrayList<ConfigPackage>();
-        if (file.exists()) {
+        if (file.exists() && !JsonHelper.isEmpty(file)) {
             try {
                 JSONParser parser = new JSONParser();
                 JSONObject json = (JSONObject) parser.parse(new FileReader(file));
@@ -41,7 +41,7 @@ public class ConfigCode {
     }
 
     private void build() {
-        JSONArray oldConfigPackages = (JSONArray) oldConfigCode.get("packages");
+        JSONArray oldConfigPackages = JsonHelper.getJsonArray(oldConfigCode, "packages");
         for (ProjectPackage mainPackage : main.getComponents()) {
             this.add(new ConfigPackage(mainPackage, JsonHelper.getJsonObjectFromArray(mainPackage.getName(), oldConfigPackages), this.test.getPackage(mainPackage.getName())));
         }

@@ -38,11 +38,11 @@ public class ConfigClazz extends ConfigCodeFile {
     }
 
     private void build() {
-        JSONArray oldConfigConstructors = (JSONArray) jsonClazz.get("constructors");
+        JSONArray oldConfigConstructors = JsonHelper.getJsonArray(jsonClazz, "constructors");
         for (ProjectConstructorMember constructor : this.projectClazz.getConstructors()) {
             this.constructors.add(new ConfigConstructorMember(constructor, JsonHelper.getJsonObjectFromArray(projectClazz.getName(), oldConfigConstructors), this.testClazz.getTestMethod(constructor.getNameWithParams())));
         }
-        JSONArray oldConfigMethods = (JSONArray) jsonClazz.get("methods");
+        JSONArray oldConfigMethods = JsonHelper.getJsonArray(jsonClazz, "methods");
         for (ProjectMethodMember method : this.projectClazz.getMethods()) {
             this.methods.add(new ConfigMethodMember(method, JsonHelper.getJsonObjectFromArray(projectClazz.getName(), oldConfigMethods), this.testClazz.getTestMethod(method.getNameWithParams())));
         }

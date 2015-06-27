@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import util.Capitalizer;
 import code.project.ProjectClazz;
 import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;
@@ -68,17 +69,17 @@ public class TestWriter implements ProjectVisitor {
     public void visit(ProjectMethodMember methodMember) {
         try {
             writer.write(this.printTabs(1) + "@Test\n");
-            writer.write(this.printTabs(1) + "public void test" + methodMember.getNameWithParams());
+            writer.write(this.printTabs(1) + "public void test" + Capitalizer.capitalize(methodMember.getNameWithParams()));
             writer.write("() {\n");
             writer.write(this.printTabs(2) + "while (data.hasNext()) {\n");
             writer.write(this.printTabs(3) + "data.next();\n");
-            writer.write(this.printTabs(3) + "assertEquals(data.get" + methodMember.getNameWithParams() + "Result(), data.get"
+            writer.write(this.printTabs(3) + "assertEquals(data.get" + Capitalizer.capitalize(methodMember.getNameWithParams()) + "Result(), data.get"
                     + methodMember.getProjectClazzName() + "()." + methodMember.getName().substring(0, 1).toLowerCase() + methodMember.getName().substring(1) + "(");
             for (int i = 0; i < methodMember.getParametersType().size()-1; i++) {
-                writer.write("data.get"+methodMember.getNameWithParams()+"Parameter"+i+"(),");
+                writer.write("data.get"+Capitalizer.capitalize(methodMember.getNameWithParams())+"Parameter"+i+"(),");
             }
             if (methodMember.getParametersType().size() > 0) {
-            	writer.write("data.get"+methodMember.getNameWithParams()+"Parameter"+ (methodMember.getParametersType().size()-1)+"()");
+            	writer.write("data.get"+Capitalizer.capitalize(methodMember.getNameWithParams())+"Parameter"+ (methodMember.getParametersType().size()-1)+"()");
             }
             writer.write("));\n");
             writer.write(this.printTabs(2) + "}\n");
