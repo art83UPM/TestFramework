@@ -1,13 +1,14 @@
 package code.config;
 
+import org.json.simple.JSONObject;
+
 import code.project.ProjectMember;
 import code.project.ProjectMethodMember;
 
 public class ConfigMethodMember extends ConfigMember {
 
-	public ConfigMethodMember(ProjectMember projectMember, ConfigClazz configClazz, ProjectMethodMember projectMethodMember) {
-        super(projectMember, configClazz);
-        this.setTest(projectMethodMember.getNameWithParams());
+	public ConfigMethodMember(ProjectMember projectMember, JSONObject oldConfigMethod, ProjectMethodMember projectMethodMember) {
+        super(projectMember, oldConfigMethod, projectMethodMember);
     }
 
     @Override

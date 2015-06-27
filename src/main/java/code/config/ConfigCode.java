@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import util.JsonHelper;
 import code.project.ProjectCode;
 import code.project.ProjectPackage;
 
@@ -40,11 +41,10 @@ public class ConfigCode {
     }
 
     private void build() {
+        JSONArray oldConfigPackages = (JSONArray) oldConfigCode.get("packages");
         for (ProjectPackage mainPackage : main.getComponents()) {
-            this.add(new ConfigPackage(mainPackage, null, this.test.getPackage(mainPackage.getName())));
+            this.add(new ConfigPackage(mainPackage, JsonHelper.getJsonObjectFromArray(mainPackage.getName(), oldConfigPackages), this.test.getPackage(mainPackage.getName())));
         }
-        // TODO test
-        // TODO oldConfig
     }
 
     public void add(ConfigPackage component) {

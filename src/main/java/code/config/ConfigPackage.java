@@ -6,8 +6,8 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import util.JsonHelper;
 import code.project.ProjectClazz;
-import code.project.ProjectCodeFile;
 import code.project.ProjectPackage;
 
 public class ConfigPackage extends ConfigCodeFile {
@@ -16,7 +16,7 @@ public class ConfigPackage extends ConfigCodeFile {
 
     private ProjectPackage testPackage;
 
-    private ConfigPackage parentPackage;
+    private JSONObject jsonPackage;
 
     private List<ConfigPackage> packages;
 
@@ -24,9 +24,9 @@ public class ConfigPackage extends ConfigCodeFile {
 
     private List<ConfigCodeFile> components;
 
-    public ConfigPackage(ProjectPackage projectPackage, ConfigPackage parentPackage, ProjectPackage testPackage) {
+    public ConfigPackage(ProjectPackage projectPackage, JSONObject oldConfigPackage, ProjectPackage testPackage) {
         this.projectPackage = projectPackage;
-        this.parentPackage = parentPackage;
+        this.jsonPackage = oldConfigPackage;
         this.testPackage = testPackage;
         this.name = this.projectPackage.getName();
         this.packages = new ArrayList<ConfigPackage>();
@@ -36,11 +36,13 @@ public class ConfigPackage extends ConfigCodeFile {
     }
 
     private void build() {
+        JSONArray oldConfigPackages = (JSONArray) jsonPackage.get("packages");
         for (ProjectPackage projectPackage : this.projectPackage.getPackages()) {
-            this.packages.add(new ConfigPackage(projectPackage, this, this.testPackage.getPackage(projectPackage.getName())));
+            this.packages.add(new ConfigPackage(projectPackage, JsonHelper.getJsonObjectFromArray(projectPackage.getName(), oldConfigPackages), this.testPackage.getPackage(projectPackage.getName())));
         }
+        JSONArray oldConfigClazzes = (JSONArray) jsonPackage.get("classes");
         for (ProjectClazz clazz : this.projectPackage.getClazzes()) {
-            this.clazzes.add(new ConfigClazz(clazz, this, this.testPackage.getClazz(clazz.getName())));
+            this.clazzes.add(new ConfigClazz(clazz, JsonHelper.getJsonObjectFromArray(projectPackage.getName(), oldConfigClazzes), this.testPackage.getClazz(clazz.getName())));
         }
         this.components.addAll(packages);
         this.components.addAll(clazzes);
@@ -50,8 +52,8 @@ public class ConfigPackage extends ConfigCodeFile {
         return name;
     }
 
-    public ConfigPackage getParentPackage() {
-        return parentPackage;
+    public JSONObject getJsonPackage() {
+        return jsonPackage;
     }
 
     @SuppressWarnings("unchecked")

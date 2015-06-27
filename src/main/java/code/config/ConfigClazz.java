@@ -6,6 +6,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import util.JsonHelper;
 import code.project.ProjectClazz;
 import code.project.ProjectCodeFile;
 import code.project.ProjectConstructorMember;
@@ -17,7 +18,7 @@ public class ConfigClazz extends ConfigCodeFile {
 
     private ProjectClazz testClazz;
 
-    private ConfigPackage parentPackage;
+    private JSONObject jsonClazz;
 
     private List<ConfigMember> components;
 
@@ -25,8 +26,8 @@ public class ConfigClazz extends ConfigCodeFile {
 
     private List<ConfigMethodMember> methods;
 
-    public ConfigClazz(ProjectCodeFile component, ConfigPackage parentPackage, ProjectClazz testClazz) {
-        this.parentPackage = parentPackage;
+    public ConfigClazz(ProjectCodeFile component, JSONObject oldConfigClazz, ProjectClazz testClazz) {
+        this.jsonClazz = oldConfigClazz;
         this.projectClazz = (ProjectClazz) component;
         this.testClazz = testClazz;
         this.name = this.projectClazz.getName();
@@ -37,11 +38,13 @@ public class ConfigClazz extends ConfigCodeFile {
     }
 
     private void build() {
+        JSONArray oldConfigConstructors = (JSONArray) jsonClazz.get("constructors");
         for (ProjectConstructorMember constructor : this.projectClazz.getConstructors()) {
-            this.constructors.add(new ConfigConstructorMember(constructor, this, this.testClazz.getTestMethod(constructor.getNameWithParams())));
+            this.constructors.add(new ConfigConstructorMember(constructor, JsonHelper.getJsonObjectFromArray(projectClazz.getName(), oldConfigConstructors), this.testClazz.getTestMethod(constructor.getNameWithParams())));
         }
+        JSONArray oldConfigMethods = (JSONArray) jsonClazz.get("methods");
         for (ProjectMethodMember method : this.projectClazz.getMethods()) {
-            this.methods.add(new ConfigMethodMember(method, this, this.testClazz.getTestMethod(method.getNameWithParams())));
+            this.methods.add(new ConfigMethodMember(method, JsonHelper.getJsonObjectFromArray(projectClazz.getName(), oldConfigMethods), this.testClazz.getTestMethod(method.getNameWithParams())));
         }
         components.addAll(this.constructors);
         components.addAll(this.methods);

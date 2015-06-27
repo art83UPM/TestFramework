@@ -3,25 +3,27 @@ package code.config;
 import org.json.simple.JSONObject;
 
 import code.project.ProjectMember;
+import code.project.ProjectMethodMember;
 
 public abstract class ConfigMember {
 
-    private ConfigClazz parentClazz;
+    private JSONObject jsonMember;
 
     private ProjectMember projectMember;
     
     private String name;
 
-    private String status;
+    private ConfigStatus status;
 
     private String test;
     
-    public ConfigMember(ProjectMember projectMember, ConfigClazz configClazz) {
-        this.parentClazz = configClazz;
+    public ConfigMember(ProjectMember projectMember, JSONObject oldConfigMember, ProjectMethodMember projectMethodMember) {
+        this.jsonMember= oldConfigMember;
         this.projectMember = projectMember;
         this.name = projectMember.getNameWithParams();
-        this.status = "default";
-        this.test = "";
+        this.status = ConfigStatus.GENERATE;
+        this.setStatus((String) oldConfigMember.get("status"));
+        this.test = projectMethodMember.getNameWithParams();
     }
 
     public String getName() {
@@ -29,11 +31,15 @@ public abstract class ConfigMember {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        for (ConfigStatus configStatus : ConfigStatus.values()) {
+            if (status.equalsIgnoreCase(configStatus.name())) {
+                this.status = configStatus;
+            }
+        }
     }
 
     public String getStatus() {
-        return status;
+        return status.name();
     }
 
     public void setTest(String test) {
@@ -48,7 +54,7 @@ public abstract class ConfigMember {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", this.name);
-        json.put("status", this.status);
+        json.put("status", this.status.name());
         json.put("test", this.test);
         return json;
     }
