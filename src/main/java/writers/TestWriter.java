@@ -65,8 +65,8 @@ public class TestWriter implements ProjectVisitor {
                 writer.write(this.printTabs(3) + "fail(\"Not yet implemented\");\n");
                 writer.write(this.printTabs(2) + "}\n");
                 writer.write(this.printTabs(1) + "}\n\n");
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException | NullPointerException e) {
+                System.out.println("Can't generate constructor " + constructorMember.getNameWithParams() + " because class " + constructorMember.getProjectClazz().getName() + " is not marked as GENERATE.");
             }
         }
     }
@@ -92,8 +92,8 @@ public class TestWriter implements ProjectVisitor {
                 writer.write("));\n");
                 writer.write(this.printTabs(2) + "}\n");
                 writer.write(this.printTabs(1) + "}\n\n");
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException | NullPointerException e) {
+                System.out.println("Can't generate method " + methodMember.getNameWithParams() + " because class " + methodMember.getProjectClazz().getName() + " is not marked as GENERATE.");
             }
         }
     }

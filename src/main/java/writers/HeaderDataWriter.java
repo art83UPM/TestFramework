@@ -27,30 +27,40 @@ public class HeaderDataWriter implements ProjectVisitor {
     }
 
     public void visit(ProjectConstructorMember constructorMember) {
-        if (constructorMember.getConfigMember().getStatus() == ConfigStatus.GENERATE) {
-            dataWriter.setSheet("Constructors");
-            String header = "get" + constructorMember.getNameWithParams();
-            if (constructorMember.getParameterNumber() == 0) {
-                dataWriter.write(header);
-            } else {
-                for (int i = 0; i < constructorMember.getParameterNumber(); i++) {
-                    dataWriter.write(header + "Parameter" + i);
+        try {
+            if (constructorMember.getConfigMember().getStatus() == ConfigStatus.GENERATE) {
+                dataWriter.setSheet("Constructors");
+                String header = "get" + constructorMember.getNameWithParams();
+                if (constructorMember.getParameterNumber() == 0) {
+                    dataWriter.write(header);
+                } else {
+                    for (int i = 0; i < constructorMember.getParameterNumber(); i++) {
+                        dataWriter.write(header + "Parameter" + i);
+                    }
                 }
             }
+        } catch (NullPointerException e) {
+            System.out.println("Can't generate constructor " + constructorMember.getNameWithParams() + " because class "
+                    + constructorMember.getProjectClazz().getName() + " is not marked as GENERATE.");
         }
     }
 
     public void visit(ProjectMethodMember methodMember) {
-        if (methodMember.getConfigMember().getStatus() == ConfigStatus.GENERATE) {
-            String header = "get" + methodMember.getName();
-            for (ProjectParameterMember parameterMember : methodMember.getParametersType()) {
-                header += parameterMember.getType();
+        try {
+            if (methodMember.getConfigMember().getStatus() == ConfigStatus.GENERATE) {
+                String header = "get" + methodMember.getName();
+                for (ProjectParameterMember parameterMember : methodMember.getParametersType()) {
+                    header += parameterMember.getType();
+                }
+                dataWriter.setSheet(header);
+                for (int i = 0; i < methodMember.getParametersType().size(); i++) {
+                    dataWriter.write(header + "Parameter" + i);
+                }
+                dataWriter.write(header + "Result");
             }
-            dataWriter.setSheet(header);
-            for (int i = 0; i < methodMember.getParametersType().size(); i++) {
-                dataWriter.write(header + "Parameter" + i);
-            }
-            dataWriter.write(header + "Result");
+        } catch (NullPointerException e) {
+            System.out.println("Can't generate method " + methodMember.getNameWithParams() + " because class "
+                    + methodMember.getProjectClazz().getName() + " is not marked as GENERATE.");
         }
     }
 
@@ -59,7 +69,9 @@ public class HeaderDataWriter implements ProjectVisitor {
     }
 
     public void close() {
-        dataWriter.save();
+        if (dataWriter != null) {
+            dataWriter.save();
+        }
     }
 
 }

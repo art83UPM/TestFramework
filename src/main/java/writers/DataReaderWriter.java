@@ -194,8 +194,8 @@ public class DataReaderWriter implements ProjectVisitor {
                 }
                 writer.write(this.printTabs(1) + "}\n\n");
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException | NullPointerException e) {
+                System.out.println("Can't generate constructor " + constructorMember.getNameWithParams() + " because class " + constructorMember.getProjectClazz().getName() + " is not marked as GENERATE.");
             }
         }
     }
@@ -242,15 +242,14 @@ public class DataReaderWriter implements ProjectVisitor {
                     writer.write(this.printTabs(1) + "}\n\n");
                 }
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException | NullPointerException e) {
+                System.out.println("Can't generate method " + methodMember.getNameWithParams() + " because class " + methodMember.getProjectClazz().getName() + " is not marked as GENERATE.");
             }
         }
     }
 
     @Override
     public void visit(ProjectPackage package1) {
-        // TODO Auto-generated method stub
 
     }
 
