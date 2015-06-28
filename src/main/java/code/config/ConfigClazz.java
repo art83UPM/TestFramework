@@ -19,6 +19,8 @@ public class ConfigClazz extends ConfigCodeFile {
     private ProjectClazz testClazz;
 
     private JSONObject jsonClazz;
+    
+    private ConfigStatus status;
 
     private List<ConfigMember> components;
 
@@ -31,6 +33,9 @@ public class ConfigClazz extends ConfigCodeFile {
         this.projectClazz = (ProjectClazz) component;
         this.testClazz = testClazz;
         this.name = this.projectClazz.getName();
+        this.projectClazz.setConfigMember(this);
+        this.setStatus(ConfigStatus.NONE);
+        this.setStatus(JsonHelper.getString(oldConfigClazz, "status"));
         this.constructors = new ArrayList<ConfigConstructorMember>();
         this.methods = new ArrayList<ConfigMethodMember>();
         this.components = new ArrayList<ConfigMember>();
@@ -65,11 +70,24 @@ public class ConfigClazz extends ConfigCodeFile {
     public String getName() {
         return name;
     }
+    
+    public void setStatus(String status) {
+        for (ConfigStatus configStatus : ConfigStatus.values()) {
+            if (status != null && status.equalsIgnoreCase(configStatus.name())) {
+                this.status = configStatus;
+            }
+        }
+    }
+    
+    public void setStatus(ConfigStatus status) {
+        this.setStatus(status.name());
+    }
 
     @SuppressWarnings("unchecked")
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", this.name);
+        json.put("status", this.status);
         JSONArray constructors = new JSONArray();
         for (ConfigConstructorMember constructor : this.constructors) {
             constructors.add(constructor.toJson());
@@ -81,6 +99,10 @@ public class ConfigClazz extends ConfigCodeFile {
         }
         json.put("methods", methods);
         return json;
+    }
+
+    public ConfigStatus getStatus() {
+        return this.status;
     }
 
 }

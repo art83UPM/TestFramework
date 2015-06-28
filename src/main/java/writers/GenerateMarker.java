@@ -16,7 +16,9 @@ public class GenerateMarker implements ProjectVisitor {
 
     @Override
     public void visit(ProjectClazz projectClazz) {
-
+        if (projectClazz.getConfigMember().getStatus() == ConfigStatus.NONE) {
+            projectClazz.getConfigMember().setStatus(ConfigStatus.GENERATE);
+        }
     }
 
     @Override

@@ -50,91 +50,94 @@ public class DataReaderWriter implements ProjectVisitor {
 
     @Override
     public void visit(ProjectClazz clazz) {
-        this.file = new File(path + clazz.getPackagePath() + File.separator + "_dataReaders" + File.separator + clazz.getName()
-                + "TestDataReader.java");
-        this.file.getParentFile().mkdirs();
-        try {
-            this.file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            writer = new BufferedWriter(new FileWriter(file));
-            writer.write("package " + clazz.getProjectPackage().getName() + "._dataReaders;\n\n");
-            writer.write("import readers.TestDataReader;\n");
-            writer.write("import readers.exceptions.EmptyDataReaderException;\n");
-            writer.write("import readers.exceptions.InvalidDataReaderException;\n");
-            writer.write("import " + clazz.getProjectPackage().getName() + "." + clazz.getName() + ";\n\n");
-            writer.write("public class " + clazz.getName() + "TestDataReader extends TestDataReader {\n\n");
-            writer.write(this.printTabs(1) + "private " + clazz.getName() + " " + clazz.getName().toLowerCase() + ";\n\n");
-            writer.write(this.printTabs(1) + "private final static String[] CONSTRUCTOR_NAMES = {");
-            int i = 0;
-            for (ProjectConstructorMember constructor : clazz.getConstructorMemberList()) {
-                writer.write("\"" + constructor.getNameWithParams() + "\"");
-                if (i++ < clazz.getConstructorMemberList().size() - 1) {
-                    writer.write(", ");
+        if (clazz.getConfigMember().getStatus() == ConfigStatus.GENERATE) {
+            this.file = new File(path + clazz.getPackagePath() + File.separator + "_dataReaders" + File.separator + clazz.getName()
+                    + "TestDataReader.java");
+            this.file.getParentFile().mkdirs();
+            try {
+                this.file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                writer = new BufferedWriter(new FileWriter(file));
+                writer.write("package " + clazz.getProjectPackage().getName() + "._dataReaders;\n\n");
+                writer.write("import readers.TestDataReader;\n");
+                writer.write("import readers.exceptions.EmptyDataReaderException;\n");
+                writer.write("import readers.exceptions.InvalidDataReaderException;\n");
+                writer.write("import " + clazz.getProjectPackage().getName() + "." + clazz.getName() + ";\n\n");
+                writer.write("public class " + clazz.getName() + "TestDataReader extends TestDataReader {\n\n");
+                writer.write(this.printTabs(1) + "private " + clazz.getName() + " " + clazz.getName().toLowerCase() + ";\n\n");
+                writer.write(this.printTabs(1) + "private final static String[] CONSTRUCTOR_NAMES = {");
+                int i = 0;
+                for (ProjectConstructorMember constructor : clazz.getConstructorMemberList()) {
+                    writer.write("\"" + constructor.getNameWithParams() + "\"");
+                    if (i++ < clazz.getConstructorMemberList().size() - 1) {
+                        writer.write(", ");
+                    }
                 }
+                writer.write("};\n\n");
+
+                writer.write(this.printTabs(1) + "public " + clazz.getName() + "TestDataReader() {\n");
+                String dataSheetPath = this.resourcesPath + clazz.getPackagePath() + File.separator + clazz.getName() + "TestData.xlsx";
+                dataSheetPath = dataSheetPath.replace("\\", "\\\\");
+                writer.write(this.printTabs(2) + "super(\"" + dataSheetPath + "\");\n");
+                writer.write(this.printTabs(1) + "}\n\n");
+
+                writer.write(this.printTabs(1) + "public boolean hasNext(String constructorName) {\n");
+                writer.write(this.printTabs(2) + "while (this.hasNext()) {\n");
+                writer.write(this.printTabs(3) + "this.getDataReader().next();\n");
+                writer.write(this.printTabs(3) + "if (this.existsConstructor(constructorName)) {\n");
+                writer.write(this.printTabs(4) + "return true;\n");
+                writer.write(this.printTabs(3) + "}\n");
+                writer.write(this.printTabs(2) + "}\n");
+                writer.write(this.printTabs(2) + "return false;\n");
+                writer.write(this.printTabs(1) + "}\n\n");
+
+                writer.write(this.printTabs(1) + "public void next() {\n");
+                writer.write(this.printTabs(2) + "this.getDataReader().next();\n");
+                writer.write(this.printTabs(2) + "int i = 0;\n");
+                writer.write(this.printTabs(2) + "this." + Capitalizer.unCapitalize(clazz.getName()) + "= null;\n");
+                writer.write(this.printTabs(2)
+                        + "while (i < CONSTRUCTOR_NAMES.length && !this.existsConstructor(CONSTRUCTOR_NAMES[i])) {\n");
+                writer.write(this.printTabs(3) + "i++;\n");
+                writer.write(this.printTabs(2) + "}\n");
+                writer.write(this.printTabs(2) + "this.construct(CONSTRUCTOR_NAMES[i]);\n");
+                writer.write(this.printTabs(1) + "}\n\n");
+
+                writer.write(this.printTabs(1) + "public void next(String constructorName) {\n");
+                writer.write(this.printTabs(2) + "this." + Capitalizer.unCapitalize(clazz.getName()) + "= null;\n");
+                writer.write(this.printTabs(2) + "this.construct(constructorName);\n");
+                writer.write(this.printTabs(1) + "}\n\n");
+
+                writer.write(this.printTabs(1) + "private boolean existsConstructor(String constructorName) {\n");
+                writer.write(this.printTabs(2) + "switch (constructorName) {\n");
+                for (ProjectConstructorMember constructor : clazz.getConstructorMemberList()) {
+                    writer.write(this.printTabs(2) + "case \"" + constructor.getNameWithParams() + "\":\n");
+                    writer.write(this.printTabs(3) + "return existsConstructor" + constructor.getNameWithParams() + "();\n\n");
+                }
+                writer.write(this.printTabs(2) + "default:\n");
+                writer.write(this.printTabs(3) + "return false;\n");
+                writer.write(this.printTabs(2) + "}\n");
+                writer.write(this.printTabs(1) + "}\n\n");
+
+                writer.write(this.printTabs(1) + "private void construct(String constructorName) {\n");
+                writer.write(this.printTabs(2) + "switch (constructorName) {\n");
+                for (ProjectConstructorMember constructor : clazz.getConstructorMemberList()) {
+                    writer.write(this.printTabs(2) + "case \"" + constructor.getNameWithParams() + "\":\n");
+                    writer.write(this.printTabs(3) + "construct" + constructor.getNameWithParams() + "();\n");
+                    writer.write(this.printTabs(3) + "break;\n\n");
+                }
+                writer.write(this.printTabs(2) + "}\n");
+                writer.write(this.printTabs(1) + "}\n\n");
+
+                writer.write(this.printTabs(1) + "public " + clazz.getName() + " get" + clazz.getName() + "() {\n");
+                writer.write(this.printTabs(2) + "return this." + clazz.getName().toLowerCase() + ";\n");
+                writer.write(this.printTabs(1) + "}\n\n");
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
-            writer.write("};\n\n");
-
-            writer.write(this.printTabs(1) + "public " + clazz.getName() + "TestDataReader() {\n");
-            String dataSheetPath = this.resourcesPath + clazz.getPackagePath() + File.separator + clazz.getName() + "TestData.xlsx";
-            dataSheetPath = dataSheetPath.replace("\\", "\\\\");
-            writer.write(this.printTabs(2) + "super(\"" + dataSheetPath + "\");\n");
-            writer.write(this.printTabs(1) + "}\n\n");
-
-            writer.write(this.printTabs(1) + "public boolean hasNext(String constructorName) {\n");
-            writer.write(this.printTabs(2) + "while (this.hasNext()) {\n");
-            writer.write(this.printTabs(3) + "this.getDataReader().next();\n");
-            writer.write(this.printTabs(3) + "if (this.existsConstructor(constructorName)) {\n");
-            writer.write(this.printTabs(4) + "return true;\n");
-            writer.write(this.printTabs(3) + "}\n");
-            writer.write(this.printTabs(2) + "}\n");
-            writer.write(this.printTabs(2) + "return false;\n");
-            writer.write(this.printTabs(1) + "}\n\n");
-
-            writer.write(this.printTabs(1) + "public void next() {\n");
-            writer.write(this.printTabs(2) + "this.getDataReader().next();\n");
-            writer.write(this.printTabs(2) + "int i = 0;\n");
-            writer.write(this.printTabs(2) + "this." + Capitalizer.unCapitalize(clazz.getName()) + "= null;\n");
-            writer.write(this.printTabs(2) + "while (i < CONSTRUCTOR_NAMES.length && !this.existsConstructor(CONSTRUCTOR_NAMES[i])) {\n");
-            writer.write(this.printTabs(3) + "i++;\n");
-            writer.write(this.printTabs(2) + "}\n");
-            writer.write(this.printTabs(2) + "this.construct(CONSTRUCTOR_NAMES[i]);\n");
-            writer.write(this.printTabs(1) + "}\n\n");
-
-            writer.write(this.printTabs(1) + "public void next(String constructorName) {\n");
-            writer.write(this.printTabs(2) + "this." + Capitalizer.unCapitalize(clazz.getName()) + "= null;\n");
-            writer.write(this.printTabs(2) + "this.construct(constructorName);\n");
-            writer.write(this.printTabs(1) + "}\n\n");
-
-            writer.write(this.printTabs(1) + "private boolean existsConstructor(String constructorName) {\n");
-            writer.write(this.printTabs(2) + "switch (constructorName) {\n");
-            for (ProjectConstructorMember constructor : clazz.getConstructorMemberList()) {
-                writer.write(this.printTabs(2) + "case \"" + constructor.getNameWithParams() + "\":\n");
-                writer.write(this.printTabs(3) + "return existsConstructor" + constructor.getNameWithParams() + "();\n\n");
-            }
-            writer.write(this.printTabs(2) + "default:\n");
-            writer.write(this.printTabs(3) + "return false;\n");
-            writer.write(this.printTabs(2) + "}\n");
-            writer.write(this.printTabs(1) + "}\n\n");
-
-            writer.write(this.printTabs(1) + "private void construct(String constructorName) {\n");
-            writer.write(this.printTabs(2) + "switch (constructorName) {\n");
-            for (ProjectConstructorMember constructor : clazz.getConstructorMemberList()) {
-                writer.write(this.printTabs(2) + "case \"" + constructor.getNameWithParams() + "\":\n");
-                writer.write(this.printTabs(3) + "construct" + constructor.getNameWithParams() + "();\n");
-                writer.write(this.printTabs(3) + "break;\n\n");
-            }
-            writer.write(this.printTabs(2) + "}\n");
-            writer.write(this.printTabs(1) + "}\n\n");
-
-            writer.write(this.printTabs(1) + "public " + clazz.getName() + " get" + clazz.getName() + "() {\n");
-            writer.write(this.printTabs(2) + "return this." + clazz.getName().toLowerCase() + ";\n");
-            writer.write(this.printTabs(1) + "}\n\n");
-
-        } catch (IOException e1) {
-            e1.printStackTrace();
         }
     }
 
@@ -252,11 +255,13 @@ public class DataReaderWriter implements ProjectVisitor {
     }
 
     public void close() {
-        try {
-            writer.write("}\n\n");
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (writer != null) {
+            try {
+                writer.write("}\n\n");
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

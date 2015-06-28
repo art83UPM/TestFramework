@@ -8,6 +8,7 @@ import java.util.List;
 
 import util.Capitalizer;
 import code.Margin;
+import code.config.ConfigClazz;
 
 public class ProjectClazz extends ProjectCodeFile {
 
@@ -15,10 +16,12 @@ public class ProjectClazz extends ProjectCodeFile {
 
     private ProjectPackage projectPackage;
 
+    private ConfigClazz configClazz;
+    
     private List<ProjectConstructorMember> constructors;
 
     private List<ProjectMethodMember> methods;
-    
+
     private List<ProjectMember> memberList;
 
     public ProjectClazz(Class<?> clazz, ProjectPackage projectPackage) {
@@ -44,7 +47,7 @@ public class ProjectClazz extends ProjectCodeFile {
             Margin.instance().dec();
         }
         for (Method method : clazz.getDeclaredMethods()) {
-            Margin.instance().inc();        
+            Margin.instance().inc();
             methods.add(new ProjectMethodMember(method, this));
             Margin.instance().dec();
         }
@@ -69,7 +72,7 @@ public class ProjectClazz extends ProjectCodeFile {
     }
 
     @Override
-    public boolean exist(ProjectMember projectMember) {        
+    public boolean exist(ProjectMember projectMember) {
         System.out.println(Margin.instance().tabs() + "compruebo si en la clase " + this.getName() + " está el método: "
                 + projectMember.getName() + " --> ");
         if (this.getName().equals(projectMember.getProjectClazz().getName())) {
@@ -97,19 +100,19 @@ public class ProjectClazz extends ProjectCodeFile {
         }
         return true;
     }
-    
+
     public String getPackagePath() {
-    	return this.getProjectPackage().getName().replace(".", File.separator);
-	}
+        return this.getProjectPackage().getName().replace(".", File.separator);
+    }
 
     public List<ProjectConstructorMember> getConstructors() {
         return this.constructors;
     }
-    
+
     public List<ProjectMethodMember> getMethods() {
         return this.methods;
     }
-    
+
     public ProjectMethodMember getTestMethod(String name) {
         for (ProjectMethodMember method : methods) {
             if (method.getNameWithParams().equals("test" + Capitalizer.capitalize(name))) {
@@ -117,5 +120,13 @@ public class ProjectClazz extends ProjectCodeFile {
             }
         }
         return null;
+    }
+
+    public void setConfigMember(ConfigClazz configClazz) {
+        this.configClazz = configClazz;
+    }
+    
+    public ConfigClazz getConfigMember() {
+        return this.configClazz;
     }
 }

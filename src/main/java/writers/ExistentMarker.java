@@ -16,7 +16,9 @@ public class ExistentMarker implements ProjectVisitor {
 
     @Override
     public void visit(ProjectClazz projectClazz) {
-
+        if (projectClazz.getConfigMember().getStatus() == ConfigStatus.GENERATE) {
+            projectClazz.getConfigMember().setStatus(ConfigStatus.EXISTENT);
+        }
     }
 
     @Override
