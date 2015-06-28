@@ -31,10 +31,7 @@ public class ProjectConstructorMember extends ProjectMember implements CodeCompo
     }
 	
     public void accept(ProjectVisitor visitor) {
-        if(this.getConfigMember().getStatus() == ConfigStatus.GENERATE) {
             visitor.visit(this);
-            this.getConfigMember().setStatus(ConfigStatus.EXISTENT);
-        }
     }
 
     @Override

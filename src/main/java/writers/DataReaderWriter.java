@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import util.Capitalizer;
+import code.config.ConfigStatus;
 import code.project.ProjectClazz;
 import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;
@@ -16,17 +17,12 @@ import code.project.ProjectParameterMember;
 import code.project.ProjectVisitor;
 
 public class DataReaderWriter implements ProjectVisitor {
-    
+
     private static Map<String, String> initializations;
-    
-    private static final String[][] mapData = {
-        {"int", "int result = 0;"},
-        {"String", "String result = null;"},
-        {"float", "float result = 0;"},
-        {"double", "double result = 0;"},
-        {"boolean", "boolean result = false;"}
-    };
-    
+
+    private static final String[][] mapData = { {"int", "int result = 0;"}, {"String", "String result = null;"},
+            {"float", "float result = 0;"}, {"double", "double result = 0;"}, {"boolean", "boolean result = false;"}};
+
     private File file;
 
     private String path;
@@ -54,7 +50,8 @@ public class DataReaderWriter implements ProjectVisitor {
 
     @Override
     public void visit(ProjectClazz clazz) {
-        this.file = new File(path + clazz.getPackagePath() + File.separator + "_dataReaders" + File.separator + clazz.getName()+ "TestDataReader.java");
+        this.file = new File(path + clazz.getPackagePath() + File.separator + "_dataReaders" + File.separator + clazz.getName()
+                + "TestDataReader.java");
         this.file.getParentFile().mkdirs();
         try {
             this.file.createNewFile();
@@ -143,96 +140,108 @@ public class DataReaderWriter implements ProjectVisitor {
 
     @Override
     public void visit(ProjectConstructorMember constructorMember) {
-        try {
-            writer.write(this.printTabs(1) + "private boolean existsConstructor" + constructorMember.getNameWithParams() + "() {\n");
-            writer.write(this.printTabs(2) + "try {\n");
-            if (constructorMember.getParameterNumber() == 0) {
-                writer.write(this.printTabs(3) + "String x = this.getString(\"get" + constructorMember.getNameWithParams() + "\");\n");
-                writer.write(this.printTabs(3) + "if (!x.equalsIgnoreCase(\"x\")) {\n");
-                writer.write(this.printTabs(4) + "throw new InvalidDataReaderException(\"Data under column \\\"get"
-                        + constructorMember.getNameWithParams()
-                        + "\\\" at row: \"+ this.getDataReader().getRow()+ \" should be x or X\");\n");
-                writer.write(this.printTabs(3) + "}\n");
-                writer.write(this.printTabs(2) + "} catch (InvalidDataReaderException e) {\n");
-                writer.write(this.printTabs(3) + "System.out.println(e.getMessage());\n");
-                writer.write(this.printTabs(3) + "System.exit(0);\n");
-            } else {
-                for (int i = 0; i < constructorMember.getParameterNumber(); i++) {
-                    writer.write(this.printTabs(3) + "this.getInt(\"get" + constructorMember.getNameWithParams() + "Parameter" + i
-                            + "\");\n");
-                }
-            }
-            writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {\n");
-            writer.write(this.printTabs(3) + "return false;\n");
-            writer.write(this.printTabs(2) + "}\n");
-            writer.write(this.printTabs(2) + "return true;\n");
-            writer.write(this.printTabs(1) + "}\n\n");
-
-            writer.write(this.printTabs(1) + "private void construct" + constructorMember.getNameWithParams() + "() {\n");
-            if (constructorMember.getParameterNumber() == 0) {
-                writer.write(this.printTabs(2) + "this." + Capitalizer.unCapitalize(constructorMember.getName()) + "= new "
-                        + constructorMember.getName() + "();\n");
-            } else {
+        if (constructorMember.getConfigMember().getStatus() == ConfigStatus.GENERATE) {
+            try {
+                writer.write(this.printTabs(1) + "private boolean existsConstructor" + constructorMember.getNameWithParams() + "() {\n");
                 writer.write(this.printTabs(2) + "try {\n");
-                for (int j = 0; j < constructorMember.getParametersType().size(); j++) {
-                    ProjectParameterMember parameter = constructorMember.getParametersType().get(j);
-                    writer.write(this.printTabs(3) + parameter.getType() + " " + constructorMember.getNameWithParams() + "Parameter" + j
-                            + " = this.get" + Capitalizer.capitalize(parameter.getType()) + "(\"get"
-                            + constructorMember.getNameWithParams() + "Parameter" + j + "\");\n");
-                }
-                writer.write(this.printTabs(2) + "this." + Capitalizer.unCapitalize(constructorMember.getName()) + "= new "
-                        + constructorMember.getName() + "(");
-                for (int k = 0; k < constructorMember.getParametersType().size(); k++) {
-                    writer.write(constructorMember.getNameWithParams() + "Parameter" + k);
-                    if (k < constructorMember.getParametersType().size() - 1) {
-                        writer.write(", ");
+                if (constructorMember.getParameterNumber() == 0) {
+                    writer.write(this.printTabs(3) + "String x = this.getString(\"get" + constructorMember.getNameWithParams() + "\");\n");
+                    writer.write(this.printTabs(3) + "if (!x.equalsIgnoreCase(\"x\")) {\n");
+                    writer.write(this.printTabs(4) + "throw new InvalidDataReaderException(\"Data under column \\\"get"
+                            + constructorMember.getNameWithParams()
+                            + "\\\" at row: \"+ this.getDataReader().getRow()+ \" should be x or X\");\n");
+                    writer.write(this.printTabs(3) + "}\n");
+                    writer.write(this.printTabs(2) + "} catch (InvalidDataReaderException e) {\n");
+                    writer.write(this.printTabs(3) + "System.out.println(e.getMessage());\n");
+                    writer.write(this.printTabs(3) + "System.exit(0);\n");
+                } else {
+                    for (int i = 0; i < constructorMember.getParameterNumber(); i++) {
+                        writer.write(this.printTabs(3) + "this.getInt(\"get" + constructorMember.getNameWithParams() + "Parameter" + i
+                                + "\");\n");
                     }
                 }
-                writer.write(");\n");
-                writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {}\n");
-            }
-            writer.write(this.printTabs(1) + "}\n\n");
+                writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {\n");
+                writer.write(this.printTabs(3) + "return false;\n");
+                writer.write(this.printTabs(2) + "}\n");
+                writer.write(this.printTabs(2) + "return true;\n");
+                writer.write(this.printTabs(1) + "}\n\n");
 
-        } catch (IOException e) {
-            e.printStackTrace();
+                writer.write(this.printTabs(1) + "private void construct" + constructorMember.getNameWithParams() + "() {\n");
+                if (constructorMember.getParameterNumber() == 0) {
+                    writer.write(this.printTabs(2) + "this." + Capitalizer.unCapitalize(constructorMember.getName()) + "= new "
+                            + constructorMember.getName() + "();\n");
+                } else {
+                    writer.write(this.printTabs(2) + "try {\n");
+                    for (int j = 0; j < constructorMember.getParametersType().size(); j++) {
+                        ProjectParameterMember parameter = constructorMember.getParametersType().get(j);
+                        writer.write(this.printTabs(3) + parameter.getType() + " " + constructorMember.getNameWithParams() + "Parameter"
+                                + j + " = this.get" + Capitalizer.capitalize(parameter.getType()) + "(\"get"
+                                + constructorMember.getNameWithParams() + "Parameter" + j + "\");\n");
+                    }
+                    writer.write(this.printTabs(2) + "this." + Capitalizer.unCapitalize(constructorMember.getName()) + "= new "
+                            + constructorMember.getName() + "(");
+                    for (int k = 0; k < constructorMember.getParametersType().size(); k++) {
+                        writer.write(constructorMember.getNameWithParams() + "Parameter" + k);
+                        if (k < constructorMember.getParametersType().size() - 1) {
+                            writer.write(", ");
+                        }
+                    }
+                    writer.write(");\n");
+                    writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {}\n");
+                }
+                writer.write(this.printTabs(1) + "}\n\n");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void visit(ProjectMethodMember methodMember) {
-        try {
-            writer.write(this.printTabs(1) + "public "+ methodMember.getReturnType() +" get"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "Result() {\n");
-            writer.write(this.printTabs(2) + "this.setTestTarget(\"test"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "\");\n");
-            writer.write(this.printTabs(2) + "this.getDataReader().next();\n");
-            writer.write(this.printTabs(2) + initializations.get(methodMember.getReturnType()) + "\n");
-            writer.write(this.printTabs(2) + "try {\n");
-            writer.write(this.printTabs(3) + "result = this.get" + Capitalizer.capitalize(methodMember.getReturnType())+"(\"get"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "Result\");\n");
-            writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {\n");
-            writer.write(this.printTabs(3) + "System.out.println(\"Error in " +"get"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "Result\");\n");
-            writer.write(this.printTabs(3) + "System.out.println(e.getMessage());\n");
-            writer.write(this.printTabs(3) + "System.exit(0);\n");
-            writer.write(this.printTabs(2) + "}\n");
-            writer.write(this.printTabs(2) + "return result;\n");
-            writer.write(this.printTabs(1) + "}\n\n");
-
-            for (int i = 0; i < methodMember.getParametersType().size(); i++) {
-                ProjectParameterMember parameter = methodMember.getParametersType().get(i);
-                writer.write(this.printTabs(1) + "public "+ parameter.getType() +" get"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "Parameter"+ i +"() {\n");
-                writer.write(this.printTabs(2) + "this.setTestTarget(\"test"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "\");\n");
-                writer.write(this.printTabs(2) + initializations.get(parameter.getType()) + "\n");
+        if (methodMember.getConfigMember().getStatus() == ConfigStatus.GENERATE) {
+            try {
+                writer.write(this.printTabs(1) + "public " + methodMember.getReturnType() + " get"
+                        + Capitalizer.capitalize(methodMember.getNameWithParams()) + "Result() {\n");
+                writer.write(this.printTabs(2) + "this.setTestTarget(\"test" + Capitalizer.capitalize(methodMember.getNameWithParams())
+                        + "\");\n");
+                writer.write(this.printTabs(2) + "this.getDataReader().next();\n");
+                writer.write(this.printTabs(2) + initializations.get(methodMember.getReturnType()) + "\n");
                 writer.write(this.printTabs(2) + "try {\n");
-                writer.write(this.printTabs(3) + "result = this.get" + Capitalizer.capitalize(parameter.getType())+"(\"get"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "Parameter" + i +"\");\n");
+                writer.write(this.printTabs(3) + "result = this.get" + Capitalizer.capitalize(methodMember.getReturnType()) + "(\"get"
+                        + Capitalizer.capitalize(methodMember.getNameWithParams()) + "Result\");\n");
                 writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {\n");
-                writer.write(this.printTabs(3) + "System.out.println(\"Error in " +"get"+ Capitalizer.capitalize(methodMember.getNameWithParams()) + "Parameter" + i +"\");\n");
+                writer.write(this.printTabs(3) + "System.out.println(\"Error in " + "get"
+                        + Capitalizer.capitalize(methodMember.getNameWithParams()) + "Result\");\n");
                 writer.write(this.printTabs(3) + "System.out.println(e.getMessage());\n");
                 writer.write(this.printTabs(3) + "System.exit(0);\n");
                 writer.write(this.printTabs(2) + "}\n");
                 writer.write(this.printTabs(2) + "return result;\n");
                 writer.write(this.printTabs(1) + "}\n\n");
+
+                for (int i = 0; i < methodMember.getParametersType().size(); i++) {
+                    ProjectParameterMember parameter = methodMember.getParametersType().get(i);
+                    writer.write(this.printTabs(1) + "public " + parameter.getType() + " get"
+                            + Capitalizer.capitalize(methodMember.getNameWithParams()) + "Parameter" + i + "() {\n");
+                    writer.write(this.printTabs(2) + "this.setTestTarget(\"test" + Capitalizer.capitalize(methodMember.getNameWithParams())
+                            + "\");\n");
+                    writer.write(this.printTabs(2) + initializations.get(parameter.getType()) + "\n");
+                    writer.write(this.printTabs(2) + "try {\n");
+                    writer.write(this.printTabs(3) + "result = this.get" + Capitalizer.capitalize(parameter.getType()) + "(\"get"
+                            + Capitalizer.capitalize(methodMember.getNameWithParams()) + "Parameter" + i + "\");\n");
+                    writer.write(this.printTabs(2) + "} catch (EmptyDataReaderException e) {\n");
+                    writer.write(this.printTabs(3) + "System.out.println(\"Error in " + "get"
+                            + Capitalizer.capitalize(methodMember.getNameWithParams()) + "Parameter" + i + "\");\n");
+                    writer.write(this.printTabs(3) + "System.out.println(e.getMessage());\n");
+                    writer.write(this.printTabs(3) + "System.exit(0);\n");
+                    writer.write(this.printTabs(2) + "}\n");
+                    writer.write(this.printTabs(2) + "return result;\n");
+                    writer.write(this.printTabs(1) + "}\n\n");
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

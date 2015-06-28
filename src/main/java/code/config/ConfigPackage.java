@@ -42,7 +42,7 @@ public class ConfigPackage extends ConfigCodeFile {
         }
         JSONArray oldConfigClazzes = JsonHelper.getJsonArray(jsonPackage, "classes");
         for (ProjectClazz clazz : this.projectPackage.getClazzes()) {
-            this.clazzes.add(new ConfigClazz(clazz, JsonHelper.getJsonObjectFromArray(projectPackage.getName(), oldConfigClazzes), this.testPackage.getClazz(clazz.getName())));
+            this.clazzes.add(new ConfigClazz(clazz, JsonHelper.getJsonObjectFromArray(clazz.getName(), oldConfigClazzes), this.testPackage.getClazz(clazz.getName())));
         }
         this.components.addAll(packages);
         this.components.addAll(clazzes);

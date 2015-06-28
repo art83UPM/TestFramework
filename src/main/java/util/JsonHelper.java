@@ -9,6 +9,9 @@ import java.io.IOException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class JsonHelper {
 
     private JsonHelper() {
@@ -47,19 +50,24 @@ public class JsonHelper {
         return false;
     }
 
-    public static JSONArray getJsonArray(JSONObject oldConfigCode, String string) {
+    public static JSONArray getJsonArray(JSONObject oldConfigCode, String name) {
         if (oldConfigCode == null) {
             return null;
         } else {
-            return (JSONArray) oldConfigCode.get("packages");
+            return (JSONArray) oldConfigCode.get(name);
         }
     }
 
-    public static String getString(JSONObject oldConfigMember, String string) {
+    public static String getString(JSONObject oldConfigMember, String name) {
         if (oldConfigMember == null) {
             return null;
         } else {
-            return (String) oldConfigMember.get("status");
+            return (String) oldConfigMember.get(name);
         }
+    }
+    
+    public static String prettyPrint(JSONObject json) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(json);
     }
 }

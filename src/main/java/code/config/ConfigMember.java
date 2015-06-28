@@ -14,12 +14,12 @@ public abstract class ConfigMember {
 
     private String test;
     
-    public ConfigMember(ProjectMember projectMember, JSONObject oldConfigMember, ProjectMethodMember projectMethodMember) {
+    public ConfigMember(ProjectMember projectMember, JSONObject oldConfigMember, ProjectMethodMember testMethodMember) {
         this.name = projectMember.getNameWithParams();
         projectMember.setConfigMember(this);
-        this.status = ConfigStatus.GENERATE;
+        this.setStatus(ConfigStatus.NONE);
         this.setStatus(JsonHelper.getString(oldConfigMember, "status"));
-        this.test = projectMethodMember.getNameWithParams();
+        this.setTest(testMethodMember);
     }
 
     public String getName() {
@@ -42,8 +42,12 @@ public abstract class ConfigMember {
         return status;
     }
 
-    public void setTest(String test) {
-        this.test = test;
+    public void setTest(ProjectMethodMember test) {
+        if (test == null) {
+            this.test = "";
+        } else {
+            this.test = test.getNameWithParams();
+        }
     }
 
     public String getTest() {

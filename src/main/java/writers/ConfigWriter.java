@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+import util.JsonHelper;
 import code.config.ConfigCode;
 import code.project.ProjectCode;
 
@@ -40,7 +41,7 @@ public class ConfigWriter {
             file.getParentFile().mkdirs();
             file.createNewFile();
             writer = new BufferedWriter(new FileWriter(file));
-            writer.write(this.configCode.toJson().toJSONString());
+            writer.write(JsonHelper.prettyPrint(this.configCode.toJson()));
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();

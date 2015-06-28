@@ -40,11 +40,23 @@ public class ConfigClazz extends ConfigCodeFile {
     private void build() {
         JSONArray oldConfigConstructors = JsonHelper.getJsonArray(jsonClazz, "constructors");
         for (ProjectConstructorMember constructor : this.projectClazz.getConstructors()) {
-            this.constructors.add(new ConfigConstructorMember(constructor, JsonHelper.getJsonObjectFromArray(projectClazz.getName(), oldConfigConstructors), this.testClazz.getTestMethod(constructor.getNameWithParams())));
+            ProjectMethodMember testMethod;
+            if (this.testClazz == null) {
+                testMethod = null;
+            } else {
+                testMethod = this.testClazz.getTestMethod(constructor.getNameWithParams());
+            }
+            this.constructors.add(new ConfigConstructorMember(constructor, JsonHelper.getJsonObjectFromArray(constructor.getNameWithParams(), oldConfigConstructors), testMethod));
         }
         JSONArray oldConfigMethods = JsonHelper.getJsonArray(jsonClazz, "methods");
         for (ProjectMethodMember method : this.projectClazz.getMethods()) {
-            this.methods.add(new ConfigMethodMember(method, JsonHelper.getJsonObjectFromArray(projectClazz.getName(), oldConfigMethods), this.testClazz.getTestMethod(method.getNameWithParams())));
+            ProjectMethodMember testMethod;
+            if (this.testClazz == null) {
+                testMethod = null;
+            } else {
+                testMethod = this.testClazz.getTestMethod(method.getNameWithParams());
+            }
+            this.methods.add(new ConfigMethodMember(method, JsonHelper.getJsonObjectFromArray(method.getNameWithParams(), oldConfigMethods), testMethod));
         }
         components.addAll(this.constructors);
         components.addAll(this.methods);

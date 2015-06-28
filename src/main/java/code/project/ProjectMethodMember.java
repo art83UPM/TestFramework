@@ -46,10 +46,7 @@ public class ProjectMethodMember extends ProjectMember implements CodeComponent 
     }
 
     public void accept(ProjectVisitor visitor) {
-        if(this.getConfigMember().getStatus() == ConfigStatus.GENERATE) {
             visitor.visit(this);
-            this.getConfigMember().setStatus(ConfigStatus.EXISTENT);
-        }
     }
 
     @Override
