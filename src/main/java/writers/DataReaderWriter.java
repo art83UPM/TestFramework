@@ -14,7 +14,6 @@ import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;
 import code.project.ProjectPackage;
 import code.project.ProjectParameterMember;
-import code.project.ProjectVisitor;
 
 public class DataReaderWriter implements ProjectVisitor {
 

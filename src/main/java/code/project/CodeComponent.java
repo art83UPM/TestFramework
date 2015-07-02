@@ -1,5 +1,7 @@
 package code.project;
 
+import writers.ProjectVisitor;
+
 
 interface CodeComponent {
     

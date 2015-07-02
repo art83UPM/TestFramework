@@ -5,7 +5,6 @@ import code.project.ProjectClazz;
 import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;
 import code.project.ProjectPackage;
-import code.project.ProjectVisitor;
 
 public class GenerateMarker implements ProjectVisitor {
 

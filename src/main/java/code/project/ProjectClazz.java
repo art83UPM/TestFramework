@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import util.Capitalizer;
+import writers.ProjectVisitor;
 import code.Margin;
 import code.config.ConfigClazz;
 

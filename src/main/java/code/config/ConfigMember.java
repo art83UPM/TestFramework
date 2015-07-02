@@ -7,13 +7,13 @@ import code.project.ProjectMember;
 import code.project.ProjectMethodMember;
 
 public abstract class ConfigMember {
-    
+
     private String name;
 
     private ConfigStatus status;
 
     private String test;
-    
+
     public ConfigMember(ProjectMember projectMember, JSONObject oldConfigMember, ProjectMethodMember testMethodMember) {
         this.name = projectMember.getNameWithParams();
         projectMember.setConfigMember(this);
@@ -33,7 +33,7 @@ public abstract class ConfigMember {
             }
         }
     }
-    
+
     public void setStatus(ConfigStatus status) {
         this.setStatus(status.name());
     }
@@ -50,10 +50,14 @@ public abstract class ConfigMember {
         }
     }
 
+    public void setTest(String test) {
+        this.test = test;
+    }
+
     public String getTest() {
         return test;
     }
-    
+
     @SuppressWarnings("unchecked")
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

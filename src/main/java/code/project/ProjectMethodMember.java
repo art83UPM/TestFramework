@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import writers.ProjectVisitor;
 import code.Margin;
 import code.config.ConfigStatus;
 

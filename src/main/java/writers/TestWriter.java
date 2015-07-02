@@ -11,7 +11,6 @@ import code.project.ProjectClazz;
 import code.project.ProjectConstructorMember;
 import code.project.ProjectMethodMember;
 import code.project.ProjectPackage;
-import code.project.ProjectVisitor;
 
 public class TestWriter implements ProjectVisitor {
 
@@ -68,6 +67,7 @@ public class TestWriter implements ProjectVisitor {
             } catch (IOException | NullPointerException e) {
                 System.out.println("Can't generate constructor " + constructorMember.getNameWithParams() + " because class " + constructorMember.getProjectClazz().getName() + " is not marked as GENERATE.");
             }
+            constructorMember.getConfigMember().setTest("test" + constructorMember.getNameWithParams());
         }
     }
 
@@ -95,6 +95,7 @@ public class TestWriter implements ProjectVisitor {
             } catch (IOException | NullPointerException e) {
                 System.out.println("Can't generate method " + methodMember.getNameWithParams() + " because class " + methodMember.getProjectClazz().getName() + " is not marked as GENERATE.");
             }
+            methodMember.getConfigMember().setTest("test" + methodMember.getNameWithParams());
         }
     }
 

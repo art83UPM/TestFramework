@@ -3,6 +3,7 @@ package code.project;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
+import writers.ProjectVisitor;
 import code.Margin;
 import code.config.ConfigStatus;
 

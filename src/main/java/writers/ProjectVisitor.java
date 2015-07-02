@@ -1,4 +1,9 @@
-package code.project;
+package writers;
+
+import code.project.ProjectClazz;
+import code.project.ProjectConstructorMember;
+import code.project.ProjectMethodMember;
+import code.project.ProjectPackage;
 
 public interface ProjectVisitor {
 	void visit(ProjectPackage projectPackage);

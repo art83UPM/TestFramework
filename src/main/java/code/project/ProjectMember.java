@@ -5,6 +5,7 @@ import java.util.List;
 
 import code.config.ConfigMember;
 import util.Capitalizer;
+import writers.ProjectVisitor;
 
 public abstract class ProjectMember {
     
